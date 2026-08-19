@@ -56,3 +56,7 @@ GitHub Pages serves `index.html` from the published branch/folder by default, an
 
 1. Push to GitHub and enable Pages in **Settings → Pages** (source: `main` branch, root folder).
 2. The site will be available at `https://<username>.github.io/<repo>/`.
+
+## Contributing
+
+Want to add a recipe or fix something? See [CONTRIBUTING.md](CONTRIBUTING.md).
