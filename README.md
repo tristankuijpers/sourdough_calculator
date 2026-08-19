@@ -39,7 +39,7 @@ To add a new product tab:
 
 1. Add a `.tab` button inside `.tabs` with a unique `data-tab="<name>"`, its label/tag text, and its accent colors via inline `--accent-soft`/`--accent-ring` (rgba versions of a `:root` color from `assets/style.css`).
 2. Add a matching `<div class="tabpanel" id="panel-<name>">` with a `.card` inside.
-3. If the ratios/recipe aren't ready yet, use a `.coming-soon` placeholder inside the card (see the Focaccia panel) instead of sliders — swap it for the real calculator UI once the math is defined.
+3. If the ratios/recipe aren't ready yet, use a `.coming-soon` placeholder inside the card (see the Hot buns panel) instead of sliders — swap it for the real calculator UI once the math is defined.
 4. Once ready, wire up sliders/JS following the Bread/Pizza pattern, and optionally add a `recipes/<name>.html` guide page.
 
 ## Local development

@@ -1,34 +1,36 @@
-# Contributing
+# Contributing 🍞
 
-Thanks for considering a contribution! This is a static, dependency-free HTML/CSS/JS project, so contributing is deliberately low-friction.
+Got a starter that makes killer focaccia? A pizza dough ratio you're proud of? Bring it here. This project lives or dies by people sharing recipes that actually work, so if you've got one, we want it.
 
-## Setup
+The best part: this is a plain HTML/CSS/JS page with zero dependencies and zero build step. No `npm install`, no waiting for webpack, no fighting a toolchain. Clone it, open it, and you're already contributing.
 
-There's no build step and nothing to install. Just open [index.html](index.html) in a browser, or serve it locally:
+## Setup (it's genuinely this easy)
 
 ```sh
 python3 -m http.server 8000
 ```
 
-## Ground rules
+...or just double-click [index.html](index.html) and open it in your browser. That's it. That's the setup.
 
-- **Vanilla only**: plain HTML/CSS/JS. No frameworks, no build tools, no npm dependencies.
-- **Static-hosting only**: this runs on GitHub Pages — no server, no backend, no database. See the README's "Before adding any new feature" checklist before proposing anything that might need one.
-- **Baker's percentages go through `computeDough()`**: don't hardcode gram amounts for a new product's ratios — derive them from the shared `computeDough(W, h, s, sp, o)` function so the sliders stay consistent, the same way Bread/Pizza/Focaccia do.
+## The house rules
 
-## Adding a new recipe/product
+- **Keep it vanilla.** Plain HTML/CSS/JS only — no frameworks, no build tools, no npm dependencies. If it doesn't run by just opening the file, it doesn't belong here.
+- **Static-hosting only.** This lives on GitHub Pages — no server, no backend, no database. Check the README's "Before adding any new feature" checklist if you're not sure your idea fits.
+- **Let the math do the math.** Don't hardcode gram amounts — pipe your ratios through the shared `computeDough(W, h, s, sp, o)` function so the sliders stay alive and scalable, same as Bread/Pizza/Focaccia.
+
+## Got a recipe? Here's how to add it
 
 Follow the README's ["Adding a new product tab"](README.md#adding-a-new-product-tab) section:
 
 1. Add a `.tab` button + matching `.tabpanel` in [index.html](index.html).
 2. Wire up sliders/JS following the Bread/Pizza/Focaccia pattern (an `updateX()` function, chip presets, reset button, `persistValue`/`restoreValue` for `localStorage`).
-3. Add `recipes/<product>.html` (copy an existing one) and `recipes/<product>-content.js` for the step-by-step guide.
-4. Test locally by opening `index.html` directly — no build/CI needed.
+3. Add `recipes/<product>.html` (copy an existing one) and `recipes/<product>-content.js` for the step-by-step method.
+4. Open `index.html` and poke at it until it feels right. No build, no CI, no waiting.
 
-Ratios should come from a recipe you've actually tested, not a guess — mention your source/testing in the PR description.
+One ask: make sure the ratios come from a recipe you've actually baked, not a guess off the internet. Tell us about it in the PR — we love hearing what worked (and what didn't).
 
-## Submitting a PR
+## Sending it in
 
-1. Fork the repo and create a branch for your change.
-2. Make sure the app still opens and works with no console errors.
-3. Open a PR against `main` describing what changed and why.
+1. Fork the repo, make a branch.
+2. Double-check the app still opens cleanly with no console errors.
+3. Open a PR and tell us what you made and why it's good. Photos of the bake are always welcome. 🥖
