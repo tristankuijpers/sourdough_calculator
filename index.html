@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1c160f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sourdough">
+<title>Sourdough Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">starter 50/50 flour·water</div>
+    <h1>Sourdough Calculator</h1>
+    <div class="sub">Set the total dough weight &mdash; every ratio scales automatically.</div>
+  </header>
+
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <div class="tab active" data-tab="bread" style="--accent-soft:rgba(207,159,66,0.16); --accent-ring:rgba(207,159,66,0.35);">Bread</div>
+      <div class="tab" data-tab="pizza" style="--accent-soft:rgba(193,80,46,0.16); --accent-ring:rgba(193,80,46,0.35);">Pizza</div>
+      <div class="tab" data-tab="focaccia" style="--accent-soft:rgba(138,154,91,0.16); --accent-ring:rgba(138,154,91,0.35);">Focaccia</div>
+      <div class="tab" data-tab="hotbuns" style="--accent-soft:rgba(127,163,160,0.16); --accent-ring:rgba(127,163,160,0.35);">Hot buns<span class="tag">coming soon</span></div>
+    </div>
+  </div>
+
+  <!-- BREAD -->
+  <div class="tabpanel active" id="panel-bread" style="--accent:var(--amber)">
+    <div class="card">
+      <div class="weight-block">
+        <div class="weight-label">Total dough weight</div>
+        <div class="weight-value"><span id="bread-weight-num">858</span><span>g</span></div>
+        <input type="range" id="bread-weight" min="300" max="2600" step="2" value="858">
+        <div class="range-minmax"><span>300 g</span><span>2600 g</span></div>
+      </div>
+      <div class="chips" id="bread-chips"></div>
+
+      <div class="divider">
+        <svg width="20" height="12" viewBox="0 0 20 12"><path d="M1 10 L7 2 M8 10 L14 2 M15 10 L19 4" stroke="var(--amber)" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
+        <div class="line"></div>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em;">INGREDIENTS</span>
+        <div class="line"></div>
+      </div>
+
+      <div class="rows" id="bread-rows"></div>
+
+      <div class="helper-line" id="bread-helper"></div>
+
+      <div class="recipe-link"><a class="chip" href="recipes/bread.html">📖 Recipe &amp; method</a></div>
+
+      <details>
+        <summary>Advanced</summary>
+        <div class="adv-grid">
+          <div class="adv-row">
+            <div class="top"><span class="k">Hydration (water relative to total flour)</span><span class="v" id="bread-hyd-v">70%</span></div>
+            <input type="range" id="bread-hyd" min="50" max="90" step="1" value="70">
+          </div>
+          <div class="adv-row">
+            <div class="top"><span class="k">Starter (relative to total flour)</span><span class="v" id="bread-starter-v">20%</span></div>
+            <input type="range" id="bread-starter" min="10" max="35" step="1" value="20">
+          </div>
+          <div class="adv-row">
+            <div class="top"><span class="k">Salt (relative to total flour)</span><span class="v" id="bread-salt-v">1.6%</span></div>
+            <input type="range" id="bread-salt" min="1" max="3" step="0.1" value="1.6">
+          </div>
+        </div>
+        <div class="adv-reset"><button type="button" class="chip" id="bread-reset">Reset to defaults</button></div>
+      </details>
+    </div>
+  </div>
+
+  <!-- PIZZA -->
+  <div class="tabpanel" id="panel-pizza" style="--accent:var(--tomato)">
+    <div class="card">
+      <div class="weight-block">
+        <div class="weight-label">Total dough weight</div>
+        <div class="weight-value"><span id="pizza-weight-num">1040</span><span>g</span></div>
+        <input type="range" id="pizza-weight" min="300" max="3000" step="2" value="1040">
+        <div class="range-minmax"><span>300 g</span><span>3000 g</span></div>
+      </div>
+
+      <div class="helper-line" style="margin-top:10px;">
+        ≈ <b id="pizza-ball-count">4.0</b> dough balls of
+        <input class="ball-input" id="pizza-ball-weight" type="number" inputmode="decimal" value="260" min="100" max="600" step="5"> g
+      </div>
+      <div class="chips" id="pizza-chips"></div>
+
+      <div class="divider">
+        <svg width="20" height="12" viewBox="0 0 20 12"><path d="M1 10 L7 2 M8 10 L14 2 M15 10 L19 4" stroke="var(--tomato)" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
+        <div class="line"></div>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em;">INGREDIENTS</span>
+        <div class="line"></div>
+      </div>
+
+      <div class="rows" id="pizza-rows"></div>
+
+      <div class="recipe-link"><a class="chip" href="recipes/pizza.html">📖 Recipe &amp; method</a></div>
+
+      <details>
+        <summary>Advanced</summary>
+        <div class="adv-grid">
+          <div class="adv-row">
+            <div class="top"><span class="k">Hydration (water relative to total flour)</span><span class="v" id="pizza-hyd-v">65%</span></div>
+            <input type="range" id="pizza-hyd" min="50" max="85" step="1" value="65">
+          </div>
+          <div class="adv-row">
+            <div class="top"><span class="k">Starter (relative to total flour)</span><span class="v" id="pizza-starter-v">20%</span></div>
+            <input type="range" id="pizza-starter" min="10" max="35" step="1" value="20">
+          </div>
+          <div class="adv-row">
+            <div class="top"><span class="k">Salt (relative to total flour)</span><span class="v" id="pizza-salt-v">2.2%</span></div>
+            <input type="range" id="pizza-salt" min="1" max="3.5" step="0.1" value="2.2">
+          </div>
+          <div class="adv-row">
+            <div class="top"><span class="k">Olive oil (relative to total flour)</span><span class="v" id="pizza-oil-v">3%</span></div>
+            <input type="range" id="pizza-oil" min="0" max="8" step="0.5" value="3">
+          </div>
+        </div>
+        <div class="adv-reset"><button type="button" class="chip" id="pizza-reset">Reset to defaults</button></div>
+      </details>
+    </div>
+  </div>
+
+  <!-- FOCACCIA -->
+  <div class="tabpanel" id="panel-focaccia" style="--accent:var(--olive)">
+    <div class="card">
+      <div class="weight-block">
+        <div class="weight-label">Total dough weight</div>
+        <div class="weight-value"><span id="focaccia-weight-num">900</span><span>g</span></div>
+        <input type="range" id="focaccia-weight" min="300" max="2400" step="2" value="900">
+        <div class="range-minmax"><span>300 g</span><span>2400 g</span></div>
+      </div>
+      <div class="chips" id="focaccia-chips"></div>
+
+      <div class="divider">
+        <svg width="20" height="12" viewBox="0 0 20 12"><path d="M1 10 L7 2 M8 10 L14 2 M15 10 L19 4" stroke="var(--olive)" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
+        <div class="line"></div>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em;">INGREDIENTS</span>
+        <div class="line"></div>
+      </div>
+
+      <div class="rows" id="focaccia-rows"></div>
+
+      <div class="helper-line" id="focaccia-helper"></div>
+
+      <div class="recipe-link"><a class="chip" href="recipes/focaccia.html">📖 Recipe &amp; method</a></div>
+
+      <details>
+        <summary>Advanced</summary>
+        <div class="adv-grid">
+          <div class="adv-row">
+            <div class="top"><span class="k">Hydration (water relative to total flour)</span><span class="v" id="focaccia-hyd-v">75%</span></div>
+            <input type="range" id="focaccia-hyd" min="60" max="85" step="1" value="75">
+          </div>
+          <div class="adv-row">
+            <div class="top"><span class="k">Starter (relative to total flour)</span><span class="v" id="focaccia-starter-v">20.3%</span></div>
+            <input type="range" id="focaccia-starter" min="10" max="35" step="0.1" value="20.3">
+          </div>
+          <div class="adv-row">
+            <div class="top"><span class="k">Salt (relative to total flour)</span><span class="v" id="focaccia-salt-v">2.0%</span></div>
+            <input type="range" id="focaccia-salt" min="1" max="3.5" step="0.1" value="2.0">
+          </div>
+          <div class="adv-row">
+            <div class="top"><span class="k">Olive oil (relative to total flour)</span><span class="v" id="focaccia-oil-v">6.0%</span></div>
+            <input type="range" id="focaccia-oil" min="0" max="10" step="0.5" value="6">
+          </div>
+        </div>
+        <div class="adv-reset"><button type="button" class="chip" id="focaccia-reset">Reset to defaults</button></div>
+      </details>
+    </div>
+  </div>
+
+  <!-- HOT BUNS (placeholder: ratios & recipe not defined yet) -->
+  <div class="tabpanel" id="panel-hotbuns" style="--accent:var(--teal)">
+    <div class="card">
+      <div class="coming-soon">
+        <div class="big">🥐 Hot buns</div>
+        <p>Ratios and the step-by-step recipe are coming soon. The calculator will work the same way &mdash; set a total dough weight and everything scales automatically.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>flour in the starter (50/50) is automatically included in total hydration</footer>
+</div>
+
+<script>
+// ---------- core baker's-percentage math ----------
+// Given total dough weight W and percentages (as fractions of total flour F):
+// hydration h, starter s, salt sp, oil o (0 for bread)
+// F = W / (1 + h + sp + o)
+// starter = s*F, flour_added = F*(1-0.5s), water_added = F*(h-0.5s), salt = sp*F, oil = o*F
+function computeDough(W, h, s, sp, o){
+  const F = W / (1 + h + sp + o);
+  return {
+    starter: s*F,
+    flour: F*(1-0.5*s),
+    water: F*(h-0.5*s),
+    salt: sp*F,
+    oil: o*F,
+    totalFlour: F
+  };
+}
+const round = n => Math.round(n);
+
+function renderRows(container, items){
+  container.innerHTML = items.map(it => `
+    <div class="row">
+      <div><span class="name">${it.name}</span><span class="pct">${it.pctLabel}</span></div>
+      <div class="amt">${round(it.grams)}<span>g</span></div>
+    </div>`).join('');
+}
+
+// ---------- persistence helpers (localStorage, "sd_" prefix) ----------
+function restoreValue(el){
+  const stored = localStorage.getItem('sd_' + el.id);
+  if (stored !== null) el.value = stored;
+}
+function persistValue(el){
+  localStorage.setItem('sd_' + el.id, el.value);
+}
+
+// ---------- BREAD ----------
+const breadWeight = document.getElementById('bread-weight');
+const breadWeightNum = document.getElementById('bread-weight-num');
+const breadHyd = document.getElementById('bread-hyd');
+const breadStarter = document.getElementById('bread-starter');
+const breadSalt = document.getElementById('bread-salt');
+const breadRows = document.getElementById('bread-rows');
+const breadHelper = document.getElementById('bread-helper');
+const breadChipsEl = document.getElementById('bread-chips');
+
+[breadWeight, breadHyd, breadStarter, breadSalt].forEach(restoreValue);
+
+const breadChipValues = [429, 858, 1287, 1716];
+breadChipsEl.innerHTML = breadChipValues.map(v =>
+  `<button class="chip" data-v="${v}">${v===858?'base recipe · ':''}${v} g</button>`
+).join('');
+
+function updateBread(){
+  const W = parseFloat(breadWeight.value);
+  const h = parseFloat(breadHyd.value)/100;
+  const s = parseFloat(breadStarter.value)/100;
+  const sp = parseFloat(breadSalt.value)/100;
+
+  breadWeightNum.textContent = round(W);
+  document.getElementById('bread-hyd-v').textContent = breadHyd.value+'%';
+  document.getElementById('bread-starter-v').textContent = breadStarter.value+'%';
+  document.getElementById('bread-salt-v').textContent = parseFloat(breadSalt.value).toFixed(1)+'%';
+
+  const d = computeDough(W, h, s, sp, 0);
+  renderRows(breadRows, [
+    {name:'Starter (50/50)', pctLabel:s*100+'% of flour', grams:d.starter},
+    {name:'Flour', pctLabel:'', grams:d.flour},
+    {name:'Water', pctLabel:'hydration '+(h*100).toFixed(0)+'%', grams:d.water},
+    {name:'Salt', pctLabel:(sp*100).toFixed(1)+'%', grams:d.salt},
+  ]);
+  breadHelper.innerHTML = `total flour incl. starter: <b>${round(d.totalFlour)} g</b>`;
+
+  [...breadChipsEl.children].forEach(c => c.classList.toggle('active', Math.abs(c.dataset.v - W) < 1));
+}
+
+breadChipsEl.addEventListener('click', e=>{
+  const btn = e.target.closest('.chip'); if(!btn) return;
+  breadWeight.value = btn.dataset.v;
+  persistValue(breadWeight);
+  updateBread();
+});
+[breadWeight, breadHyd, breadStarter, breadSalt].forEach(el => el.addEventListener('input', ()=>{
+  persistValue(el);
+  updateBread();
+}));
+document.getElementById('bread-reset').addEventListener('click', ()=>{
+  breadHyd.value = 70;
+  breadStarter.value = 20;
+  breadSalt.value = 1.6;
+  [breadHyd, breadStarter, breadSalt].forEach(persistValue);
+  updateBread();
+});
+updateBread();
+
+// ---------- PIZZA ----------
+const pizzaWeight = document.getElementById('pizza-weight');
+const pizzaWeightNum = document.getElementById('pizza-weight-num');
+const pizzaHyd = document.getElementById('pizza-hyd');
+const pizzaStarter = document.getElementById('pizza-starter');
+const pizzaSalt = document.getElementById('pizza-salt');
+const pizzaOil = document.getElementById('pizza-oil');
+const pizzaRows = document.getElementById('pizza-rows');
+const pizzaBallCount = document.getElementById('pizza-ball-count');
+const pizzaBallWeight = document.getElementById('pizza-ball-weight');
+const pizzaChipsEl = document.getElementById('pizza-chips');
+
+[pizzaWeight, pizzaHyd, pizzaStarter, pizzaSalt, pizzaOil, pizzaBallWeight].forEach(restoreValue);
+
+function pizzaChipValues(){
+  const bw = parseFloat(pizzaBallWeight.value) || 260;
+  return [2,4,6,8].map(n => Math.round(n*bw));
+}
+function renderPizzaChips(){
+  pizzaChipsEl.innerHTML = pizzaChipValues().map((v,i) =>
+    `<button class="chip" data-v="${v}">${[2,4,6,8][i]} balls</button>`
+  ).join('');
+}
+renderPizzaChips();
+
+function updatePizza(){
+  const W = parseFloat(pizzaWeight.value);
+  const h = parseFloat(pizzaHyd.value)/100;
+  const s = parseFloat(pizzaStarter.value)/100;
+  const sp = parseFloat(pizzaSalt.value)/100;
+  const o = parseFloat(pizzaOil.value)/100;
+  const bw = parseFloat(pizzaBallWeight.value) || 260;
+
+  pizzaWeightNum.textContent = round(W);
+  document.getElementById('pizza-hyd-v').textContent = pizzaHyd.value+'%';
+  document.getElementById('pizza-starter-v').textContent = pizzaStarter.value+'%';
+  document.getElementById('pizza-salt-v').textContent = parseFloat(pizzaSalt.value).toFixed(1)+'%';
+  document.getElementById('pizza-oil-v').textContent = parseFloat(pizzaOil.value).toFixed(1)+'%';
+
+  const d = computeDough(W, h, s, sp, o);
+  renderRows(pizzaRows, [
+    {name:'Starter (50/50)', pctLabel:s*100+'% of flour', grams:d.starter},
+    {name:'Flour', pctLabel:'', grams:d.flour},
+    {name:'Water', pctLabel:'hydration '+(h*100).toFixed(0)+'%', grams:d.water},
+    {name:'Olive oil', pctLabel:(o*100).toFixed(1)+'%', grams:d.oil},
+    {name:'Salt', pctLabel:(sp*100).toFixed(1)+'%', grams:d.salt},
+  ]);
+
+  pizzaBallCount.textContent = (W/bw).toFixed(1);
+  [...pizzaChipsEl.children].forEach(c => c.classList.toggle('active', Math.abs(c.dataset.v - W) < 1));
+}
+
+pizzaChipsEl.addEventListener('click', e=>{
+  const btn = e.target.closest('.chip'); if(!btn) return;
+  pizzaWeight.value = btn.dataset.v;
+  persistValue(pizzaWeight);
+  updatePizza();
+});
+pizzaBallWeight.addEventListener('input', ()=>{
+  persistValue(pizzaBallWeight);
+  renderPizzaChips();
+  updatePizza();
+});
+[pizzaWeight, pizzaHyd, pizzaStarter, pizzaSalt, pizzaOil].forEach(el => el.addEventListener('input', ()=>{
+  persistValue(el);
+  updatePizza();
+}));
+document.getElementById('pizza-reset').addEventListener('click', ()=>{
+  pizzaHyd.value = 65;
+  pizzaStarter.value = 20;
+  pizzaSalt.value = 2.2;
+  pizzaOil.value = 3;
+  [pizzaHyd, pizzaStarter, pizzaSalt, pizzaOil].forEach(persistValue);
+  updatePizza();
+});
+updatePizza();
+
+// ---------- FOCACCIA ----------
+const focacciaWeight = document.getElementById('focaccia-weight');
+const focacciaWeightNum = document.getElementById('focaccia-weight-num');
+const focacciaHyd = document.getElementById('focaccia-hyd');
+const focacciaStarter = document.getElementById('focaccia-starter');
+const focacciaSalt = document.getElementById('focaccia-salt');
+const focacciaOil = document.getElementById('focaccia-oil');
+const focacciaRows = document.getElementById('focaccia-rows');
+const focacciaHelper = document.getElementById('focaccia-helper');
+const focacciaChipsEl = document.getElementById('focaccia-chips');
+
+[focacciaWeight, focacciaHyd, focacciaStarter, focacciaSalt, focacciaOil].forEach(restoreValue);
+
+const focacciaChipValues = [450, 900, 1350, 1800];
+focacciaChipsEl.innerHTML = focacciaChipValues.map(v =>
+  `<button class="chip" data-v="${v}">${v===900?'standard pan · ':''}${v} g</button>`
+).join('');
+
+function updateFocaccia(){
+  const W = parseFloat(focacciaWeight.value);
+  const h = parseFloat(focacciaHyd.value)/100;
+  const s = parseFloat(focacciaStarter.value)/100;
+  const sp = parseFloat(focacciaSalt.value)/100;
+  const o = parseFloat(focacciaOil.value)/100;
+
+  focacciaWeightNum.textContent = round(W);
+  document.getElementById('focaccia-hyd-v').textContent = focacciaHyd.value+'%';
+  document.getElementById('focaccia-starter-v').textContent = parseFloat(focacciaStarter.value).toFixed(1)+'%';
+  document.getElementById('focaccia-salt-v').textContent = parseFloat(focacciaSalt.value).toFixed(1)+'%';
+  document.getElementById('focaccia-oil-v').textContent = parseFloat(focacciaOil.value).toFixed(1)+'%';
+
+  const d = computeDough(W, h, s, sp, o);
+  renderRows(focacciaRows, [
+    {name:'Starter (50/50)', pctLabel:(s*100).toFixed(1)+'% of flour', grams:d.starter},
+    {name:'Flour', pctLabel:'', grams:d.flour},
+    {name:'Water', pctLabel:'hydration '+(h*100).toFixed(0)+'%', grams:d.water},
+    {name:'Olive oil', pctLabel:(o*100).toFixed(1)+'%', grams:d.oil},
+    {name:'Salt', pctLabel:(sp*100).toFixed(1)+'%', grams:d.salt},
+  ]);
+  focacciaHelper.innerHTML = `total flour incl. starter: <b>${round(d.totalFlour)} g</b>`;
+
+  [...focacciaChipsEl.children].forEach(c => c.classList.toggle('active', Math.abs(c.dataset.v - W) < 1));
+}
+
+focacciaChipsEl.addEventListener('click', e=>{
+  const btn = e.target.closest('.chip'); if(!btn) return;
+  focacciaWeight.value = btn.dataset.v;
+  persistValue(focacciaWeight);
+  updateFocaccia();
+});
+[focacciaWeight, focacciaHyd, focacciaStarter, focacciaSalt, focacciaOil].forEach(el => el.addEventListener('input', ()=>{
+  persistValue(el);
+  updateFocaccia();
+}));
+document.getElementById('focaccia-reset').addEventListener('click', ()=>{
+  focacciaHyd.value = 75;
+  focacciaStarter.value = 20.3;
+  focacciaSalt.value = 2.0;
+  focacciaOil.value = 6;
+  [focacciaHyd, focacciaStarter, focacciaSalt, focacciaOil].forEach(persistValue);
+  updateFocaccia();
+});
+updateFocaccia();
+
+// ---------- tabs ----------
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-'+tab.dataset.tab).classList.add('active');
+    tab.scrollIntoView({block:'nearest', inline:'nearest', behavior:'smooth'});
+  });
+});
+
+// only show the edge fades on the tab strip when there's actually more to scroll to
+const tabsWrap = document.querySelector('.tabs-wrap');
+const tabsEl = document.querySelector('.tabs');
+function updateTabFades(){
+  const canLeft = tabsEl.scrollLeft > 2;
+  const canRight = tabsEl.scrollLeft + tabsEl.clientWidth < tabsEl.scrollWidth - 2;
+  tabsWrap.classList.toggle('can-scroll-left', canLeft);
+  tabsWrap.classList.toggle('can-scroll-right', canRight);
+}
+tabsEl.addEventListener('scroll', updateTabFades);
+window.addEventListener('resize', updateTabFades);
+updateTabFades();
+</script>
+</body>
+</html>
+
