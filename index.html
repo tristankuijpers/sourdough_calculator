@@ -246,12 +246,12 @@ function updateBread(){
   const sp = breadSalt/100;
 
   breadWeightNum.textContent = round(W);
-  document.getElementById('bread-hyd-v').textContent = breadHyd.value+'%';
-  document.getElementById('bread-starter-v').textContent = breadStarter.value+'%';
+  document.getElementById('bread-hyd-v').textContent = Math.round(parseFloat(breadHyd.value))+'%';
+  document.getElementById('bread-starter-v').textContent = Math.round(parseFloat(breadStarter.value))+'%';
 
   const d = computeDough(W, h, s, sp, 0);
   renderRows(breadRows, [
-    {name:'Starter (50/50)', pctLabel:s*100+'% of flour', grams:d.starter},
+    {name:'Starter (50/50)', pctLabel:Math.round(s*100)+'% of flour', grams:d.starter},
     {name:'Flour', pctLabel:'', grams:d.flour},
     {name:'Water', pctLabel:'hydration '+(h*100).toFixed(0)+'%', grams:d.water},
     {name:'Salt', pctLabel:(sp*100).toFixed(1)+'%', grams:d.salt},
@@ -429,17 +429,17 @@ function updateFocaccia(){
   const o = parseFloat(focacciaOil.value)/100;
 
   focacciaWeightNum.textContent = round(W);
-  document.getElementById('focaccia-hyd-v').textContent = focacciaHyd.value+'%';
-  document.getElementById('focaccia-starter-v').textContent = parseFloat(focacciaStarter.value).toFixed(1)+'%';
-  document.getElementById('focaccia-oil-v').textContent = parseFloat(focacciaOil.value).toFixed(1)+'%';
+  document.getElementById('focaccia-hyd-v').textContent = Math.round(parseFloat(focacciaHyd.value))+'%';
+  document.getElementById('focaccia-starter-v').textContent = Math.round(parseFloat(focacciaStarter.value))+'%';
+  document.getElementById('focaccia-oil-v').textContent = Math.round(parseFloat(focacciaOil.value))+'%';
 
   const d = computeDough(W, h, s, sp, o);
   renderRows(focacciaRows, [
-    {name:'Starter (50/50)', pctLabel:(s*100).toFixed(1)+'% of flour', grams:d.starter},
+    {name:'Starter (50/50)', pctLabel:Math.round(s*100)+'% of flour', grams:d.starter},
     {name:'Flour', pctLabel:'', grams:d.flour},
-    {name:'Water', pctLabel:'hydration '+(h*100).toFixed(0)+'%', grams:d.water},
-    {name:'Olive oil', pctLabel:(o*100).toFixed(1)+'%', grams:d.oil},
-    {name:'Salt', pctLabel:(sp*100).toFixed(1)+'%', grams:d.salt},
+    {name:'Water', pctLabel:'hydration '+Math.round(h*100)+'%', grams:d.water},
+    {name:'Olive oil', pctLabel:Math.round(o*100)+'%', grams:d.oil},
+    {name:'Salt', pctLabel:Math.round(sp*100)+'%', grams:d.salt},
   ]);
   focacciaHelper.innerHTML = `total flour incl. starter: <b>${round(d.totalFlour)} g</b>`;
 
