@@ -228,7 +228,7 @@ const breadRows = document.getElementById('bread-rows');
 const breadHelper = document.getElementById('bread-helper');
 const breadChipsEl = document.getElementById('bread-chips');
 
-[breadWeight, breadHyd, breadStarter].forEach(restoreValue);
+[breadHyd, breadStarter].forEach(restoreValue);
 
 const breadChipValues = [
   {label:'half loaf', weight:429},
@@ -406,7 +406,7 @@ const focacciaRows = document.getElementById('focaccia-rows');
 const focacciaHelper = document.getElementById('focaccia-helper');
 const focacciaChipsEl = document.getElementById('focaccia-chips');
 
-[focacciaWeight, focacciaHyd, focacciaStarter, focacciaOil].forEach(restoreValue);
+[focacciaHyd, focacciaStarter, focacciaOil].forEach(restoreValue);
 
 const focacciaChipValues = [450, 900, 1350, 1800];
 focacciaChipsEl.innerHTML = focacciaChipValues.map(v =>
