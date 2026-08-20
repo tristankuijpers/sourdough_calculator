@@ -16,7 +16,7 @@
     <rect x="256" y="208" width="512" height="120" rx="60" fill="#d2c8b5"/>
   </g>
   <rect x="256" y="208" width="512" height="120" rx="60" fill="none" stroke="#b6ac9c" stroke-width="8"/>
-  <circle cx="491" cy="289" r="14" fill="#ebe1cf"/>
+  <circle cx="512" cy="289" r="14" fill="#ebe1cf"/>
   <rect x="281" y="387" width="462" height="27" fill="#a79e91"/>
   <path d="M288 415h448v327c0 94-76 170-170 170H458c-94 0-170-76-170-170Z" fill="#a59c90"/>
   <path d="M304 512c68 0 103 36 164 36 58 0 80-37 140-37 65 0 86 37 136 37 24 0 42-3 56-7v201c0 86-70 156-156 156H460c-86 0-156-70-156-156Z" fill="url(#sdFaviconStarterGradient)"/>
