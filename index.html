@@ -229,6 +229,8 @@ const breadHelper = document.getElementById('bread-helper');
 const breadChipsEl = document.getElementById('bread-chips');
 
 [breadHyd, breadStarter].forEach(restoreValue);
+const breadBaseRecipe = {starter:100, flour:450, water:300, salt:8, total:858};
+let breadPercentageMode = false;
 
 const breadChipValues = [
   {label:'half loaf', weight:429},
@@ -249,7 +251,16 @@ function updateBread(){
   document.getElementById('bread-hyd-v').textContent = Math.round(parseFloat(breadHyd.value))+'%';
   document.getElementById('bread-starter-v').textContent = Math.round(parseFloat(breadStarter.value))+'%';
 
-  const d = computeDough(W, h, s, sp, 0);
+  const d = breadPercentageMode ? computeDough(W, h, s, sp, 0) : (()=>{
+    const scale = W / breadBaseRecipe.total;
+    return {
+      starter: breadBaseRecipe.starter * scale,
+      flour: breadBaseRecipe.flour * scale,
+      water: breadBaseRecipe.water * scale,
+      salt: breadBaseRecipe.salt * scale,
+      totalFlour: (breadBaseRecipe.flour + breadBaseRecipe.starter / 2) * scale
+    };
+  })();
   renderRows(breadRows, [
     {name:'Starter (50/50)', pctLabel:Math.round(s*100)+'% of flour', grams:d.starter},
     {name:'Flour', pctLabel:'', grams:d.flour},
@@ -268,10 +279,12 @@ breadChipsEl.addEventListener('click', e=>{
   updateBread();
 });
 [breadWeight, breadHyd, breadStarter].forEach(el => el.addEventListener('input', ()=>{
+  if (el !== breadWeight) breadPercentageMode = true;
   persistValue(el);
   updateBread();
 }));
 document.getElementById('bread-reset').addEventListener('click', ()=>{
+  breadPercentageMode = false;
   breadHyd.value = 70;
   breadStarter.value = 20;
   [breadHyd, breadStarter].forEach(persistValue);
