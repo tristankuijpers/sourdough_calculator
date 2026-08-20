@@ -453,6 +453,10 @@ function updateTabFades(){
 tabsEl.addEventListener('scroll', updateTabFades);
 window.addEventListener('resize', updateTabFades);
 updateTabFades();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+}
 </script>
 </body>
 </html>

@@ -24,5 +24,10 @@
   <div class="card" id="recipe-content"></div>
 </div>
 <script src="pizza-content.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('../sw.js'));
+}
+</script>
 </body>
 </html>
