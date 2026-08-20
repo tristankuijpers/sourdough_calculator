@@ -1,0 +1,28 @@
+{
+  "name": "Sourdough Calculator",
+  "short_name": "Sourdough",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#1c160f",
+  "theme_color": "#1c160f",
+  "icons": [
+    {
+      "src": "assets/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/favicon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
