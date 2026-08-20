@@ -254,7 +254,7 @@ function updateBread(){
     {name:'Starter (50/50)', pctLabel:Math.round(s*100)+'% of flour', grams:d.starter},
     {name:'Flour', pctLabel:'', grams:d.flour},
     {name:'Water', pctLabel:'hydration '+(h*100).toFixed(0)+'%', grams:d.water},
-    {name:'Salt', pctLabel:(sp*100).toFixed(1)+'%', grams:d.salt},
+    {name:'Salt', pctLabel:Math.round(sp*100)+'%', grams:d.salt},
   ]);
   breadHelper.innerHTML = `total flour incl. starter: <b>${round(d.totalFlour)} g</b>`;
 
