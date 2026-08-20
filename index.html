@@ -152,16 +152,16 @@
         <summary>Advanced</summary>
         <div class="adv-grid">
           <div class="adv-row">
-            <div class="top"><span class="k">Hydration (water relative to total flour)</span><span class="v" id="focaccia-hyd-v">75%</span></div>
-            <input type="range" id="focaccia-hyd" min="60" max="85" step="1" value="75">
+            <div class="top"><span class="k">Hydration (water relative to total flour)</span><span class="v" id="focaccia-hyd-v">76%</span></div>
+            <input type="range" id="focaccia-hyd" min="60" max="85" step="0.0001" value="75.5102">
           </div>
           <div class="adv-row">
-            <div class="top"><span class="k">Starter (relative to total flour)</span><span class="v" id="focaccia-starter-v">20.3%</span></div>
-            <input type="range" id="focaccia-starter" min="10" max="35" step="0.1" value="20.3">
+            <div class="top"><span class="k">Starter (relative to total flour)</span><span class="v" id="focaccia-starter-v">20%</span></div>
+            <input type="range" id="focaccia-starter" min="10" max="35" step="0.0001" value="20.4082">
           </div>
           <div class="adv-row">
-            <div class="top"><span class="k">Olive oil (relative to total flour)</span><span class="v" id="focaccia-oil-v">6.0%</span></div>
-            <input type="range" id="focaccia-oil" min="0" max="10" step="0.5" value="6">
+            <div class="top"><span class="k">Olive oil (relative to total flour)</span><span class="v" id="focaccia-oil-v">6%</span></div>
+            <input type="range" id="focaccia-oil" min="0" max="10" step="0.0001" value="6.1224">
           </div>
         </div>
         <div class="adv-reset"><button type="button" class="chip" id="focaccia-reset">Reset to defaults</button></div>
@@ -400,13 +400,21 @@ const focacciaWeight = document.getElementById('focaccia-weight');
 const focacciaWeightNum = document.getElementById('focaccia-weight-num');
 const focacciaHyd = document.getElementById('focaccia-hyd');
 const focacciaStarter = document.getElementById('focaccia-starter');
-const focacciaSalt = 2.0;
+const focacciaSalt = 2.0408163;
 const focacciaOil = document.getElementById('focaccia-oil');
 const focacciaRows = document.getElementById('focaccia-rows');
 const focacciaHelper = document.getElementById('focaccia-helper');
 const focacciaChipsEl = document.getElementById('focaccia-chips');
 
 [focacciaHyd, focacciaStarter, focacciaOil].forEach(restoreValue);
+const focacciaRecipeVersion = '900g-v1';
+if (localStorage.getItem('sd_focaccia-recipe-version') !== focacciaRecipeVersion) {
+  focacciaHyd.value = 75.5102;
+  focacciaStarter.value = 20.4082;
+  focacciaOil.value = 6.1224;
+  [focacciaHyd, focacciaStarter, focacciaOil].forEach(persistValue);
+  localStorage.setItem('sd_focaccia-recipe-version', focacciaRecipeVersion);
+}
 
 const focacciaChipValues = [450, 900, 1350, 1800];
 focacciaChipsEl.innerHTML = focacciaChipValues.map(v =>
@@ -449,9 +457,9 @@ focacciaChipsEl.addEventListener('click', e=>{
   updateFocaccia();
 }));
 document.getElementById('focaccia-reset').addEventListener('click', ()=>{
-  focacciaHyd.value = 75;
-  focacciaStarter.value = 20.3;
-  focacciaOil.value = 6;
+  focacciaHyd.value = 75.5102;
+  focacciaStarter.value = 20.4082;
+  focacciaOil.value = 6.1224;
   [focacciaHyd, focacciaStarter, focacciaOil].forEach(persistValue);
   updateFocaccia();
 });
