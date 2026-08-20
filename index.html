@@ -81,14 +81,14 @@
     <div class="card">
       <div class="weight-block">
         <div class="weight-label">Total dough weight</div>
-        <div class="weight-value"><span id="pizza-weight-num">1040</span><span>g</span></div>
-        <input type="range" id="pizza-weight" min="300" max="3000" step="2" value="1040">
+        <div class="weight-value"><span id="pizza-weight-num">950</span><span>g</span></div>
+        <input type="range" id="pizza-weight" min="300" max="3000" step="1" value="950">
         <div class="range-minmax"><span>300 g</span><span>3000 g</span></div>
       </div>
 
       <div class="helper-line" style="margin-top:10px;">
-        ≈ <b id="pizza-ball-count">4.0</b> dough balls of
-        <input class="ball-input" id="pizza-ball-weight" type="number" inputmode="decimal" value="260" min="100" max="600" step="5"> g
+        ≈ <b id="pizza-ball-count">4</b> dough balls of
+        <input class="ball-input" id="pizza-ball-weight" type="text" inputmode="decimal" value="237.5"> g
       </div>
       <div class="chips" id="pizza-chips"></div>
 
@@ -107,16 +107,16 @@
         <summary>Advanced</summary>
         <div class="adv-grid">
           <div class="adv-row">
-            <div class="top"><span class="k">Hydration (water relative to total flour)</span><span class="v" id="pizza-hyd-v">65%</span></div>
-            <input type="range" id="pizza-hyd" min="50" max="85" step="1" value="65">
+            <div class="top"><span class="k">Hydration (water relative to total flour)</span><span class="v" id="pizza-hyd-v">69%</span></div>
+            <input type="range" id="pizza-hyd" min="50" max="85" step="0.0001" value="69.0909">
           </div>
           <div class="adv-row">
-            <div class="top"><span class="k">Starter (relative to total flour)</span><span class="v" id="pizza-starter-v">20%</span></div>
-            <input type="range" id="pizza-starter" min="10" max="35" step="1" value="20">
+            <div class="top"><span class="k">Starter (relative to total flour)</span><span class="v" id="pizza-starter-v">18%</span></div>
+            <input type="range" id="pizza-starter" min="10" max="35" step="0.0001" value="18.1818">
           </div>
           <div class="adv-row">
-            <div class="top"><span class="k">Olive oil (relative to total flour)</span><span class="v" id="pizza-oil-v">3%</span></div>
-            <input type="range" id="pizza-oil" min="0" max="8" step="0.5" value="3">
+            <div class="top"><span class="k">Olive oil (relative to total flour)</span><span class="v" id="pizza-oil-v">2%</span></div>
+            <input type="range" id="pizza-oil" min="0" max="8" step="0.0001" value="1.8182">
           </div>
         </div>
         <div class="adv-reset"><button type="button" class="chip" id="pizza-reset">Reset to defaults</button></div>
@@ -230,9 +230,13 @@ const breadChipsEl = document.getElementById('bread-chips');
 
 [breadWeight, breadHyd, breadStarter].forEach(restoreValue);
 
-const breadChipValues = [429, 858, 1287, 1716];
-breadChipsEl.innerHTML = breadChipValues.map(v =>
-  `<button class="chip" data-v="${v}">${v===858?'base recipe · ':''}${v} g</button>`
+const breadChipValues = [
+  {label:'half loaf', weight:429},
+  {label:'full loaf', weight:858},
+  {label:'double loaf', weight:1716}
+];
+breadChipsEl.innerHTML = breadChipValues.map(({label, weight}) =>
+  `<button class="chip" data-v="${weight}">${label} · ${weight} g</button>`
 ).join('');
 
 function updateBread(){
@@ -280,72 +284,113 @@ const pizzaWeight = document.getElementById('pizza-weight');
 const pizzaWeightNum = document.getElementById('pizza-weight-num');
 const pizzaHyd = document.getElementById('pizza-hyd');
 const pizzaStarter = document.getElementById('pizza-starter');
-const pizzaSalt = 2.2;
+const pizzaSalt = 1.8181818;
 const pizzaOil = document.getElementById('pizza-oil');
 const pizzaRows = document.getElementById('pizza-rows');
 const pizzaBallCount = document.getElementById('pizza-ball-count');
 const pizzaBallWeight = document.getElementById('pizza-ball-weight');
 const pizzaChipsEl = document.getElementById('pizza-chips');
 
-[pizzaWeight, pizzaHyd, pizzaStarter, pizzaOil, pizzaBallWeight].forEach(restoreValue);
+// Weight intentionally not restored: always open on the base recipe.
+[pizzaHyd, pizzaStarter, pizzaOil].forEach(restoreValue);
+pizzaWeight.value = 950;
+pizzaBallWeight.value = 237.5;
 
-function pizzaChipValues(){
-  const bw = parseFloat(pizzaBallWeight.value) || 260;
-  return [2,4,6,8].map(n => Math.round(n*bw));
+localStorage.removeItem('sd_pizza-percentage-mode');
+const pizzaRecipeVersion = '950g-v7';
+if (localStorage.getItem('sd_pizza-recipe-version') !== pizzaRecipeVersion) {
+  pizzaHyd.value = 69.0909;
+  pizzaStarter.value = 18.1818;
+  pizzaOil.value = 1.8182;
+  [pizzaHyd, pizzaStarter, pizzaOil].forEach(persistValue);
+  localStorage.setItem('sd_pizza-recipe-version', pizzaRecipeVersion);
 }
+
+const pizzaBaseRecipe = { starter:100, flour:500, water:330, oil:10, salt:10, total:950 };
+let pizzaPercentageMode = false; // session-only, never persisted
+
 function renderPizzaChips(){
-  pizzaChipsEl.innerHTML = pizzaChipValues().map((v,i) =>
-    `<button class="chip" data-v="${v}">${[2,4,6,8][i]} balls</button>`
+  pizzaChipsEl.innerHTML = [2,4,6,8].map(n =>
+    `<button class="chip" data-balls="${n}">${n} balls</button>`
   ).join('');
 }
 renderPizzaChips();
 
+function scalePizzaBaseRecipe(W){
+  const scale = W / pizzaBaseRecipe.total;
+  return {
+    starter:    pizzaBaseRecipe.starter * scale,
+    flour:      pizzaBaseRecipe.flour   * scale,
+    water:      pizzaBaseRecipe.water   * scale,
+    oil:        pizzaBaseRecipe.oil     * scale,
+    salt:       pizzaBaseRecipe.salt    * scale,
+    totalFlour: (pizzaBaseRecipe.flour + pizzaBaseRecipe.starter / 2) * scale
+  };
+}
+
 function updatePizza(){
-  const W = parseFloat(pizzaWeight.value);
-  const h = parseFloat(pizzaHyd.value)/100;
-  const s = parseFloat(pizzaStarter.value)/100;
+  const W  = parseFloat(pizzaWeight.value);
+  const bw = parseFloat(pizzaBallWeight.value) || 237.5;
+  // always read slider values for labels; only used for calculation in percentage mode
+  const h  = parseFloat(pizzaHyd.value)/100;
+  const s  = parseFloat(pizzaStarter.value)/100;
   const sp = pizzaSalt/100;
-  const o = parseFloat(pizzaOil.value)/100;
-  const bw = parseFloat(pizzaBallWeight.value) || 260;
+  const o  = parseFloat(pizzaOil.value)/100;
 
   pizzaWeightNum.textContent = round(W);
-  document.getElementById('pizza-hyd-v').textContent = pizzaHyd.value+'%';
-  document.getElementById('pizza-starter-v').textContent = pizzaStarter.value+'%';
-  document.getElementById('pizza-oil-v').textContent = parseFloat(pizzaOil.value).toFixed(1)+'%';
+  document.getElementById('pizza-hyd-v').textContent     = Math.round(h*100)+'%';
+  document.getElementById('pizza-starter-v').textContent = Math.round(s*100)+'%';
+  document.getElementById('pizza-oil-v').textContent     = Math.round(o*100)+'%';
 
-  const d = computeDough(W, h, s, sp, o);
+  const d = pizzaPercentageMode ? computeDough(W, h, s, sp, o) : scalePizzaBaseRecipe(W);
+  // pctLabels always come from the sliders so they never change when scaling presets
   renderRows(pizzaRows, [
-    {name:'Starter (50/50)', pctLabel:s*100+'% of flour', grams:d.starter},
-    {name:'Flour', pctLabel:'', grams:d.flour},
-    {name:'Water', pctLabel:'hydration '+(h*100).toFixed(0)+'%', grams:d.water},
-    {name:'Olive oil', pctLabel:(o*100).toFixed(1)+'%', grams:d.oil},
-    {name:'Salt', pctLabel:(sp*100).toFixed(1)+'%', grams:d.salt},
+    {name:'Starter (50/50)', pctLabel:Math.round(s*100)+'% of flour',    grams:d.starter},
+    {name:'Flour',           pctLabel:'',                                 grams:d.flour},
+    {name:'Water',           pctLabel:'hydration '+Math.round(h*100)+'%', grams:d.water},
+    {name:'Olive oil',       pctLabel:Math.round(o*100)+'%',              grams:d.oil},
+    {name:'Salt',            pctLabel:Math.round(sp*100)+'%',             grams:d.salt},
   ]);
 
-  pizzaBallCount.textContent = (W/bw).toFixed(1);
-  [...pizzaChipsEl.children].forEach(c => c.classList.toggle('active', Math.abs(c.dataset.v - W) < 1));
+  pizzaBallCount.textContent = Math.round(W/bw);
+  [...pizzaChipsEl.children].forEach(c => {
+    const n = parseInt(c.dataset.balls, 10);
+    c.classList.toggle('active', Math.abs(W - pizzaBaseRecipe.total * n / 4) < 1);
+  });
 }
 
 pizzaChipsEl.addEventListener('click', e=>{
   const btn = e.target.closest('.chip'); if(!btn) return;
-  pizzaWeight.value = btn.dataset.v;
+  // compute W from ball count directly — no dependency on stored ball weight
+  const n = parseInt(btn.dataset.balls, 10);
+  pizzaPercentageMode = false;
+  pizzaWeight.value = pizzaBaseRecipe.total * n / 4;
   persistValue(pizzaWeight);
   updatePizza();
 });
 pizzaBallWeight.addEventListener('input', ()=>{
+  pizzaBallWeight.value = Math.round((parseFloat(pizzaBallWeight.value) || 237.5) * 2) / 2;
   persistValue(pizzaBallWeight);
-  renderPizzaChips();
   updatePizza();
 });
-[pizzaWeight, pizzaHyd, pizzaStarter, pizzaOil].forEach(el => el.addEventListener('input', ()=>{
+pizzaWeight.addEventListener('input', ()=>{
+  persistValue(pizzaWeight);
+  updatePizza();
+});
+[pizzaHyd, pizzaStarter, pizzaOil].forEach(el => el.addEventListener('input', ()=>{
+  pizzaPercentageMode = true;
   persistValue(el);
   updatePizza();
 }));
 document.getElementById('pizza-reset').addEventListener('click', ()=>{
-  pizzaHyd.value = 65;
-  pizzaStarter.value = 20;
-  pizzaOil.value = 3;
+  pizzaPercentageMode = false;
+  pizzaWeight.value = 950;
+  pizzaBallWeight.value = 237.5;
+  pizzaHyd.value = 69.0909;
+  pizzaStarter.value = 18.1818;
+  pizzaOil.value = 1.8182;
   [pizzaHyd, pizzaStarter, pizzaOil].forEach(persistValue);
+  renderPizzaChips();
   updatePizza();
 });
 updatePizza();
@@ -411,6 +456,11 @@ document.getElementById('focaccia-reset').addEventListener('click', ()=>{
   updateFocaccia();
 });
 updateFocaccia();
+
+// wipe stale SW caches so VS Code preview and browsers without SW get fresh code
+if ('caches' in window) {
+  caches.keys().then(keys => keys.filter(k => k !== 'sourdough-v7').forEach(k => caches.delete(k)));
+}
 
 // ---------- tabs ----------
 document.querySelectorAll('.tab').forEach(tab=>{
