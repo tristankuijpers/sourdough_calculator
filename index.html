@@ -70,10 +70,6 @@
             <div class="top"><span class="k">Starter (relative to total flour)</span><span class="v" id="bread-starter-v">20%</span></div>
             <input type="range" id="bread-starter" min="10" max="35" step="1" value="20">
           </div>
-          <div class="adv-row">
-            <div class="top"><span class="k">Salt (relative to total flour)</span><span class="v" id="bread-salt-v">1.6%</span></div>
-            <input type="range" id="bread-salt" min="1" max="3" step="0.1" value="1.6">
-          </div>
         </div>
         <div class="adv-reset"><button type="button" class="chip" id="bread-reset">Reset to defaults</button></div>
       </details>
@@ -119,10 +115,6 @@
             <input type="range" id="pizza-starter" min="10" max="35" step="1" value="20">
           </div>
           <div class="adv-row">
-            <div class="top"><span class="k">Salt (relative to total flour)</span><span class="v" id="pizza-salt-v">2.2%</span></div>
-            <input type="range" id="pizza-salt" min="1" max="3.5" step="0.1" value="2.2">
-          </div>
-          <div class="adv-row">
             <div class="top"><span class="k">Olive oil (relative to total flour)</span><span class="v" id="pizza-oil-v">3%</span></div>
             <input type="range" id="pizza-oil" min="0" max="8" step="0.5" value="3">
           </div>
@@ -166,10 +158,6 @@
           <div class="adv-row">
             <div class="top"><span class="k">Starter (relative to total flour)</span><span class="v" id="focaccia-starter-v">20.3%</span></div>
             <input type="range" id="focaccia-starter" min="10" max="35" step="0.1" value="20.3">
-          </div>
-          <div class="adv-row">
-            <div class="top"><span class="k">Salt (relative to total flour)</span><span class="v" id="focaccia-salt-v">2.0%</span></div>
-            <input type="range" id="focaccia-salt" min="1" max="3.5" step="0.1" value="2.0">
           </div>
           <div class="adv-row">
             <div class="top"><span class="k">Olive oil (relative to total flour)</span><span class="v" id="focaccia-oil-v">6.0%</span></div>
@@ -235,12 +223,12 @@ const breadWeight = document.getElementById('bread-weight');
 const breadWeightNum = document.getElementById('bread-weight-num');
 const breadHyd = document.getElementById('bread-hyd');
 const breadStarter = document.getElementById('bread-starter');
-const breadSalt = document.getElementById('bread-salt');
+const breadSalt = 1.6;
 const breadRows = document.getElementById('bread-rows');
 const breadHelper = document.getElementById('bread-helper');
 const breadChipsEl = document.getElementById('bread-chips');
 
-[breadWeight, breadHyd, breadStarter, breadSalt].forEach(restoreValue);
+[breadWeight, breadHyd, breadStarter].forEach(restoreValue);
 
 const breadChipValues = [429, 858, 1287, 1716];
 breadChipsEl.innerHTML = breadChipValues.map(v =>
@@ -251,12 +239,11 @@ function updateBread(){
   const W = parseFloat(breadWeight.value);
   const h = parseFloat(breadHyd.value)/100;
   const s = parseFloat(breadStarter.value)/100;
-  const sp = parseFloat(breadSalt.value)/100;
+  const sp = breadSalt/100;
 
   breadWeightNum.textContent = round(W);
   document.getElementById('bread-hyd-v').textContent = breadHyd.value+'%';
   document.getElementById('bread-starter-v').textContent = breadStarter.value+'%';
-  document.getElementById('bread-salt-v').textContent = parseFloat(breadSalt.value).toFixed(1)+'%';
 
   const d = computeDough(W, h, s, sp, 0);
   renderRows(breadRows, [
@@ -276,15 +263,14 @@ breadChipsEl.addEventListener('click', e=>{
   persistValue(breadWeight);
   updateBread();
 });
-[breadWeight, breadHyd, breadStarter, breadSalt].forEach(el => el.addEventListener('input', ()=>{
+[breadWeight, breadHyd, breadStarter].forEach(el => el.addEventListener('input', ()=>{
   persistValue(el);
   updateBread();
 }));
 document.getElementById('bread-reset').addEventListener('click', ()=>{
   breadHyd.value = 70;
   breadStarter.value = 20;
-  breadSalt.value = 1.6;
-  [breadHyd, breadStarter, breadSalt].forEach(persistValue);
+  [breadHyd, breadStarter].forEach(persistValue);
   updateBread();
 });
 updateBread();
@@ -294,14 +280,14 @@ const pizzaWeight = document.getElementById('pizza-weight');
 const pizzaWeightNum = document.getElementById('pizza-weight-num');
 const pizzaHyd = document.getElementById('pizza-hyd');
 const pizzaStarter = document.getElementById('pizza-starter');
-const pizzaSalt = document.getElementById('pizza-salt');
+const pizzaSalt = 2.2;
 const pizzaOil = document.getElementById('pizza-oil');
 const pizzaRows = document.getElementById('pizza-rows');
 const pizzaBallCount = document.getElementById('pizza-ball-count');
 const pizzaBallWeight = document.getElementById('pizza-ball-weight');
 const pizzaChipsEl = document.getElementById('pizza-chips');
 
-[pizzaWeight, pizzaHyd, pizzaStarter, pizzaSalt, pizzaOil, pizzaBallWeight].forEach(restoreValue);
+[pizzaWeight, pizzaHyd, pizzaStarter, pizzaOil, pizzaBallWeight].forEach(restoreValue);
 
 function pizzaChipValues(){
   const bw = parseFloat(pizzaBallWeight.value) || 260;
@@ -318,14 +304,13 @@ function updatePizza(){
   const W = parseFloat(pizzaWeight.value);
   const h = parseFloat(pizzaHyd.value)/100;
   const s = parseFloat(pizzaStarter.value)/100;
-  const sp = parseFloat(pizzaSalt.value)/100;
+  const sp = pizzaSalt/100;
   const o = parseFloat(pizzaOil.value)/100;
   const bw = parseFloat(pizzaBallWeight.value) || 260;
 
   pizzaWeightNum.textContent = round(W);
   document.getElementById('pizza-hyd-v').textContent = pizzaHyd.value+'%';
   document.getElementById('pizza-starter-v').textContent = pizzaStarter.value+'%';
-  document.getElementById('pizza-salt-v').textContent = parseFloat(pizzaSalt.value).toFixed(1)+'%';
   document.getElementById('pizza-oil-v').textContent = parseFloat(pizzaOil.value).toFixed(1)+'%';
 
   const d = computeDough(W, h, s, sp, o);
@@ -352,16 +337,15 @@ pizzaBallWeight.addEventListener('input', ()=>{
   renderPizzaChips();
   updatePizza();
 });
-[pizzaWeight, pizzaHyd, pizzaStarter, pizzaSalt, pizzaOil].forEach(el => el.addEventListener('input', ()=>{
+[pizzaWeight, pizzaHyd, pizzaStarter, pizzaOil].forEach(el => el.addEventListener('input', ()=>{
   persistValue(el);
   updatePizza();
 }));
 document.getElementById('pizza-reset').addEventListener('click', ()=>{
   pizzaHyd.value = 65;
   pizzaStarter.value = 20;
-  pizzaSalt.value = 2.2;
   pizzaOil.value = 3;
-  [pizzaHyd, pizzaStarter, pizzaSalt, pizzaOil].forEach(persistValue);
+  [pizzaHyd, pizzaStarter, pizzaOil].forEach(persistValue);
   updatePizza();
 });
 updatePizza();
@@ -371,13 +355,13 @@ const focacciaWeight = document.getElementById('focaccia-weight');
 const focacciaWeightNum = document.getElementById('focaccia-weight-num');
 const focacciaHyd = document.getElementById('focaccia-hyd');
 const focacciaStarter = document.getElementById('focaccia-starter');
-const focacciaSalt = document.getElementById('focaccia-salt');
+const focacciaSalt = 2.0;
 const focacciaOil = document.getElementById('focaccia-oil');
 const focacciaRows = document.getElementById('focaccia-rows');
 const focacciaHelper = document.getElementById('focaccia-helper');
 const focacciaChipsEl = document.getElementById('focaccia-chips');
 
-[focacciaWeight, focacciaHyd, focacciaStarter, focacciaSalt, focacciaOil].forEach(restoreValue);
+[focacciaWeight, focacciaHyd, focacciaStarter, focacciaOil].forEach(restoreValue);
 
 const focacciaChipValues = [450, 900, 1350, 1800];
 focacciaChipsEl.innerHTML = focacciaChipValues.map(v =>
@@ -388,13 +372,12 @@ function updateFocaccia(){
   const W = parseFloat(focacciaWeight.value);
   const h = parseFloat(focacciaHyd.value)/100;
   const s = parseFloat(focacciaStarter.value)/100;
-  const sp = parseFloat(focacciaSalt.value)/100;
+  const sp = focacciaSalt/100;
   const o = parseFloat(focacciaOil.value)/100;
 
   focacciaWeightNum.textContent = round(W);
   document.getElementById('focaccia-hyd-v').textContent = focacciaHyd.value+'%';
   document.getElementById('focaccia-starter-v').textContent = parseFloat(focacciaStarter.value).toFixed(1)+'%';
-  document.getElementById('focaccia-salt-v').textContent = parseFloat(focacciaSalt.value).toFixed(1)+'%';
   document.getElementById('focaccia-oil-v').textContent = parseFloat(focacciaOil.value).toFixed(1)+'%';
 
   const d = computeDough(W, h, s, sp, o);
@@ -416,16 +399,15 @@ focacciaChipsEl.addEventListener('click', e=>{
   persistValue(focacciaWeight);
   updateFocaccia();
 });
-[focacciaWeight, focacciaHyd, focacciaStarter, focacciaSalt, focacciaOil].forEach(el => el.addEventListener('input', ()=>{
+[focacciaWeight, focacciaHyd, focacciaStarter, focacciaOil].forEach(el => el.addEventListener('input', ()=>{
   persistValue(el);
   updateFocaccia();
 }));
 document.getElementById('focaccia-reset').addEventListener('click', ()=>{
   focacciaHyd.value = 75;
   focacciaStarter.value = 20.3;
-  focacciaSalt.value = 2.0;
   focacciaOil.value = 6;
-  [focacciaHyd, focacciaStarter, focacciaSalt, focacciaOil].forEach(persistValue);
+  [focacciaHyd, focacciaStarter, focacciaOil].forEach(persistValue);
   updateFocaccia();
 });
 updateFocaccia();
