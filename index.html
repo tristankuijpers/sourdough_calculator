@@ -274,6 +274,7 @@ function updateBread(){
 
 breadChipsEl.addEventListener('click', e=>{
   const btn = e.target.closest('.chip'); if(!btn) return;
+  breadPercentageMode = false;
   breadWeight.value = btn.dataset.v;
   persistValue(breadWeight);
   updateBread();
