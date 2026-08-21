@@ -59,6 +59,7 @@
 
       <div class="recipe-link"><a class="chip" href="recipes/bread.html">📖 Recipe &amp; method</a></div>
 
+      <div class="card-actions">
       <details>
         <summary>Advanced</summary>
         <div class="adv-grid">
@@ -73,6 +74,8 @@
         </div>
         <div class="adv-reset"><button type="button" class="chip" id="bread-reset">Reset to defaults</button></div>
       </details>
+      <button type="button" class="share-btn" id="share-bread">Share</button>
+      </div>
     </div>
   </div>
 
@@ -103,6 +106,7 @@
 
       <div class="recipe-link"><a class="chip" href="recipes/pizza.html">📖 Recipe &amp; method</a></div>
 
+      <div class="card-actions">
       <details>
         <summary>Advanced</summary>
         <div class="adv-grid">
@@ -121,6 +125,8 @@
         </div>
         <div class="adv-reset"><button type="button" class="chip" id="pizza-reset">Reset to defaults</button></div>
       </details>
+      <button type="button" class="share-btn" id="share-pizza">Share</button>
+      </div>
     </div>
   </div>
 
@@ -148,6 +154,7 @@
 
       <div class="recipe-link"><a class="chip" href="recipes/focaccia.html">📖 Recipe &amp; method</a></div>
 
+      <div class="card-actions">
       <details>
         <summary>Advanced</summary>
         <div class="adv-grid">
@@ -166,6 +173,8 @@
         </div>
         <div class="adv-reset"><button type="button" class="chip" id="focaccia-reset">Reset to defaults</button></div>
       </details>
+      <button type="button" class="share-btn" id="share-focaccia">Share</button>
+      </div>
     </div>
   </div>
 
@@ -179,6 +188,7 @@
     </div>
   </div>
 
+  <div class="toast" id="share-toast"></div>
   <footer>flour in the starter (50/50) is automatically included in total hydration</footer>
 </div>
 
@@ -483,6 +493,32 @@ updateFocaccia();
 if ('caches' in window) {
   caches.keys().then(keys => keys.filter(k => k !== 'sourdough-v7').forEach(k => caches.delete(k)));
 }
+
+// ---------- share ----------
+const shareToast = document.getElementById('share-toast');
+function showToast(msg){
+  shareToast.textContent = msg;
+  shareToast.classList.add('show');
+  if (shareToast._t) clearTimeout(shareToast._t);
+  shareToast._t = setTimeout(()=>shareToast.classList.remove('show'), 2200);
+}
+function shareFallback(url, text){
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url);
+  showToast('Link copied — opening WhatsApp');
+  window.open('https://wa.me/?text='+encodeURIComponent(text+' '+url), '_blank');
+}
+document.querySelectorAll('.share-btn').forEach(btn => btn.addEventListener('click', ()=>{
+  const url = location.href.split('#')[0];
+  const text = 'Sourdough Calculator — scale bread, pizza & focaccia dough';
+  try {
+    if (navigator.share){
+      navigator.share({ title:'Sourdough Calculator', text, url })
+        .catch(()=>shareFallback(url, text));
+      return;
+    }
+  } catch(e){}
+  shareFallback(url, text);
+}));
 
 // ---------- tabs ----------
 document.querySelectorAll('.tab').forEach(tab=>{

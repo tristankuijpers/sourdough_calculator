@@ -280,6 +280,25 @@ details[open] summary{color:var(--ink);}
 .adv-reset{margin-top:18px; text-align:center;}
 .adv-reset .chip{font-family:'IBM Plex Mono',monospace;}
 
+.card-actions{display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin-top:18px;}
+.card-actions details{margin-top:0;}
+.share-btn{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+  padding:7px 13px; border-radius:999px;
+  border:1px solid var(--line-strong); background:transparent; color:var(--muted);
+  cursor:pointer; transition:all .15s ease;
+}
+.share-btn:hover{color:var(--ink); border-color:var(--accent, var(--amber));}
+.toast{
+  position:fixed; left:50%; bottom:28px; transform:translate(-50%, 14px);
+  background:var(--surface-2); color:var(--ink); border:1px solid var(--line-strong);
+  padding:9px 16px; border-radius:999px; font-family:'IBM Plex Mono',monospace; font-size:11px;
+  opacity:0; pointer-events:none; z-index:50;
+  transition:opacity .2s ease, transform .2s ease;
+}
+.toast.show{opacity:1; transform:translate(-50%, 0);}
+
 footer{
   text-align:center;
   margin-top:22px;
