@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#1c160f">
-<title>Pizza Recipe &amp; Method &mdash; Sourdough Calculator</title>
+<title>Recipe &amp; Method &mdash; Sourdough Calculator</title>
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="../assets/favicon-192x192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
@@ -14,16 +14,31 @@
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
-<div class="wrap" style="--accent:var(--tomato)">
+<div class="wrap" id="recipe-wrap">
   <a class="back-link" href="../index.html">&larr; Back to calculator</a>
   <header>
-    <div class="eyebrow">pizza &middot; method</div>
-    <h1>Pizza: recipe &amp; method</h1>
-    <div class="sub">A straightforward sourdough pizza dough timeline. Weigh ingredients with the calculator, then follow these steps.</div>
+    <div class="eyebrow" id="recipe-eyebrow"></div>
+    <h1 id="recipe-title"></h1>
+    <div class="sub" id="recipe-sub"></div>
   </header>
   <div class="card" id="recipe-content"></div>
 </div>
-<script src="pizza-content.js"></script>
+<script>
+var id = new URLSearchParams(location.search).get('product') || 'bread';
+</script>
+<script src="../products.js"></script>
+<script>
+var p = getProduct(id) || getProduct('bread');
+document.getElementById('recipe-wrap').style.setProperty('--accent', p.accent.color);
+document.getElementById('recipe-eyebrow').innerHTML = p.recipe.eyebrow;
+document.getElementById('recipe-title').innerHTML = p.recipe.title;
+document.getElementById('recipe-sub').innerHTML = p.recipe.tagline;
+document.getElementById('recipe-content').innerHTML =
+  '<ol class="steps">' + p.recipe.steps.map(s =>
+    '<li><h3>' + s.h + '</h3><p>' + s.p + '</p></li>'
+  ).join('') + '</ol>' +
+  '<div class="tip"><b>Tip:</b> ' + p.recipe.tip + '</div>';
+</script>
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('../sw.js'));

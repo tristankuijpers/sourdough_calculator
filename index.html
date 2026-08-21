@@ -27,157 +27,10 @@
   </header>
 
   <div class="tabs-wrap">
-    <div class="tabs">
-      <div class="tab active" data-tab="bread" style="--accent-soft:rgba(207,159,66,0.16); --accent-ring:rgba(207,159,66,0.35);">Bread</div>
-      <div class="tab" data-tab="pizza" style="--accent-soft:rgba(193,80,46,0.16); --accent-ring:rgba(193,80,46,0.35);">Pizza</div>
-      <div class="tab" data-tab="focaccia" style="--accent-soft:rgba(138,154,91,0.16); --accent-ring:rgba(138,154,91,0.35);">Focaccia</div>
-      <div class="tab" data-tab="hotbuns" style="--accent-soft:rgba(127,163,160,0.16); --accent-ring:rgba(127,163,160,0.35);">Hot buns<span class="tag">coming soon</span></div>
-    </div>
+    <div class="tabs" id="tabs"></div>
   </div>
 
-  <!-- BREAD -->
-  <div class="tabpanel active" id="panel-bread" style="--accent:var(--amber)">
-    <div class="card">
-      <div class="weight-block">
-        <div class="weight-label">Total dough weight</div>
-        <div class="weight-value"><span id="bread-weight-num">858</span><span>g</span></div>
-        <input type="range" id="bread-weight" min="300" max="2600" step="1" value="858">
-        <div class="range-minmax"><span>300 g</span><span>2600 g</span></div>
-      </div>
-      <div class="chips" id="bread-chips"></div>
-
-      <div class="divider">
-        <svg width="20" height="12" viewBox="0 0 20 12"><path d="M1 10 L7 2 M8 10 L14 2 M15 10 L19 4" stroke="var(--amber)" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
-        <div class="line"></div>
-        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em;">INGREDIENTS</span>
-        <div class="line"></div>
-      </div>
-
-      <div class="rows" id="bread-rows"></div>
-
-      <div class="helper-line" id="bread-helper"></div>
-
-      <div class="recipe-link"><a class="chip" href="recipes/bread.html">📖 Recipe &amp; method</a></div>
-
-      <details>
-        <summary>Advanced</summary>
-        <div class="adv-grid">
-          <div class="adv-row">
-            <div class="top"><span class="k">Hydration (water relative to total flour)</span><span class="v" id="bread-hyd-v">70%</span></div>
-            <input type="range" id="bread-hyd" min="50" max="90" step="1" value="70">
-          </div>
-          <div class="adv-row">
-            <div class="top"><span class="k">Starter (relative to total flour)</span><span class="v" id="bread-starter-v">20%</span></div>
-            <input type="range" id="bread-starter" min="10" max="35" step="1" value="20">
-          </div>
-        </div>
-        <div class="adv-reset"><button type="button" class="chip" id="bread-reset">Reset to defaults</button></div>
-      </details>
-    </div>
-  </div>
-
-  <!-- PIZZA -->
-  <div class="tabpanel" id="panel-pizza" style="--accent:var(--tomato)">
-    <div class="card">
-      <div class="weight-block">
-        <div class="weight-label">Total dough weight</div>
-        <div class="weight-value"><span id="pizza-weight-num">950</span><span>g</span></div>
-        <input type="range" id="pizza-weight" min="300" max="3000" step="1" value="950">
-        <div class="range-minmax"><span>300 g</span><span>3000 g</span></div>
-      </div>
-
-      <div class="helper-line" style="margin-top:10px;">
-        ≈ <b id="pizza-ball-count">4</b> dough balls of
-        <input class="ball-input" id="pizza-ball-weight" type="text" inputmode="decimal" value="237.5"> g
-      </div>
-      <div class="chips" id="pizza-chips"></div>
-
-      <div class="divider">
-        <svg width="20" height="12" viewBox="0 0 20 12"><path d="M1 10 L7 2 M8 10 L14 2 M15 10 L19 4" stroke="var(--tomato)" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
-        <div class="line"></div>
-        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em;">INGREDIENTS</span>
-        <div class="line"></div>
-      </div>
-
-      <div class="rows" id="pizza-rows"></div>
-
-      <div class="recipe-link"><a class="chip" href="recipes/pizza.html">📖 Recipe &amp; method</a></div>
-
-      <details>
-        <summary>Advanced</summary>
-        <div class="adv-grid">
-          <div class="adv-row">
-            <div class="top"><span class="k">Hydration (water relative to total flour)</span><span class="v" id="pizza-hyd-v">69%</span></div>
-            <input type="range" id="pizza-hyd" min="50" max="85" step="0.0001" value="69.0909">
-          </div>
-          <div class="adv-row">
-            <div class="top"><span class="k">Starter (relative to total flour)</span><span class="v" id="pizza-starter-v">18%</span></div>
-            <input type="range" id="pizza-starter" min="10" max="35" step="0.0001" value="18.1818">
-          </div>
-          <div class="adv-row">
-            <div class="top"><span class="k">Olive oil (relative to total flour)</span><span class="v" id="pizza-oil-v">2%</span></div>
-            <input type="range" id="pizza-oil" min="0" max="8" step="0.0001" value="1.8182">
-          </div>
-        </div>
-        <div class="adv-reset"><button type="button" class="chip" id="pizza-reset">Reset to defaults</button></div>
-      </details>
-    </div>
-  </div>
-
-  <!-- FOCACCIA -->
-  <div class="tabpanel" id="panel-focaccia" style="--accent:var(--olive)">
-    <div class="card">
-      <div class="weight-block">
-        <div class="weight-label">Total dough weight</div>
-        <div class="weight-value"><span id="focaccia-weight-num">900</span><span>g</span></div>
-        <input type="range" id="focaccia-weight" min="300" max="2400" step="1" value="900">
-        <div class="range-minmax"><span>300 g</span><span>2400 g</span></div>
-      </div>
-      <div class="chips" id="focaccia-chips"></div>
-
-      <div class="divider">
-        <svg width="20" height="12" viewBox="0 0 20 12"><path d="M1 10 L7 2 M8 10 L14 2 M15 10 L19 4" stroke="var(--olive)" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
-        <div class="line"></div>
-        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em;">INGREDIENTS</span>
-        <div class="line"></div>
-      </div>
-
-      <div class="rows" id="focaccia-rows"></div>
-
-      <div class="helper-line" id="focaccia-helper"></div>
-
-      <div class="recipe-link"><a class="chip" href="recipes/focaccia.html">📖 Recipe &amp; method</a></div>
-
-      <details>
-        <summary>Advanced</summary>
-        <div class="adv-grid">
-          <div class="adv-row">
-            <div class="top"><span class="k">Hydration (water relative to total flour)</span><span class="v" id="focaccia-hyd-v">76%</span></div>
-            <input type="range" id="focaccia-hyd" min="60" max="85" step="0.0001" value="75.5102">
-          </div>
-          <div class="adv-row">
-            <div class="top"><span class="k">Starter (relative to total flour)</span><span class="v" id="focaccia-starter-v">20%</span></div>
-            <input type="range" id="focaccia-starter" min="10" max="35" step="0.0001" value="20.4082">
-          </div>
-          <div class="adv-row">
-            <div class="top"><span class="k">Olive oil (relative to total flour)</span><span class="v" id="focaccia-oil-v">6%</span></div>
-            <input type="range" id="focaccia-oil" min="0" max="10" step="0.0001" value="6.1224">
-          </div>
-        </div>
-        <div class="adv-reset"><button type="button" class="chip" id="focaccia-reset">Reset to defaults</button></div>
-      </details>
-    </div>
-  </div>
-
-  <!-- HOT BUNS (placeholder: ratios & recipe not defined yet) -->
-  <div class="tabpanel" id="panel-hotbuns" style="--accent:var(--teal)">
-    <div class="card">
-      <div class="coming-soon">
-        <div class="big">🥯 Hot buns</div>
-        <p>Ratios and the step-by-step recipe are coming soon. The calculator will work the same way &mdash; set a total dough weight and everything scales automatically.</p>
-      </div>
-    </div>
-  </div>
+  <div id="panels"></div>
 
   <div class="toast" id="share-toast"></div>
   <footer>
@@ -188,22 +41,14 @@
   </footer>
 </div>
 
+<script src="products.js"></script>
 <script>
 // ---------- core baker's-percentage math ----------
-// Given total dough weight W and percentages (as fractions of total flour F):
-// hydration h, starter s, salt sp, oil o (0 for bread)
-// F = W / (1 + h + sp + o)
-// starter = s*F, flour_added = F*(1-0.5s), water_added = F*(h-0.5s), salt = sp*F, oil = o*F
+// F = total flour, W = total dough weight, all percentages are fractions of F.
+// hydration h, starter s, salt sp, oil o (0 for bread).
 function computeDough(W, h, s, sp, o){
   const F = W / (1 + h + sp + o);
-  return {
-    starter: s*F,
-    flour: F*(1-0.5*s),
-    water: F*(h-0.5*s),
-    salt: sp*F,
-    oil: o*F,
-    totalFlour: F
-  };
+  return { starter:s*F, flour:F*(1-0.5*s), water:F*(h-0.5*s), salt:sp*F, oil:o*F, totalFlour:F };
 }
 const round = n => Math.round(n);
 
@@ -215,279 +60,227 @@ function renderRows(container, items){
     </div>`).join('');
 }
 
-// ---------- persistence helpers (localStorage, "sd_" prefix) ----------
-function restoreValue(el){
-  const stored = localStorage.getItem('sd_' + el.id);
-  if (stored !== null) el.value = stored;
-}
-function persistValue(el){
-  localStorage.setItem('sd_' + el.id, el.value);
-}
+// persistence helpers (localStorage, "sd_" prefix)
+function restoreValue(el){ const v = localStorage.getItem('sd_' + el.id); if (v !== null) el.value = v; }
+function persistValue(el){ localStorage.setItem('sd_' + el.id, el.value); }
 
-// ---------- BREAD ----------
-const breadWeight = document.getElementById('bread-weight');
-const breadWeightNum = document.getElementById('bread-weight-num');
-const breadHyd = document.getElementById('bread-hyd');
-const breadStarter = document.getElementById('bread-starter');
-const breadSalt = 1.6;
-const breadRows = document.getElementById('bread-rows');
-const breadHelper = document.getElementById('bread-helper');
-const breadChipsEl = document.getElementById('bread-chips');
+const $ = id => document.getElementById(id);
+// session-only UI mode per product: "base" (chips scale the default portion) or "percent"
+const baseMode = {};
+const activeId = PRODUCTS.some(p => !p.disabled) ? PRODUCTS.find(p => !p.disabled).id : null;
 
-[breadHyd, breadStarter].forEach(restoreValue);
-const breadBaseRecipe = {starter:100, flour:450, water:300, salt:8, total:858};
-let breadPercentageMode = false;
-
-const breadChipValues = [
-  {label:'half loaf', weight:429},
-  {label:'full loaf', weight:858},
-  {label:'double loaf', weight:1716}
-];
-breadChipsEl.innerHTML = breadChipValues.map(({label, weight}) =>
-  `<button class="chip" data-v="${weight}">${label} · ${weight} g</button>`
-).join('');
-
-function updateBread(){
-  const W = parseFloat(breadWeight.value);
-  const h = parseFloat(breadHyd.value)/100;
-  const s = parseFloat(breadStarter.value)/100;
-  const sp = breadSalt/100;
-
-  breadWeightNum.textContent = round(W);
-  document.getElementById('bread-hyd-v').textContent = Math.round(parseFloat(breadHyd.value))+'%';
-  document.getElementById('bread-starter-v').textContent = Math.round(parseFloat(breadStarter.value))+'%';
-
-  const d = breadPercentageMode ? computeDough(W, h, s, sp, 0) : (()=>{
-    const scale = W / breadBaseRecipe.total;
-    return {
-      starter: breadBaseRecipe.starter * scale,
-      flour: breadBaseRecipe.flour * scale,
-      water: breadBaseRecipe.water * scale,
-      salt: breadBaseRecipe.salt * scale,
-      totalFlour: (breadBaseRecipe.flour + breadBaseRecipe.starter / 2) * scale
-    };
-  })();
-  renderRows(breadRows, [
-    {name:'Starter (50/50)', pctLabel:Math.round(s*100)+'% of flour', grams:d.starter},
-    {name:'Flour', pctLabel:'', grams:d.flour},
-    {name:'Water', pctLabel:'hydration '+(h*100).toFixed(0)+'%', grams:d.water},
-    {name:'Salt', pctLabel:Math.round(sp*100)+'%', grams:d.salt},
-  ]);
-  breadHelper.innerHTML = `total flour incl. starter: <b>${round(d.totalFlour)} g</b>`;
-
-  [...breadChipsEl.children].forEach(c => c.classList.toggle('active', Math.abs(c.dataset.v - W) < 1));
-}
-
-breadChipsEl.addEventListener('click', e=>{
-  const btn = e.target.closest('.chip'); if(!btn) return;
-  breadPercentageMode = false;
-  breadWeight.value = btn.dataset.v;
-  persistValue(breadWeight);
-  updateBread();
-});
-[breadWeight, breadHyd, breadStarter].forEach(el => el.addEventListener('input', ()=>{
-  if (el !== breadWeight) breadPercentageMode = true;
-  persistValue(el);
-  updateBread();
-}));
-document.getElementById('bread-reset').addEventListener('click', ()=>{
-  breadPercentageMode = false;
-  breadHyd.value = 70;
-  breadStarter.value = 20;
-  [breadHyd, breadStarter].forEach(persistValue);
-  updateBread();
-});
-updateBread();
-
-// ---------- PIZZA ----------
-const pizzaWeight = document.getElementById('pizza-weight');
-const pizzaWeightNum = document.getElementById('pizza-weight-num');
-const pizzaHyd = document.getElementById('pizza-hyd');
-const pizzaStarter = document.getElementById('pizza-starter');
-const pizzaSalt = 1.8181818;
-const pizzaOil = document.getElementById('pizza-oil');
-const pizzaRows = document.getElementById('pizza-rows');
-const pizzaBallCount = document.getElementById('pizza-ball-count');
-const pizzaBallWeight = document.getElementById('pizza-ball-weight');
-const pizzaChipsEl = document.getElementById('pizza-chips');
-
-// Weight intentionally not restored: always open on the base recipe.
-[pizzaHyd, pizzaStarter, pizzaOil].forEach(restoreValue);
-pizzaWeight.value = 950;
-pizzaBallWeight.value = 237.5;
-
-localStorage.removeItem('sd_pizza-percentage-mode');
-const pizzaRecipeVersion = '950g-v7';
-if (localStorage.getItem('sd_pizza-recipe-version') !== pizzaRecipeVersion) {
-  pizzaHyd.value = 69.0909;
-  pizzaStarter.value = 18.1818;
-  pizzaOil.value = 1.8182;
-  [pizzaHyd, pizzaStarter, pizzaOil].forEach(persistValue);
-  localStorage.setItem('sd_pizza-recipe-version', pizzaRecipeVersion);
-}
-
-const pizzaBaseRecipe = { starter:100, flour:500, water:330, oil:10, salt:10, total:950 };
-let pizzaPercentageMode = false; // session-only, never persisted
-
-function renderPizzaChips(){
-  pizzaChipsEl.innerHTML = [2,4,6,8].map(n =>
-    `<button class="chip" data-balls="${n}">${n} balls</button>`
-  ).join('');
-}
-renderPizzaChips();
-
-function scalePizzaBaseRecipe(W){
-  const scale = W / pizzaBaseRecipe.total;
+// scale a base portion (grams) up/down to a new total dough weight
+function scaleBase(base, W){
+  const k = W / base.total;
   return {
-    starter:    pizzaBaseRecipe.starter * scale,
-    flour:      pizzaBaseRecipe.flour   * scale,
-    water:      pizzaBaseRecipe.water   * scale,
-    oil:        pizzaBaseRecipe.oil     * scale,
-    salt:       pizzaBaseRecipe.salt    * scale,
-    totalFlour: (pizzaBaseRecipe.flour + pizzaBaseRecipe.starter / 2) * scale
+    starter: base.starter * k,
+    flour:   base.flour   * k,
+    water:   base.water   * k,
+    salt:    base.salt    * k,
+    oil:     (base.oil || 0) * k,
+    totalFlour: (base.flour + base.starter / 2) * k
   };
 }
 
-function updatePizza(){
-  const W  = parseFloat(pizzaWeight.value);
-  const bw = parseFloat(pizzaBallWeight.value) || 237.5;
-  // always read slider values for labels; only used for calculation in percentage mode
-  const h  = parseFloat(pizzaHyd.value)/100;
-  const s  = parseFloat(pizzaStarter.value)/100;
-  const sp = pizzaSalt/100;
-  const o  = parseFloat(pizzaOil.value)/100;
+// The one update function every product shares.
+function updateProduct(p){
+  const pid = p.id;
+  const W  = parseFloat($(pid+'-weight').value);
+  const h  = parseFloat($(pid+'-hydration').value) / 100;
+  const st = parseFloat($(pid+'-starter').value)   / 100;
+  const sp = p.advanced.salt / 100;
+  const os = p.advanced.extras.map(ex => parseFloat($(pid+'-'+ex.key).value));
+  const o  = os.reduce((a,b)=>a+b,0) / 100;
 
-  pizzaWeightNum.textContent = round(W);
-  document.getElementById('pizza-hyd-v').textContent     = Math.round(h*100)+'%';
-  document.getElementById('pizza-starter-v').textContent = Math.round(s*100)+'%';
-  document.getElementById('pizza-oil-v').textContent     = Math.round(o*100)+'%';
+  $(pid+'-weight-num').textContent  = round(W);
+  $(pid+'-hydration-v').textContent = Math.round(h*100)+'%';
+  $(pid+'-starter-v').textContent   = Math.round(st*100)+'%';
+  p.advanced.extras.forEach((ex,i) => { $(pid+'-'+ex.key+'-v').textContent = Math.round(os[i])+'%'; });
 
-  const d = pizzaPercentageMode ? computeDough(W, h, s, sp, o) : scalePizzaBaseRecipe(W);
-  // pctLabels always come from the sliders so they never change when scaling presets
-  renderRows(pizzaRows, [
-    {name:'Starter (50/50)', pctLabel:Math.round(s*100)+'% of flour',    grams:d.starter},
-    {name:'Flour',           pctLabel:'',                                 grams:d.flour},
+  const d = (p.chipsSwitchTo === 'base' && baseMode[pid] === 'base' && p.base)
+    ? scaleBase(p.base, W)
+    : computeDough(W, h, st, sp, o);
+
+  const rows = [
+    {name:'Starter (50/50)', pctLabel:Math.round(st*100)+'% of flour',   grams:d.starter},
+    {name:'Flour',           pctLabel:'',                                grams:d.flour},
     {name:'Water',           pctLabel:'hydration '+Math.round(h*100)+'%', grams:d.water},
-    {name:'Olive oil',       pctLabel:Math.round(o*100)+'%',              grams:d.oil},
-    {name:'Salt',            pctLabel:Math.round(sp*100)+'%',             grams:d.salt},
-  ]);
+    ...p.advanced.extras.map((ex,i) => ({name:ex.name, pctLabel:Math.round(os[i])+'%', grams:d.oil})),
+    {name:'Salt',            pctLabel:Math.round(sp*100)+'%',            grams:d.salt},
+  ];
+  renderRows($(pid+'-rows'), rows);
 
-  pizzaBallCount.textContent = Math.round(W/bw);
-  [...pizzaChipsEl.children].forEach(c => {
+  // per-product widget (e.g. pizza's dough-ball counter) or default helper line
+  if (p.widget && p.widget.type === 'balls'){
+    const bw = parseFloat($(pid+'-ball-weight').value) || p.widget.defaultBallWeight;
+    $(pid+'-ball-count').textContent = Math.round(W / bw);
+  } else {
+    $(pid+'-helper').innerHTML = `total flour incl. starter: <b>${round(d.totalFlour)} g</b>`;
+  }
+
+  // chip active state
+  [...$(pid+'-chips').children].forEach(c => {
     const n = parseInt(c.dataset.balls, 10);
-    c.classList.toggle('active', Math.abs(W - pizzaBaseRecipe.total * n / 4) < 1);
+    const ok = isNaN(n)
+      ? Math.abs(parseFloat(c.dataset.v) - W) < 1
+      : Math.abs(W - p.base.total * n / p.widget.defaultCount) < 1;
+    c.classList.toggle('active', ok);
   });
 }
+// ---- builders -----------------------------------------------------------
 
-pizzaChipsEl.addEventListener('click', e=>{
-  const btn = e.target.closest('.chip'); if(!btn) return;
-  // compute W from ball count directly — no dependency on stored ball weight
-  const n = parseInt(btn.dataset.balls, 10);
-  pizzaPercentageMode = false;
-  pizzaWeight.value = pizzaBaseRecipe.total * n / 4;
-  persistValue(pizzaWeight);
-  updatePizza();
-});
-pizzaBallWeight.addEventListener('input', ()=>{
-  pizzaBallWeight.value = Math.round((parseFloat(pizzaBallWeight.value) || 237.5) * 2) / 2;
-  persistValue(pizzaBallWeight);
-  updatePizza();
-});
-pizzaWeight.addEventListener('input', ()=>{
-  persistValue(pizzaWeight);
-  updatePizza();
-});
-[pizzaHyd, pizzaStarter, pizzaOil].forEach(el => el.addEventListener('input', ()=>{
-  pizzaPercentageMode = true;
-  persistValue(el);
-  updatePizza();
-}));
-document.getElementById('pizza-reset').addEventListener('click', ()=>{
-  pizzaPercentageMode = false;
-  pizzaWeight.value = 950;
-  pizzaBallWeight.value = 237.5;
-  pizzaHyd.value = 69.0909;
-  pizzaStarter.value = 18.1818;
-  pizzaOil.value = 1.8182;
-  [pizzaHyd, pizzaStarter, pizzaOil].forEach(persistValue);
-  renderPizzaChips();
-  updatePizza();
-});
-updatePizza();
-
-// ---------- FOCACCIA ----------
-const focacciaWeight = document.getElementById('focaccia-weight');
-const focacciaWeightNum = document.getElementById('focaccia-weight-num');
-const focacciaHyd = document.getElementById('focaccia-hyd');
-const focacciaStarter = document.getElementById('focaccia-starter');
-const focacciaSalt = 2.0408163;
-const focacciaOil = document.getElementById('focaccia-oil');
-const focacciaRows = document.getElementById('focaccia-rows');
-const focacciaHelper = document.getElementById('focaccia-helper');
-const focacciaChipsEl = document.getElementById('focaccia-chips');
-
-[focacciaHyd, focacciaStarter, focacciaOil].forEach(restoreValue);
-const focacciaRecipeVersion = '900g-v1';
-if (localStorage.getItem('sd_focaccia-recipe-version') !== focacciaRecipeVersion) {
-  focacciaHyd.value = 75.5102;
-  focacciaStarter.value = 20.4082;
-  focacciaOil.value = 6.1224;
-  [focacciaHyd, focacciaStarter, focacciaOil].forEach(persistValue);
-  localStorage.setItem('sd_focaccia-recipe-version', focacciaRecipeVersion);
+function tabHTML(p){
+  const soon = p.disabled ? ' tab-soon' : '';
+  const emoji = p.emoji ? p.emoji+' ' : '';
+  const tag = p.tag ? `<span class="tag">${p.tag}</span>` : '';
+  return `<div class="tab${soon}" data-tab="${p.id}" style="--accent-soft:${p.accent.soft}; --accent-ring:${p.accent.ring};">${emoji}${p.label}${tag}</div>`;
 }
 
-const focacciaChipValues = [450, 900, 1350, 1800];
-focacciaChipsEl.innerHTML = focacciaChipValues.map(v =>
-  `<button class="chip" data-v="${v}">${v===900?'standard pan · ':''}${v} g</button>`
-).join('');
-
-function updateFocaccia(){
-  const W = parseFloat(focacciaWeight.value);
-  const h = parseFloat(focacciaHyd.value)/100;
-  const s = parseFloat(focacciaStarter.value)/100;
-  const sp = focacciaSalt/100;
-  const o = parseFloat(focacciaOil.value)/100;
-
-  focacciaWeightNum.textContent = round(W);
-  document.getElementById('focaccia-hyd-v').textContent = Math.round(parseFloat(focacciaHyd.value))+'%';
-  document.getElementById('focaccia-starter-v').textContent = Math.round(parseFloat(focacciaStarter.value))+'%';
-  document.getElementById('focaccia-oil-v').textContent = Math.round(parseFloat(focacciaOil.value))+'%';
-
-  const d = computeDough(W, h, s, sp, o);
-  renderRows(focacciaRows, [
-    {name:'Starter (50/50)', pctLabel:Math.round(s*100)+'% of flour', grams:d.starter},
-    {name:'Flour', pctLabel:'', grams:d.flour},
-    {name:'Water', pctLabel:'hydration '+Math.round(h*100)+'%', grams:d.water},
-    {name:'Olive oil', pctLabel:Math.round(o*100)+'%', grams:d.oil},
-    {name:'Salt', pctLabel:Math.round(sp*100)+'%', grams:d.salt},
-  ]);
-  focacciaHelper.innerHTML = `total flour incl. starter: <b>${round(d.totalFlour)} g</b>`;
-
-  [...focacciaChipsEl.children].forEach(c => c.classList.toggle('active', Math.abs(c.dataset.v - W) < 1));
+function chipHTML(c){
+  if (c.balls !== undefined) return `<button class="chip" data-balls="${c.balls}">${c.balls} balls</button>`;
+  return `<button class="chip" data-v="${c.weight}">${c.text}</button>`;
 }
 
-focacciaChipsEl.addEventListener('click', e=>{
-  const btn = e.target.closest('.chip'); if(!btn) return;
-  focacciaWeight.value = btn.dataset.v;
-  persistValue(focacciaWeight);
-  updateFocaccia();
+function advRowHTML(pid, cfg){
+  if (!cfg) return '';
+  return `
+    <div class="adv-row">
+      <div class="top"><span class="k">${cfg.label}</span><span class="v" id="${pid}-${cfg.key}-v">${Math.round(cfg.def)}%</span></div>
+      <input type="range" id="${pid}-${cfg.key}" min="${cfg.min}" max="${cfg.max}" step="${cfg.step}" value="${cfg.def}">
+    </div>`;
+}
+
+function calcPanelHTML(p){
+  const pid = p.id, s = p.slider;
+  const ballWidget = (p.widget && p.widget.type === 'balls') ? `
+    <div class="helper-line" style="margin-top:10px;">
+      ≈ <b id="${pid}-ball-count">${p.widget.defaultCount}</b> dough balls of
+      <input class="ball-input" id="${pid}-ball-weight" type="text" inputmode="decimal" value="${p.widget.defaultBallWeight}"> g
+    </div>` : '';
+  const helper = ballWidget ? '' : `<div class="helper-line" id="${pid}-helper"></div>`;
+  const adv = [
+    advRowHTML(pid, p.advanced.hydration),
+    advRowHTML(pid, p.advanced.starter),
+    ...p.advanced.extras.map(ex => advRowHTML(pid, ex))
+  ].join('');
+  return `
+      <div class="weight-block">
+        <div class="weight-label">Total dough weight</div>
+        <div class="weight-value"><span id="${pid}-weight-num">${s.def}</span><span>g</span></div>
+        <input type="range" id="${pid}-weight" min="${s.min}" max="${s.max}" step="${s.step}" value="${s.def}">
+        <div class="range-minmax"><span>${s.min} g</span><span>${s.max} g</span></div>
+      </div>
+      ${ballWidget}
+      <div class="chips" id="${pid}-chips"></div>
+
+      <div class="divider">
+        <svg width="20" height="12" viewBox="0 0 20 12"><path d="M1 10 L7 2 M8 10 L14 2 M15 10 L19 4" stroke="var(--accent, var(--amber))" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
+        <div class="line"></div>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em;">INGREDIENTS</span>
+        <div class="line"></div>
+      </div>
+
+      <div class="rows" id="${pid}-rows"></div>
+
+      ${helper}
+
+      <div class="recipe-link"><a class="chip" href="recipes/recipe.html?product=${pid}">📖 Recipe &amp; method</a></div>
+
+      <details>
+        <summary>Advanced</summary>
+        <div class="adv-grid">
+          ${adv}
+        </div>
+        <div class="adv-reset"><button type="button" class="chip" id="${pid}-reset">Reset to defaults</button></div>
+      </details>`;
+}
+
+function panelHTML(p){
+  const active = p.id === activeId ? ' active' : '';
+  const card = p.disabled
+    ? `<div class="card"><div class="coming-soon"><div class="big">${p.emoji} ${p.label}</div><p>${p.comingSoon}</p></div></div>`
+    : `<div class="card">${calcPanelHTML(p)}</div>`;
+  return `<div class="tabpanel${active}" id="panel-${p.id}" style="--accent:${p.accent.color}">${card}</div>`;
+}
+
+// ---- render ----
+$('tabs').innerHTML = PRODUCTS.map(tabHTML).join('');
+$('panels').innerHTML = PRODUCTS.map(panelHTML).join('');
+
+// wire up each enabled product
+PRODUCTS.forEach(p => {
+  if (p.disabled) return;
+  const pid = p.id;
+  baseMode[pid] = p.chipsSwitchTo;
+
+  // persistence: seed ratio slider defaults, then restore any saved values.
+  // (Weight is intentionally never restored — every product opens on its
+  // default portion.)
+  [p.advanced.hydration, p.advanced.starter, ...p.advanced.extras]
+    .forEach(cfg => { $(pid+'-'+cfg.key).value = cfg.def; });
+  [p.advanced.hydration, p.advanced.starter, ...p.advanced.extras]
+    .forEach(cfg => restoreValue($(pid+'-'+cfg.key)));
+
+  $(pid+'-chips').innerHTML = p.chips.map(chipHTML).join('');
+
+  // chips (presets): snap to a new weight and switch back to base mode
+  $(pid+'-chips').addEventListener('click', e => {
+    const btn = e.target.closest('.chip'); if (!btn) return;
+    baseMode[pid] = p.chipsSwitchTo;
+    const balls = parseInt(btn.dataset.balls, 10);
+    $(pid+'-weight').value = isNaN(balls)
+      ? parseFloat(btn.dataset.v)
+      : p.base.total * balls / p.widget.defaultCount;
+    persistValue($(pid+'-weight'));
+    updateProduct(p);
+  });
+
+  // total-dough weight slider (keeps current mode; never restored on load)
+  $(pid+'-weight').addEventListener('input', () => {
+    persistValue($(pid+'-weight'));
+    updateProduct(p);
+  });
+
+  // ball-weight input (pizza): rounds to 0.5 g, stays in current mode
+  if (p.widget && p.widget.type === 'balls'){
+    $(pid+'-ball-weight').addEventListener('input', () => {
+      $(pid+'-ball-weight').value = Math.round((parseFloat($(pid+'-ball-weight').value) || p.widget.defaultBallWeight) * 2) / 2;
+      persistValue($(pid+'-ball-weight'));
+      updateProduct(p);
+    });
+  }
+
+  // ratio sliders switch bread/pizza from base mode into percentage mode
+  [p.advanced.hydration, p.advanced.starter, ...p.advanced.extras].forEach(cfg => {
+    const el = $(pid+'-'+cfg.key);
+    el.addEventListener('input', () => {
+      if (p.chipsSwitchTo === 'base') baseMode[pid] = 'percent';
+      persistValue(el);
+      updateProduct(p);
+    });
+  });
+
+  // reset-to-defaults
+  $(pid+'-reset').addEventListener('click', () => {
+    baseMode[pid] = p.chipsSwitchTo;
+    if (p.resetWeight) {
+      $(pid+'-weight').value = p.slider.def;
+      persistValue($(pid+'-weight'));
+    }
+    if (p.widget && p.widget.type === 'balls') $(pid+'-ball-weight').value = p.widget.defaultBallWeight;
+    [p.advanced.hydration, p.advanced.starter, ...p.advanced.extras].forEach(cfg => {
+      $(pid+'-'+cfg.key).value = cfg.def;
+      persistValue($(pid+'-'+cfg.key));
+    });
+    updateProduct(p);
+  });
+
+  updateProduct(p);
 });
-[focacciaWeight, focacciaHyd, focacciaStarter, focacciaOil].forEach(el => el.addEventListener('input', ()=>{
-  persistValue(el);
-  updateFocaccia();
-}));
-document.getElementById('focaccia-reset').addEventListener('click', ()=>{
-  focacciaHyd.value = 75.5102;
-  focacciaStarter.value = 20.4082;
-  focacciaOil.value = 6.1224;
-  [focacciaHyd, focacciaStarter, focacciaOil].forEach(persistValue);
-  updateFocaccia();
-});
-updateFocaccia();
 
 // wipe stale SW caches so VS Code preview and browsers without SW get fresh code
 if ('caches' in window) {
-  caches.keys().then(keys => keys.filter(k => k !== 'sourdough-v7').forEach(k => caches.delete(k)));
+  caches.keys().then(keys => keys.filter(k => k !== 'sourdough-v8').forEach(k => caches.delete(k)));
 }
 
 // ---------- share ----------
@@ -527,7 +320,7 @@ document.querySelectorAll('.tab').forEach(tab=>{
   });
 });
 
-// only show the edge fades on the tab strip when there's actually more to scroll to
+// only show the edge fades on the tab strip when there's more to scroll to
 const tabsWrap = document.querySelector('.tabs-wrap');
 const tabsEl = document.querySelector('.tabs');
 function updateTabFades(){

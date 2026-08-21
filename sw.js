@@ -1,7 +1,8 @@
-const CACHE_NAME = 'sourdough-v7';
+const CACHE_NAME = 'sourdough-v8';
 const ASSETS = [
   './',
   './index.html',
+  './products.js',
   './site.webmanifest',
   './assets/style.css',
   './assets/favicon-32x32.png',
@@ -9,12 +10,7 @@ const ASSETS = [
   './assets/favicon-512x512.png',
   './assets/favicon-maskable.png',
   './assets/apple-touch-icon.png',
-  './recipes/bread.html',
-  './recipes/bread-content.js',
-  './recipes/pizza.html',
-  './recipes/pizza-content.js',
-  './recipes/focaccia.html',
-  './recipes/focaccia-content.js',
+  './recipes/recipe.html',
 ];
 
 self.addEventListener('install', (event) => {

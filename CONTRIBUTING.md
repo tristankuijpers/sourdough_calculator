@@ -16,18 +16,16 @@ python3 -m http.server 8000
 
 - **Keep it vanilla.** Plain HTML/CSS/JS only — no frameworks, no build tools, no npm dependencies. If it doesn't run by just opening the file, it doesn't belong here.
 - **Static-hosting only.** This lives on GitHub Pages — no server, no backend, no database. Check the README's "Before adding any new feature" checklist if you're not sure your idea fits.
-- **Let the math do the math.** Don't hardcode gram amounts — pipe your ratios through the shared `computeDough(W, h, s, sp, o)` function so the sliders stay alive and scalable, same as Bread/Pizza/Focaccia.
+- **Data over markup.** All product definitions (ratios, presets, percentages, recipe steps) live in [`products.js`](products.js). The calculator reads that one file — never hardcode gram amounts or a new panel in HTML/JS. If a product does something the schema doesn't cover yet, start by extending the schema, then the generic renderer.
 
 ## Got a recipe? Here's how to add it
 
-Follow the README's ["Adding a new product tab"](README.md#adding-a-new-product-tab) section:
-
-1. Add a `.tab` button + matching `.tabpanel` in [index.html](index.html).
-2. Wire up sliders/JS following the Bread/Pizza/Focaccia pattern (an `updateX()` function, chip presets, reset button, `persistValue`/`restoreValue` for `localStorage`).
-3. Add `recipes/<product>.html` (copy an existing one) and `recipes/<product>-content.js` for the step-by-step method.
+1. Open [`products.js`](products.js) and append one entry to the `PRODUCTS` array (copy an existing product as a template).
+2. The new tab, calculator sliders, chips, and `recipe.html?product=<id>` page appear automatically — no HTML or JS edits.
+3. **Use real numbers.** Ratios come from a recipe you've actually baked, not a guess off the internet. Tell us about it in the PR — we love hearing what worked (and what didn't).
 4. Open `index.html` and poke at it until it feels right. No build, no CI, no waiting.
 
-One ask: make sure the ratios come from a recipe you've actually baked, not a guess off the internet. Tell us about it in the PR — we love hearing what worked (and what didn't).
+The schema is documented in the README under "Adding a new product".
 
 ## Sending it in
 
