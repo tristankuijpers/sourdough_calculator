@@ -1,6 +1,7 @@
 {
   "name": "Sourdough Calculator",
   "short_name": "Sourdough",
+  "description": "Scale bread, pizza & focaccia dough by total weight — baker's percentages computed for you, with presets and a full recipe.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#1c160f",
@@ -19,10 +20,26 @@
       "purpose": "any"
     },
     {
-      "src": "assets/favicon-maskable.png",
+      "src": "assets/favicon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Sourdough Calculator on desktop"
+    },
+    {
+      "src": "assets/screenshot-mobile.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Sourdough Calculator on mobile"
     }
   ]
 }
