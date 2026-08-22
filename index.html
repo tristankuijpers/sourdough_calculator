@@ -341,14 +341,15 @@ function showToast(msg){
 }
 function isSmartphone(){
   const ua = navigator.userAgent || '';
-  const mobilePhoneUA = /Android|iPhone|iPod|Windows Phone|Mobile/i.test(ua);
+  const mobilePhoneUA = /Android|iPhone|iPad|iPod|Windows Phone|Mobile/i.test(ua);
   const hasCoarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
   const narrowViewport = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
-  return mobilePhoneUA && hasCoarsePointer && narrowViewport;
+  // Any one signal is enough: some phones/iPads/webviews don't report all of them.
+  return mobilePhoneUA || hasCoarsePointer || narrowViewport;
 }
 
-// Share only on smartphones, using exclusively the native OS share sheet.
-// No WhatsApp/deep-link fallbacks: unsupported browsers simply hide the button.
+// Share only where the native share sheet can work. If navigator.share is missing
+// the button is hidden (no WhatsApp-style fallbacks; opting out is a clean no).
 const enableNativeShare = isSmartphone() && !!navigator.share;
 if (!enableNativeShare){
   shareAppBtn.style.display = 'none';
