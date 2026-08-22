@@ -8,6 +8,7 @@ const ASSETS = [
   './assets/favicon-32x32.png',
   './assets/favicon-192x192.png',
   './assets/favicon-512x512.png',
+  './assets/favicon-maskable.png',
   './assets/apple-touch-icon.png',
   './assets/screenshot-desktop.png',
   './assets/screenshot-mobile.png',
