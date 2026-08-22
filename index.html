@@ -278,11 +278,6 @@ PRODUCTS.forEach(p => {
   updateProduct(p);
 });
 
-// wipe stale SW caches so VS Code preview and browsers without SW get fresh code
-if ('caches' in window) {
-  caches.keys().then(keys => keys.filter(k => k !== 'sourdough-v9').forEach(k => caches.delete(k)));
-}
-
 // ---------- share ----------
 const shareToast = document.getElementById('share-toast');
 const shareAppBtn = document.getElementById('share-app');
