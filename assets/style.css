@@ -383,3 +383,120 @@ footer{
   margin-bottom:8px;
 }
 .coming-soon p{font-size:13.5px; line-height:1.6; max-width:38ch; margin:0 auto;}
+
+/* Advanced sliders are temporarily hidden to keep the calculator dead simple.
+   TODO(advanced): rework into a flour-mix picker (e.g. "50% whole wheat /
+   50% white"). Delete this rule to bring the sliders back. */
+.adv-panel{display:none;}
+
+/* CTA button on the landing page */
+.get-started{
+  margin-top:18px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:'Inter',sans-serif;
+  font-size:13px;
+  padding:10px 16px;
+  border-color:var(--amber);
+  color:var(--amber);
+  background:rgba(207,159,66,0.08);
+}
+.get-started:hover{
+  color:var(--bg);
+  background:var(--amber);
+  border-color:var(--amber);
+}
+.get-started:hover .icon-img{filter:brightness(0);}
+.icon-img{
+  width:18px;
+  height:18px;
+  flex-shrink:0;
+  display:block;
+  transition:filter .15s ease;
+}
+
+/* recipe pages: general-method callout + per-product notes */
+.general-callout{
+  text-align:center;
+  padding:18px 16px 20px;
+  border-radius:10px;
+  background:var(--surface-2);
+  border:1px solid var(--line-strong);
+  margin-bottom:24px;
+}
+.general-callout p{
+  margin:0 auto 14px;
+  max-width:44ch;
+  font-size:13.5px;
+  line-height:1.6;
+  color:var(--muted);
+}
+.general-callout .chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  padding:8px 14px;
+  border-color:var(--accent, var(--amber));
+  color:var(--ink);
+}
+.general-callout .chip .icon-img{width:16px; height:16px;}
+.general-callout .chip:hover{
+  color:var(--bg);
+  background:var(--accent, var(--amber));
+  border-color:var(--accent, var(--amber));
+}
+.general-callout .chip:hover .icon-img{filter:brightness(0);}
+.notes-title{
+  font-family:'Fraunces',serif;
+  font-size:18px;
+  font-weight:600;
+  margin:0 0 14px;
+}
+.notes{display:flex; flex-direction:column;}
+.note{padding:0 0 16px; margin-bottom:16px; border-bottom:1px solid var(--line);}
+.note:last-child{border-bottom:none; margin-bottom:0; padding-bottom:0;}
+.note h3{
+  font-family:'Fraunces',serif;
+  font-size:16px;
+  font-weight:600;
+  margin:0 0 6px;
+  color:var(--ink);
+}
+.note p{font-size:14px; line-height:1.6; color:var(--muted); margin:0;}
+
+/* getting-started story page */
+.story .lede{
+  font-family:'Fraunces',serif;
+  font-size:16.5px;
+  line-height:1.6;
+  color:var(--ink);
+  margin:0 0 22px;
+  padding-left:14px;
+  border-left:2px solid var(--accent, var(--amber));
+}
+.story h2{
+  font-family:'Fraunces',serif;
+  font-size:20px;
+  font-weight:600;
+  margin:26px 0 10px;
+  color:var(--ink);
+}
+.story h3{
+  font-family:'Fraunces',serif;
+  font-size:16px;
+  font-weight:600;
+  margin:22px 0 8px;
+  color:var(--ink);
+}
+.story p{font-size:14px; line-height:1.7; color:var(--muted); margin:0 0 12px;}
+.story p b{color:var(--ink); font-weight:600;}
+.story .method-intro{color:var(--ink); font-size:14.5px;}
+.story .punchline{
+  font-family:'Fraunces',serif;
+  font-size:17px;
+  font-weight:600;
+  color:var(--ink);
+  margin:24px 0 0;
+}

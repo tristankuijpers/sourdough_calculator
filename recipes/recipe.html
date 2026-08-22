@@ -44,6 +44,11 @@
     <div class="sub" id="recipe-sub"></div>
   </header>
   <div class="card" id="recipe-content"></div>
+  <footer>
+    <div class="footer-links">
+      <span class="foot-stat">Built by TK/LAB &middot; <a href="https://github.com/tristankuijpers/sourdough_calculator" target="_blank" rel="noopener">open source on GitHub</a></span>
+    </div>
+  </footer>
 </div>
 <script>
 var id = new URLSearchParams(location.search).get('product') || 'bread';
@@ -55,11 +60,27 @@ document.getElementById('recipe-wrap').style.setProperty('--accent', p.accent.co
 document.getElementById('recipe-eyebrow').innerHTML = p.recipe.eyebrow;
 document.getElementById('recipe-title').innerHTML = p.recipe.title;
 document.getElementById('recipe-sub').innerHTML = p.recipe.tagline;
-document.getElementById('recipe-content').innerHTML =
-  '<ol class="steps">' + p.recipe.steps.map(s =>
-    '<li><h3>' + s.h + '</h3><p>' + s.p + '</p></li>'
-  ).join('') + '</ol>' +
-  '<div class="tip"><b>Tip:</b> ' + p.recipe.tip + '</div>';
+document.title = p.recipe.title + ' — Sourdough Calculator';
+
+// Every bake starts from the same general method; the recipe only lists
+// what differs or what to keep an eye on (p.recipe.notes).
+var html =
+  '<div class="general-callout">' +
+    '<p>Every bake on this site starts from the same general method. Read it once &mdash; it applies to all of them. Below: only what differs for this one.</p>' +
+    '<a class="chip" href="getting-started.html"><img class="icon-img" src="../assets/favicon-32x32.png" alt="">Getting started with sourdough &rarr;</a>' +
+  '</div>';
+
+if (p.recipe.notes && p.recipe.notes.length) {
+  html += '<h2 class="notes-title">Notes for ' + p.label + '</h2>' +
+    '<div class="notes">' +
+    p.recipe.notes.map(function (n) {
+      return '<div class="note"><h3>' + n.h + '</h3><p>' + n.p + '</p></div>';
+    }).join('') +
+    '</div>';
+}
+
+html += '<div class="tip"><b>Tip:</b> ' + p.recipe.tip + '</div>';
+document.getElementById('recipe-content').innerHTML = html;
 </script>
 <script>
 if ('serviceWorker' in navigator) {

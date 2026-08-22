@@ -46,16 +46,14 @@ const PRODUCTS = [
     recipe: {
       eyebrow: "bread &middot; method",
       title: "Bread: recipe &amp; method",
-      tagline: "A straightforward sourdough bread timeline. Weigh ingredients with the calculator, then follow these steps.",
-      tip: "use the calculator's total dough weight and slider to size the recipe for your pan or banneton, then follow this method regardless of batch size &mdash; the ratios stay the same.",
-      steps: [
-        { h: "Feed your starter", p: "8&ndash;12 hours before mixing, feed your starter (equal parts flour and water) so it's active and roughly doubled, with a domed top, at mixing time." },
-        { h: "Mix", p: "Combine the starter and water first, then mix in the flour until no dry bits remain. Rest 30&ndash;60 minutes (autolyse) before adding salt." },
-        { h: "Add salt &amp; strengthen the dough", p: "Add the salt with a splash of the mixed water, then fold or knead briefly. Over the next 2 hours, do 3&ndash;4 sets of stretch-and-folds, spaced 30 minutes apart." },
-        { h: "Bulk fermentation", p: "Let the dough rise at room temperature (24&ndash;26&deg;C) until it's grown 40&ndash;60% in volume and feels airy and jiggly &mdash; typically 4&ndash;6 hours, longer if your kitchen is cooler." },
-        { h: "Shape", p: "Turn the dough out gently, pre-shape into a round, rest 20&ndash;30 minutes, then shape firmly into its final form (boule or batard)." },
-        { h: "Cold proof", p: "Place the shaped dough seam-side up in a floured banneton and refrigerate for 8&ndash;18 hours. A longer cold proof deepens the flavor." },
-        { h: "Bake", p: "Preheat a Dutch oven at 250&deg;C for 45 minutes. Score the cold dough, bake covered for 20 minutes, then uncovered at 230&deg;C for another 20&ndash;25 minutes until deeply golden." }
+      tagline: "The general method in calculator form. Flour, water, salt &mdash; and time. Nothing extra, nothing missing.",
+      tip: "use the calculator's total dough weight to size the loaf for your pan or banneton &mdash; the method is identical at any batch size.",
+      // Every recipe starts from the general method (recipes/getting-started.html);
+      // `notes` only lists what differs for this bake or what to keep an eye on.
+      notes: [
+        { h: "Flour", p: "I use 100% whole wheat or 100% whole spelt. Prefer a lighter crumb? Mix in some white flour &mdash; start at 15% and go from there. The flour decides how much water the dough wants, and the general method's rule covers it: too dry, add a splash of water; too wet, add a little flour." },
+        { h: "Water", p: "Start with the calculator's ratio, then trust your hands. The right amount shifts with your flour, your kitchen, even the weather &mdash; feel beats percentage." },
+        { h: "The bake", p: "Identical to the general method: 250&deg;C with steam, straight down to 200&deg;C, 40 minutes, cool on a rack. No scoring needed &mdash; the folds do the bursting for you." }
       ]
     }
   },
@@ -95,17 +93,17 @@ const PRODUCTS = [
     recipe: {
       eyebrow: "pizza &middot; method",
       title: "Pizza: recipe &amp; method",
-      tagline: "A straightforward sourdough pizza dough timeline. Weigh ingredients with the calculator, then follow these steps.",
-      tip: "use the ball weight and count inputs on the calculator to scale this recipe to any number of pizzas &mdash; the method stays identical.",
-      steps: [
-        { h: "Feed your starter", p: "8&ndash;12 hours before mixing, feed your starter so it's active and roughly doubled at mixing time." },
-        { h: "Mix", p: "Dissolve the starter into the water, then mix in the flour until no dry bits remain. Rest 30 minutes (autolyse) before adding salt and oil." },
-        { h: "Add salt &amp; oil", p: "Add the salt and olive oil, then knead or fold until the dough is smooth and elastic, about 5&ndash;10 minutes by hand." },
-        { h: "Bulk fermentation", p: "Let the dough rise at room temperature until it's grown about 50% in volume, roughly 2&ndash;4 hours, with 2 sets of stretch-and-folds in the first hour." },
-        { h: "Divide into balls", p: "Use the Pizza Ball Calculator on the main page to size your batch, then divide the dough and shape each portion into a tight ball." },
-        { h: "Cold proof", p: "Place the balls in lightly oiled, covered containers and refrigerate for 24&ndash;72 hours for the best flavor and easiest stretching." },
-        { h: "Bring to room temperature &amp; stretch", p: "Take the balls out 2&ndash;3 hours before baking. Stretch each one by hand from the center outward, leaving a puffy rim." },
-        { h: "Bake", p: "Bake as hot as your oven/steel/stone allows (ideally 280&ndash;300&deg;C), until the crust is blistered and the base is set, usually 60&ndash;90 seconds in a pizza oven or 6&ndash;9 minutes in a home oven." }
+      tagline: "The same starter, a different agenda. The general method gets the dough through its bulk ferment &mdash; then it splits into balls and bakes hot and fast.",
+      tip: "use the ball weight and count on the calculator to scale this to any number of pizzas &mdash; the method doesn't change.",
+      // Every recipe starts from the general method (recipes/getting-started.html);
+      // `notes` only lists what differs for this bake or what to keep an eye on.
+      notes: [
+        { h: "Flour", p: "White or strong bread flour, not the whole wheat from the general loaf &mdash; more gluten means more stretch. Whole wheat works for a heartier crust; just don't expect it to stretch as far." },
+        { h: "The dough", p: "There's olive oil in this one (the calculator adds it), and the dough gets a proper knead &mdash; 5&ndash;10 minutes by hand &mdash; until it's smooth and elastic, not just combined." },
+        { h: "Divide into balls", p: "After the bulk ferment, skip the bowl: divide the dough into balls and shape each one tight. Use the ball counter on the calculator to size your batch." },
+        { h: "Cold proof", p: "24&ndash;72 hours, not a few hours to two days. The long fridge stay builds the flavour and makes the dough much easier to stretch. Do the full 72 if you can wait." },
+        { h: "Before baking", p: "Take the balls out 2&ndash;3 hours ahead so they come to room temperature. Stretch each one by hand from the centre outward, leaving a puffy rim." },
+        { h: "Bake hot", p: "As hot as your oven, steel or stone allows &mdash; ideally 280&ndash;300&deg;C. 60&ndash;90 seconds in a pizza oven, 6&ndash;9 minutes in a home oven. No steam: this crust is all heat." }
       ]
     }
   },
@@ -142,16 +140,15 @@ const PRODUCTS = [
     recipe: {
       eyebrow: "focaccia &middot; method",
       title: "Focaccia: recipe &amp; method",
-      tagline: "A straightforward sourdough focaccia timeline. Weigh ingredients with the calculator, then follow these steps.",
-      tip: "use the calculator's total dough weight and slider to size the recipe for your pan, then follow this method regardless of batch size &mdash; the ratios stay the same.",
-      steps: [
-        { h: "Feed your starter", p: "Ensure your starter is active and roughly doubled before you start mixing." },
-        { h: "Mix &amp; autolyse", p: "Dissolve the starter in the water, add the flour, and mix until no dry bits remain. Rest before adding salt and oil." },
-        { h: "Add salt &amp; oil", p: "Add the salt and olive oil, then knead or fold until the dough is smooth and cohesive." },
-        { h: "Bulk fermentation", p: "Let the dough rise at room temperature, performing periodic stretch-and-folds during the first few hours until it's aerated and puffy." },
-        { h: "Cold proof", p: "Transfer the covered dough to the refrigerator for cold fermentation." },
-        { h: "Pan proof &amp; dimple", p: "Transfer the dough to a generously oiled baking sheet (30&times;40&nbsp;cm). Gently stretch it to fill the pan, dimple deeply with oiled fingers, and add toppings (sea salt, rosemary, olive oil)." },
-        { h: "Bake", p: "Bake at 230&deg;C for 20&ndash;25 minutes until golden and crispy." }
+      tagline: "The easy one: no shaping, no scoring, no steam. Same general method up to the bulk ferment &mdash; then oil, a pan, dimples, and a hot flat bake.",
+      tip: "match the dough weight to your baking sheet with the calculator, then follow the method &mdash; the dimples never change.",
+      // Every recipe starts from the general method (recipes/getting-started.html);
+      // `notes` only lists what differs for this bake or what to keep an eye on.
+      notes: [
+        { h: "Olive oil, generously", p: "Oil goes in the dough, in the pan and on top. Focaccia is the one recipe where being greasy is the point &mdash; don't hold back." },
+        { h: "Pan proof", p: "After the bulk ferment, no bowl: stretch the dough into a generously oiled baking sheet (30&times;40&nbsp;cm). It will try to spring back &mdash; give it a rest, then stretch again until it stays." },
+        { h: "Dimple deep", p: "Oil your fingers and press all the way down to the bottom of the pan. The dimples collect the oil and crisp up the edges. Sea salt and rosemary are the classics &mdash; whatever you add, do it now." },
+        { h: "Bake", p: "230&deg;C for 20&ndash;25 minutes until golden and crispy. No steam, no temperature drop &mdash; focaccia bakes flat, fast and direct." }
       ]
     }
   },

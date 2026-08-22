@@ -16,7 +16,7 @@ python3 -m http.server 8000
 
 - **Keep it vanilla.** Plain HTML/CSS/JS only — no frameworks, no build tools, no npm dependencies. If it doesn't run by just opening the file, it doesn't belong here.
 - **Static-hosting only.** This lives on GitHub Pages — no server, no backend, no database. Check the README's "Before adding any new feature" checklist if you're not sure your idea fits.
-- **Data over markup.** All product definitions (ratios, presets, percentages, recipe steps) live in [`products.js`](products.js). The calculator reads that one file — never hardcode gram amounts or a new panel in HTML/JS. If a product does something the schema doesn't cover yet, start by extending the schema, then the generic renderer.
+- **Data over markup.** All product definitions (ratios, presets, percentages, recipe notes) live in [`products.js`](products.js). The calculator reads that one file — never hardcode gram amounts or a new panel in HTML/JS. If a product does something the schema doesn't cover yet, start by extending the schema, then the generic renderer.
 
 ## Got a recipe? Here's how to add it
 

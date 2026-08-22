@@ -18,6 +18,7 @@ index.html              # generic calculator (tabs + sliders + panels), driven b
 products.js             ← single source of truth: every product's data + recipe text
 assets/style.css        shared dark theme, used by index.html and the recipe page
 recipes/recipe.html     one template that renders any product's "recipe & method"
+recipes/getting-started.html  the general sourdough method every recipe builds on
 sw.js                   PWA service worker (offline cache)
 site.webmanifest
 assets/*.png            favicon / app icons
@@ -86,7 +87,10 @@ Append one object to the `PRODUCTS` array in `products.js`. The fresh tab, calcu
     title: "My Product: recipe &amp; method",
     tagline: "A short description.",
     tip: "A sizing tip.",
-    steps: [ { h: "Step title", p: "Plain HTML for the step." } ]
+    // Every recipe starts by pointing at the general method
+    // (recipes/getting-started.html). `notes` only lists what
+    // differs for this bake or what to keep an eye on.
+    notes: [ { h: "Note title", p: "What's different for this bake." } ]
   },
 
   comingSoon: "…"   // for disabled products only: the placeholder copy
@@ -120,6 +124,10 @@ GitHub Pages serves `index.html` from the published branch/folder by default, an
 
 1. Push to GitHub and enable Pages in **Settings → Pages** (source: `main` branch, root folder).
 2. The site will be available at `https://<username>.github.io/<repo>/`.
+
+## Roadmap
+
+- **Advanced sliders are temporarily hidden** to keep the calculator dead simple. Planned: a flour-mix picker (e.g. "50% whole wheat / 50% white") instead. See `TODO(advanced)` in `index.html` and `.adv-panel` in `assets/style.css`.
 
 ## Contributing
 

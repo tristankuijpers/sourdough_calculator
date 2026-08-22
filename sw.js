@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sourdough-v10';
+const CACHE_NAME = 'sourdough-v11';
 const ASSETS = [
   './',
   './index.html',
@@ -13,6 +13,7 @@ const ASSETS = [
   './assets/screenshot-desktop.png',
   './assets/screenshot-mobile.png',
   './recipes/recipe.html',
+  './recipes/getting-started.html',
 ];
 
 self.addEventListener('install', (event) => {

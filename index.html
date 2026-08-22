@@ -46,6 +46,7 @@
     <div class="eyebrow">starter 50/50 flour·water</div>
     <h1>Sourdough Calculator</h1>
     <div class="sub">Set the total dough weight &mdash; every ratio scales automatically.</div>
+    <a class="chip get-started" href="recipes/getting-started.html"><img class="icon-img" src="assets/favicon-32x32.png" alt="">Getting started with sourdough</a>
   </header>
 
   <div class="tabs-wrap">
@@ -57,7 +58,7 @@
   <div class="toast" id="share-toast"></div>
   <footer>
     <div class="footer-links">
-      <span class="foot-stat">Open&#8209;source &middot; <a href="https://github.com/tristankuijpers/sourdough_calculator" target="_blank" rel="noopener">contribute on GitHub</a></span>
+      <span class="foot-stat">Built by TK/LAB &middot; <a href="https://github.com/tristankuijpers/sourdough_calculator" target="_blank" rel="noopener">open source on GitHub</a></span>
       <button type="button" class="share-btn" id="share-app">Share this app</button>
     </div>
   </footer>
@@ -208,7 +209,10 @@ function calcPanelHTML(p){
 
       <div class="recipe-link"><a class="chip" href="recipes/recipe.html?product=${pid}">📖 Recipe &amp; method</a></div>
 
-      <details>
+      <!-- TODO(advanced): the advanced sliders are hidden for now (see .adv-panel
+           in style.css). Planned rework: a flour-mix picker (e.g. "50% whole
+           wheat / 50% white") instead of ratio sliders. -->
+      <details class="adv-panel">
         <summary>Advanced</summary>
         <div class="adv-grid">
           ${adv}

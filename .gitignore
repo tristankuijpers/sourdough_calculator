@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+assets/.DS_Store
+
+# Internal content & voice guidelines — not public for now.
+# Turn this public later by deleting `CONTENT_GUIDELINES.md` from this file
+# and committing it.
+CONTENT_GUIDELINES.md
