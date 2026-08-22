@@ -280,34 +280,51 @@ PRODUCTS.forEach(p => {
 
 // wipe stale SW caches so VS Code preview and browsers without SW get fresh code
 if ('caches' in window) {
-  caches.keys().then(keys => keys.filter(k => k !== 'sourdough-v8').forEach(k => caches.delete(k)));
+  caches.keys().then(keys => keys.filter(k => k !== 'sourdough-v9').forEach(k => caches.delete(k)));
 }
 
 // ---------- share ----------
 const shareToast = document.getElementById('share-toast');
+const shareAppBtn = document.getElementById('share-app');
 function showToast(msg){
   shareToast.textContent = msg;
   shareToast.classList.add('show');
   if (shareToast._t) clearTimeout(shareToast._t);
   shareToast._t = setTimeout(()=>shareToast.classList.remove('show'), 2200);
 }
-function shareFallback(url, text){
-  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url);
-  showToast('Link copied — opening WhatsApp');
-  window.open('https://wa.me/?text='+encodeURIComponent(text+' '+url), '_blank');
+function isSmartphone(){
+  const ua = navigator.userAgent || '';
+  const mobilePhoneUA = /Android|iPhone|iPod|Windows Phone|Mobile/i.test(ua);
+  const hasCoarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  const narrowViewport = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
+  return mobilePhoneUA && hasCoarsePointer && narrowViewport;
 }
-document.querySelectorAll('.share-btn').forEach(btn => btn.addEventListener('click', ()=>{
-  const url = location.href.split('#')[0];
-  const text = 'Sourdough Calculator — scale bread, pizza & focaccia dough';
-  try {
-    if (navigator.share){
-      navigator.share({ title:'Sourdough Calculator', text, url })
-        .catch(()=>shareFallback(url, text));
+
+// Share only on smartphones, using exclusively the native OS share sheet.
+// No WhatsApp/deep-link fallbacks: unsupported browsers simply hide the button.
+const enableNativeShare = isSmartphone() && !!navigator.share;
+if (!enableNativeShare){
+  shareAppBtn.style.display = 'none';
+} else {
+  shareAppBtn.addEventListener('click', async ()=>{
+    if (!navigator.share){
+      showToast('Native sharing is unavailable on this device.');
       return;
     }
-  } catch(e){}
-  shareFallback(url, text);
-}));
+
+    const url = location.href.split('#')[0];
+    const text = 'Sourdough Calculator — scale bread, pizza & focaccia dough';
+
+    try {
+      await navigator.share({ title:'Sourdough Calculator', text, url });
+    } catch (err) {
+      // Dismissing the share sheet (AbortError) is a normal no-op.
+      // Never open fallback channels (e.g. WhatsApp) on cancel or failure.
+      if (err && err.name === 'AbortError') return;
+      showToast('Could not open the share sheet. Please try again.');
+    }
+  });
+}
 
 // ---------- tabs ----------
 document.querySelectorAll('.tab').forEach(tab=>{
