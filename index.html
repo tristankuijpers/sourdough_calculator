@@ -17,13 +17,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1L7SY4MPC9"></script>
+<!-- Google tag (gtag.js) — GA4 G-1L7SY4MPC9
+     Opt out on this device: open the site once with ?optout=1
+     DebugView session:      open the site with ?debug=1 -->
 <script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  try {
+    if (q.has('optout')) localStorage.setItem('ga_off', '1');
+    if (localStorage.getItem('ga_off') === '1') return;
+  } catch (e) {}
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-1L7SY4MPC9';
+  document.head.appendChild(s);
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  window.gtag = function () { window.dataLayer.push(arguments); };
   gtag('js', new Date());
-  gtag('config', 'G-1L7SY4MPC9');
+  var cfg = q.has('debug') ? { debug_mode: true } : {};
+  gtag('config', 'G-1L7SY4MPC9', cfg);
+})();
 </script>
 </head>
 <body>
