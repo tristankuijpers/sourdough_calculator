@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#1c160f">
 <title>Recipe &amp; Method &mdash; Sourdough Calculator</title>
+  <meta name="description" content="A starter-based bake built on the general sourdough method: only what differs for this product, plus a sizing tip.">
+  <link rel="canonical" href="https://tristankuijpers.github.io/sourdough_calculator/recipes/recipe.html">
+  <meta name="robots" content="index, follow">
+  <!-- Open Graph / social sharing (refreshed per product by JS below) -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Sourdough Calculator">
+  <meta property="og:title" content="Recipe &amp; Method — Sourdough Calculator">
+  <meta property="og:description" content="A starter-based bake built on the general sourdough method.">
+  <meta property="og:url" content="https://tristankuijpers.github.io/sourdough_calculator/recipes/recipe.html">
+  <meta property="og:image" content="https://tristankuijpers.github.io/sourdough_calculator/assets/screenshot-desktop.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Recipe &amp; Method — Sourdough Calculator">
+  <meta name="twitter:description" content="A starter-based bake built on the general sourdough method.">
+  <meta name="twitter:image" content="https://tristankuijpers.github.io/sourdough_calculator/assets/screenshot-desktop.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="../assets/favicon-192x192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
@@ -61,6 +75,17 @@ document.getElementById('recipe-eyebrow').innerHTML = p.recipe.eyebrow;
 document.getElementById('recipe-title').innerHTML = p.recipe.title;
 document.getElementById('recipe-sub').innerHTML = p.recipe.tagline;
 document.title = p.recipe.title + ' — Sourdough Calculator';
+
+// SEO: canonical + Open Graph should reflect the exact product URL so each
+// ?product= variant is indexed separately instead of collapsing into one.
+var pageUrl = location.origin + location.pathname + location.search;
+document.querySelector('link[rel=canonical]').setAttribute('href', pageUrl);
+document.querySelector('meta[property="og:title"]').setAttribute('content', p.recipe.title);
+document.querySelector('meta[property="og:url"]').setAttribute('content', pageUrl);
+document.querySelector('meta[name="twitter:title"]').setAttribute('content', p.recipe.title);
+document.querySelector('meta[name="description"]').setAttribute('content', p.label + ' sourdough recipe — ' + p.recipe.tagline.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/g, ' ').slice(0, 150));
+document.querySelector('meta[property="og:description"]').setAttribute('content', p.label + ' sourdough recipe — ' + p.recipe.tagline.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/g, ' ').slice(0, 150));
+document.querySelector('meta[name="twitter:description"]').setAttribute('content', p.label + ' sourdough recipe — ' + p.recipe.tagline.replace(/<[^>]*>/g, '').replace(/&[a-z]+;/g, ' ').slice(0, 150));
 
 // Every bake starts from the same general method; the recipe only lists
 // what differs or what to keep an eye on (p.recipe.notes).

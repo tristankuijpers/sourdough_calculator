@@ -19,6 +19,8 @@ products.js             ← single source of truth: every product's data + recip
 assets/style.css        shared dark theme, used by index.html and the recipe page
 recipes/recipe.html     one template that renders any product's "recipe & method"
 recipes/getting-started.html  the general sourdough method every recipe builds on
+robots.txt              crawler allow-list + sitemap reference
+sitemap.xml             sitemap for the GitHub Pages origin
 sw.js                   PWA service worker (offline cache)
 site.webmanifest
 assets/*.png            favicon / app icons
