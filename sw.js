@@ -10,6 +10,8 @@ const ASSETS = [
   './assets/favicon-512x512.png',
   './assets/favicon-maskable.png',
   './assets/apple-touch-icon.png',
+  './assets/screenshot-desktop.png',
+  './assets/screenshot-mobile.png',
   './recipes/recipe.html',
 ];
 
