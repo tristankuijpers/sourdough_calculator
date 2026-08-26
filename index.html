@@ -69,10 +69,13 @@
 <div class="wrap">
 
   <header>
-    <div class="eyebrow">starter 50/50 flour·water</div>
-    <h1>Sourdough Calculator</h1>
-    <div class="sub">Set the total dough weight &mdash; every ratio scales automatically.</div>
-    <a class="chip get-started" href="recipes/getting-started.html"><img class="icon-img" src="assets/favicon-32x32.png" alt="">Getting started with sourdough</a>
+    <div class="eyebrow" data-i18n="eyebrow">starter 50/50 flour·water</div>
+    <h1 data-i18n="title">Sourdough Calculator</h1>
+    <div class="sub" data-i18n-html="sub">Set the total dough weight &mdash; every ratio scales automatically.</div>
+    <div class="head-actions">
+      <a class="chip get-started" href="recipes/getting-started.html"><img class="icon-img" src="assets/favicon-32x32.png" alt=""><span data-i18n="getStarted">Getting started with sourdough</span></a>
+      <button type="button" class="chip lang-chip" id="lang-chip">Nederlands</button>
+    </div>
   </header>
 
   <div class="tabs-wrap">
@@ -84,13 +87,20 @@
   <div class="toast" id="share-toast"></div>
   <footer>
     <div class="footer-links">
-      <span class="foot-stat">Built by TK/LAB &middot; <a href="https://github.com/tristankuijpers/sourdough_calculator" target="_blank" rel="noopener">open source on GitHub</a></span>
-      <button type="button" class="share-btn" id="share-app">Share this app</button>
+      <span class="foot-stat" data-i18n-html="footer">Built by TK/LAB &middot; <a href="https://github.com/tristankuijpers/sourdough_calculator" target="_blank" rel="noopener">open source on GitHub</a></span>
+      <button type="button" class="share-btn" id="share-app" data-i18n="shareApp">Share this app</button>
     </div>
   </footer>
 </div>
 
+<script src="assets/i18n.js"></script>
 <script src="products.js"></script>
+<script>
+// Localize the product list for this page load *before* the app boots:
+// pLocal() swaps every shared string for the active language (labels, chips,
+// comingSoon) while leaving ratios/limits untouched.
+window.PRODUCTS = PRODUCTS.map(p => window.pLocal(p, I18N.lang()));
+</script>
 <script>
 // ---------- core baker's-percentage math ----------
 // F = total flour, W = total dough weight, all percentages are fractions of F.
@@ -151,11 +161,11 @@ function updateProduct(p){
     : computeDough(W, h, st, sp, o);
 
   const rows = [
-    {name:'Starter (50/50)', pctLabel:Math.round(st*100)+'% of flour',   grams:d.starter},
-    {name:'Flour',           pctLabel:'',                                grams:d.flour},
-    {name:'Water',           pctLabel:'hydration '+Math.round(h*100)+'%', grams:d.water},
+    {name:I18N.t('ing_starter'), pctLabel:Math.round(st*100)+'% '+I18N.t('pctOfFlour'), grams:d.starter},
+    {name:I18N.t('ing_flour'),   pctLabel:'',                                        grams:d.flour},
+    {name:I18N.t('ing_water'),   pctLabel:I18N.t('hydrationPct',Math.round(h*100)),   grams:d.water},
     ...p.advanced.extras.map((ex,i) => ({name:ex.name, pctLabel:Math.round(os[i])+'%', grams:d.oil})),
-    {name:'Salt',            pctLabel:Math.round(sp*100)+'%',            grams:d.salt},
+    {name:I18N.t('ing_salt'),    pctLabel:Math.round(sp*100)+'%',                    grams:d.salt},
   ];
   renderRows($(pid+'-rows'), rows);
 
@@ -164,7 +174,7 @@ function updateProduct(p){
     const bw = parseFloat($(pid+'-ball-weight').value) || p.widget.defaultBallWeight;
     $(pid+'-ball-count').textContent = Math.round(W / bw);
   } else {
-    $(pid+'-helper').innerHTML = `total flour incl. starter: <b>${round(d.totalFlour)} g</b>`;
+    $(pid+'-helper').innerHTML = I18N.t('helperTotalFlour', round(d.totalFlour));
   }
 
   // chip active state
@@ -186,7 +196,7 @@ function tabHTML(p){
 }
 
 function chipHTML(c){
-  if (c.balls !== undefined) return `<button class="chip" data-balls="${c.balls}">${c.balls} balls</button>`;
+  if (c.balls !== undefined) return `<button class="chip" data-balls="${c.balls}">${c.text}</button>`;
   return `<button class="chip" data-v="${c.weight}">${c.text}</button>`;
 }
 
@@ -203,7 +213,7 @@ function calcPanelHTML(p){
   const pid = p.id, s = p.slider;
   const ballWidget = (p.widget && p.widget.type === 'balls') ? `
     <div class="helper-line" style="margin-top:10px;">
-      ≈ <b id="${pid}-ball-count">${p.widget.defaultCount}</b> dough balls of
+      ≈ <b id="${pid}-ball-count">${p.widget.defaultCount}</b> ${I18N.t('doneBalls')}
       <input class="ball-input" id="${pid}-ball-weight" type="text" inputmode="decimal" value="${p.widget.defaultBallWeight}"> g
     </div>` : '';
   const helper = ballWidget ? '' : `<div class="helper-line" id="${pid}-helper"></div>`;
@@ -214,7 +224,7 @@ function calcPanelHTML(p){
   ].join('');
   return `
       <div class="weight-block">
-        <div class="weight-label">Total dough weight</div>
+        <div class="weight-label">${I18N.t('totalDough')}</div>
         <div class="weight-value"><span id="${pid}-weight-num">${s.def}</span><span>g</span></div>
         <input type="range" id="${pid}-weight" min="${s.min}" max="${s.max}" step="${s.step}" value="${s.def}">
         <div class="range-minmax"><span>${s.min} g</span><span>${s.max} g</span></div>
@@ -225,7 +235,7 @@ function calcPanelHTML(p){
       <div class="divider">
         <svg width="20" height="12" viewBox="0 0 20 12"><path d="M1 10 L7 2 M8 10 L14 2 M15 10 L19 4" stroke="var(--accent, var(--amber))" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
         <div class="line"></div>
-        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em;">INGREDIENTS</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em;">${I18N.t('ingredients')}</span>
         <div class="line"></div>
       </div>
 
@@ -233,17 +243,17 @@ function calcPanelHTML(p){
 
       ${helper}
 
-      <div class="recipe-link"><a class="chip" href="recipes/recipe.html?product=${pid}">📖 Recipe &amp; method</a></div>
+      <div class="recipe-link"><a class="chip" href="recipes/recipe.html?product=${pid}">${I18N.t('recipeMethod')}</a></div>
 
       <!-- TODO(advanced): the advanced sliders are hidden for now (see .adv-panel
            in style.css). Planned rework: a flour-mix picker (e.g. "50% whole
            wheat / 50% white") instead of ratio sliders. -->
       <details class="adv-panel">
-        <summary>Advanced</summary>
+        <summary>${I18N.t('advanced')}</summary>
         <div class="adv-grid">
           ${adv}
         </div>
-        <div class="adv-reset"><button type="button" class="chip" id="${pid}-reset">Reset to defaults</button></div>
+        <div class="adv-reset"><button type="button" class="chip" id="${pid}-reset">${I18N.t('resetDefaults')}</button></div>
       </details>`;
 }
 
@@ -356,20 +366,20 @@ if (!enableNativeShare){
 } else {
   shareAppBtn.addEventListener('click', async ()=>{
     if (!navigator.share){
-      showToast('Native sharing is unavailable on this device.');
+      showToast(I18N.t('shareUnavailable'));
       return;
     }
 
     const url = location.href.split('#')[0];
-    const text = 'Sourdough Calculator — scale bread, pizza & focaccia dough';
+    const text = I18N.t('shareText');
 
     try {
-      await navigator.share({ title:'Sourdough Calculator', text, url });
+      await navigator.share({ title:I18N.t('shareTitle'), text, url });
     } catch (err) {
       // Dismissing the share sheet (AbortError) is a normal no-op.
       // Never open fallback channels (e.g. WhatsApp) on cancel or failure.
       if (err && err.name === 'AbortError') return;
-      showToast('Could not open the share sheet. Please try again.');
+      showToast(I18N.t('shareFailed'));
     }
   });
 }
@@ -397,6 +407,16 @@ function updateTabFades(){
 tabsEl.addEventListener('scroll', updateTabFades);
 window.addEventListener('resize', updateTabFades);
 updateTabFades();
+
+// ---------- i18n boot ----------
+// Static [data-i18n] markup, <title> and meta description follow the active
+// language; the lang-chip toggles en <-> nl (persisted in localStorage).
+document.documentElement.lang = I18N.lang();
+document.title = I18N.t('title');
+var metaDescEl = document.querySelector('meta[name="description"]');
+if (metaDescEl) metaDescEl.setAttribute('content', I18N.t('metaDesc'));
+I18N.apply(document);
+I18N.wireChip(document.getElementById('lang-chip'));
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));

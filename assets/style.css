@@ -389,9 +389,16 @@ footer{
    50% white"). Delete this rule to bring the sliders back. */
 .adv-panel{display:none;}
 
-/* CTA button on the landing page */
-.get-started{
+/* CTA row on the landing page: getting-started chip + language switch */
+.head-actions{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
   margin-top:18px;
+}
+.get-started{
   display:inline-flex;
   align-items:center;
   gap:8px;
@@ -408,6 +415,14 @@ footer{
   border-color:var(--amber);
 }
 .get-started:hover .icon-img{filter:brightness(0);}
+/* Language switch chip: shows the name of the other language */
+.lang-chip{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.06em;
+  padding:10px 14px;
+}
+.lang-chip:hover{color:var(--ink);}
 .icon-img{
   width:18px;
   height:18px;

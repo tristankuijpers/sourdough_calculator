@@ -1,8 +1,9 @@
-const CACHE_NAME = 'sourdough-v12';
+const CACHE_NAME = 'sourdough-v13';
 const ASSETS = [
   './',
   './index.html',
   './products.js',
+  './assets/i18n.js',
   './site.webmanifest',
   './assets/style.css',
   './assets/favicon-32x32.png',
