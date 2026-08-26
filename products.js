@@ -91,10 +91,10 @@ const PRODUCTS = [
       soft: "rgba(193,80,46,0.16)",
       ring: "rgba(193,80,46,0.35)"
     },
-    base: { starter: 100, flour: 500, water: 330, salt: 10, oil: 12, total: 952 },
+    base: { starter: 100, flour: 500, water: 330, salt: 10, oil: 10, total: 950 },
     portionNames: { en: "pizza", nl: "pizza" },
-    slider: { min: 300, max: 2400, step: 1, def: 952 },
-    chipsSwitchTo: "percent",
+    slider: { min: 300, max: 2400, step: 1, def: 950 },
+    chipsSwitchTo: "base",
     widget: { type: "balls", defaultCount: 4, defaultBallWeight: 237.5 },
     chips: {
       en: [
@@ -220,30 +220,6 @@ recipes: {
           { h: "Bakken", p: "230&deg;C voor 20&ndash;25 minuten tot goudbruin en knapperig. Geen stoom, geen temperatuursdaling &mdash; focaccia bakt plat, snel en direct." }
         ]
       }
-    }
-  },
-{
-    id: "hotbuns",
-    labels: { en: "Hot buns", nl: "Hete broodjes" },
-    emoji: "\u{1FAD0}",
-    tags: { en: "coming soon", nl: "binnenkort" },
-    disabled: true,
-    accent: {
-      color: "var(--teal)",
-      soft: "rgba(127,163,160,0.16)",
-      ring: "rgba(127,163,160,0.35)"
-    },
-    base: null,
-    portionNames: { en: "", nl: "" },
-    slider: null,
-    chipsSwitchTo: "base",
-    chips: { en: [], nl: [] },
-    advanced: { salt: 2, hydration: null, starter: null, extras: [] },
-    widget: null,
-    recipes: null,
-    comingSoon: {
-      en: "Ratios and the step-by-step recipe are coming soon. The calculator will work the same way &mdash; set a total dough weight and everything scales automatically.",
-      nl: "De verhoudingen en het stap-voor-stap recept komen binnenkort. De calculator blijft hetzelfde werken &mdash; stel een totaal deeggewicht in en alles schaalt automatisch mee."
     }
   }
 ];

@@ -110,7 +110,6 @@ Append one object to the `PRODUCTS` array in `products.js`. The fresh tab, calcu
 - **Bread** — portion presets `half / full / double loaf`.
 - **Pizza** — ball-count presets (2/4/6/8) via the `balls` widget.
 - **Focaccia** — percentage-driven; pan-size presets.
-- **Hot buns** — disabled placeholder awaiting a real recipe.
 
 ## Local development
 
