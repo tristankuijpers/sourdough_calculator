@@ -68,13 +68,21 @@
 <body>
 <div class="wrap">
 
+  <div class="lang-toggle" aria-label="Language / Taal">
+    <button type="button" class="flag-btn" data-lang="en" aria-label="English" title="English">
+      <svg viewBox="0 0 60 30" aria-hidden="true"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="2.6"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg>
+    </button>
+    <button type="button" class="flag-btn" data-lang="nl" aria-label="Nederlands" title="Nederlands">
+      <svg viewBox="0 0 30 20" aria-hidden="true"><rect width="10" height="20" fill="#1a1a1a"/><rect x="10" width="10" height="20" fill="#FDDA24"/><rect x="20" width="10" height="20" fill="#EF3340"/></svg>
+    </button>
+  </div>
+
   <header>
     <div class="eyebrow" data-i18n="eyebrow">starter 50/50 flour·water</div>
     <h1 data-i18n="title">Sourdough Calculator</h1>
     <div class="sub" data-i18n-html="sub">Set the total dough weight &mdash; every ratio scales automatically.</div>
     <div class="head-actions">
       <a class="chip get-started" href="recipes/getting-started.html"><img class="icon-img" src="assets/favicon-32x32.png" alt=""><span data-i18n="getStarted">Getting started with sourdough</span></a>
-      <button type="button" class="chip lang-chip" id="lang-chip">Nederlands</button>
     </div>
   </header>
 
@@ -176,13 +184,12 @@ function updateProduct(p){
   ];
   renderRows($(pid+'-rows'), rows);
 
-  // per-product widget (e.g. pizza's dough-ball counter) or default helper line
+  // dough-ball counter (pizza widget); helper line always shows total flour
   if (p.widget && p.widget.type === 'balls'){
     const bw = parseFloat($(pid+'-ball-weight').value) || p.widget.defaultBallWeight;
     $(pid+'-ball-count').textContent = Math.round(W / bw);
-  } else {
-    $(pid+'-helper').innerHTML = I18N.t('helperTotalFlour', round(d.totalFlour));
   }
+  $(pid+'-helper').innerHTML = I18N.t('helperTotalFlour', round(d.totalFlour));
 
   // chip active state
   [...$(pid+'-chips').children].forEach(c => {
@@ -223,7 +230,7 @@ function calcPanelHTML(p){
       ≈ <b id="${pid}-ball-count">${p.widget.defaultCount}</b> ${I18N.t('doneBalls')}
       <input class="ball-input" id="${pid}-ball-weight" type="text" inputmode="decimal" value="${p.widget.defaultBallWeight}"> g
     </div>` : '';
-  const helper = ballWidget ? '' : `<div class="helper-line" id="${pid}-helper"></div>`;
+  const helper = `<div class="helper-line" id="${pid}-helper"></div>`;
   const adv = [
     advRowHTML(pid, p.advanced.hydration),
     advRowHTML(pid, p.advanced.starter),
@@ -423,11 +430,23 @@ document.title = I18N.t('title');
 var metaDescEl = document.querySelector('meta[name="description"]');
 if (metaDescEl) metaDescEl.setAttribute('content', I18N.t('metaDesc'));
 I18N.apply(document);
-I18N.wireChip(document.getElementById('lang-chip'));
+I18N.wireFlags(document);
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
 }
+</script>
+<script>
+// TEMP DEBUG (remove): report toggle geometry in the document title
+var lt = document.querySelector('.lang-toggle');
+var r = lt.getBoundingClientRect();
+document.title = 'DBG ' + JSON.stringify({
+  x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height),
+  wrapW: Math.round(document.querySelector('.wrap').getBoundingClientRect().width),
+  innerW: window.innerWidth,
+  scrollW: document.documentElement.scrollWidth,
+  btnH: Math.round(document.querySelector('.flag-btn').getBoundingClientRect().height)
+});
 </script>
 </body>
 </html>

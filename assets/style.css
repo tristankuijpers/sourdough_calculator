@@ -26,7 +26,43 @@ body{
   padding:32px 16px 64px;
   -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:640px;margin:0 auto;}
+.wrap{max-width:640px;margin:0 auto;position:relative;}
+
+/* Language flag toggle: pinned top-right, aligned with the top text line.
+   Present on every page (calculator, recipe, getting-started). */
+.lang-toggle{
+  position:absolute;
+  top:0;
+  right:0;
+  display:flex;
+  gap:6px;
+  z-index:5;
+}
+.flag-btn{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:5px 6px;
+  cursor:pointer;
+  opacity:0.55;
+  transition:opacity .15s ease, border-color .15s ease;
+}
+.flag-btn svg{
+  display:block;
+  width:24px;
+  height:15px;
+  border-radius:2px;
+  box-shadow:0 0 0 1px rgba(241,233,216,0.18);
+}
+.flag-btn:hover{opacity:0.9;}
+.flag-btn.active{
+  opacity:1;
+  border-color:var(--amber);
+  box-shadow:inset 0 0 0 1px rgba(207,159,66,0.35);
+}
 
 header{margin-bottom:28px;}
 .eyebrow{
@@ -415,14 +451,6 @@ footer{
   border-color:var(--amber);
 }
 .get-started:hover .icon-img{filter:brightness(0);}
-/* Language switch chip: shows the name of the other language */
-.lang-chip{
-  font-family:'IBM Plex Mono',monospace;
-  font-size:11px;
-  letter-spacing:0.06em;
-  padding:10px 14px;
-}
-.lang-chip:hover{color:var(--ink);}
 .icon-img{
   width:18px;
   height:18px;

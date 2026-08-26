@@ -61,9 +61,7 @@ const I18N = {
     gs_sub: "One method, three steps, a lot of waiting. Read this once &mdash; every bake on this site is a variation on it.",
     gs_meta_title: "Getting Started with Sourdough &mdash; Sourdough Calculator",
     gs_meta_desc: "One general sourdough method, three steps and a lot of waiting. How to feed your starter, fold the dough and bake a 40-minute loaf — about ten minutes of actual work.",
-    calcCta: "Set your total dough weight on the calculator &rarr;",
-
-    switchLabel: "Nederlands"
+    calcCta: "Set your total dough weight on the calculator &rarr;"
   },
 
   nl: {
@@ -110,9 +108,7 @@ const I18N = {
     gs_sub: "Eén methode, drie stappen, veel wachttijd. Lees dit één keer &mdash; elk baksel op deze site is een variatie erop.",
     gs_meta_title: "Aan de slag met zuurdesem &mdash; Zuurdesemcalculator",
     gs_meta_desc: "Eén algemene zuurdesemmethode, drie stappen en veel wachttijd. Hoe je je starter voedt, het deeg vouwt en in 40 minuten een brood bakt — zo'n tien minuten echt werk.",
-    calcCta: "Stel je totale deeggewicht in op de calculator &rarr;",
-
-    switchLabel: "English"
+    calcCta: "Stel je totale deeggewicht in op de calculator &rarr;"
   }
 };
 
@@ -163,6 +159,16 @@ const I18N = {
 
   I18N.switchLang = function (target) {
     persist(target);
+    // Strip ?lang= from the URL before reloading, otherwise the stale param
+    // would override the just-persisted choice.
+    try {
+      var u = new URL(location.href);
+      if (u.searchParams.has('lang')) {
+        u.searchParams.delete('lang');
+        location.href = u.toString();
+        return;
+      }
+    } catch (e) {}
     location.reload();
   };
 
@@ -179,10 +185,18 @@ const I18N = {
     });
   };
 
-  // Wire a .lang-chip button: its label shows the name of the OTHER language.
-  I18N.wireChip = function (btn) {
-    if (!btn) return;
-    btn.textContent = I18N[I18N.other()].switchLabel;
-    btn.addEventListener('click', function () { I18N.toggleLang(); });
+  // Wire the flag toggle: two .flag-btn buttons (data-lang="en"|"nl").
+  // The flag of the ACTIVE language is highlighted; clicking the other one
+  // switches (persisted) and reloads.
+  I18N.wireFlags = function (root) {
+    root = root || document;
+    var cur = I18N.lang();
+    root.querySelectorAll('.flag-btn').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.lang === cur);
+      btn.addEventListener('click', function () {
+        var target = btn.dataset.lang;
+        if (target && I18N[target] && target !== cur) I18N.switchLang(target);
+      });
+    });
   };
 })();

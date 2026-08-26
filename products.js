@@ -93,7 +93,7 @@ const PRODUCTS = [
     },
     base: { starter: 100, flour: 500, water: 330, salt: 10, oil: 12, total: 952 },
     portionNames: { en: "pizza", nl: "pizza" },
-    slider: { min: 300, max: 1200, step: 1, def: 952 },
+    slider: { min: 300, max: 3000, step: 1, def: 952 },
     chipsSwitchTo: "percent",
     widget: { type: "balls", defaultCount: 4, defaultBallWeight: 237.5 },
     chips: {
@@ -279,13 +279,7 @@ window.pLocal = function (p, lang) {
   out.label = pick(p.labels, L);
   out.tag   = pick(p.tags, L);
   out.portionName = pick(p.portionNames, L);
-  // Chips: weight presets keep their own (mostly numeric) text; ball counts
-  // render as a bare "<n> ×" since the row label carries the wording.
-  const chipsRaw = pick(p.chips, L) || [];
-  out.chips = chipsRaw.map(function (c) {
-    if (c && c.balls != null) return Object.assign({}, c, { text: c.balls + " \u00D7" });
-    return c;
-  });
+  out.chips = pick(p.chips, L) || [];
   out.comingSoon = pick(p.comingSoon, L);
   out.recipe = pick(p.recipes, L) || null;
   // Ingredient names shared across products -> dictionary (ing_* keys).

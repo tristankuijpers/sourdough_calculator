@@ -51,6 +51,14 @@
 </head>
 <body>
 <div class="wrap" id="recipe-wrap">
+  <div class="lang-toggle" aria-label="Language / Taal">
+    <button type="button" class="flag-btn" data-lang="en" aria-label="English" title="English">
+      <svg viewBox="0 0 60 30" aria-hidden="true"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="2.6"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg>
+    </button>
+    <button type="button" class="flag-btn" data-lang="nl" aria-label="Nederlands" title="Nederlands">
+      <svg viewBox="0 0 30 20" aria-hidden="true"><rect width="10" height="20" fill="#1a1a1a"/><rect x="10" width="10" height="20" fill="#FDDA24"/><rect x="20" width="10" height="20" fill="#EF3340"/></svg>
+    </button>
+  </div>
   <a class="back-link" href="../index.html" data-i18n-html="back">&larr; Back to calculator</a>
   <header>
     <div class="eyebrow" id="recipe-eyebrow"></div>
@@ -77,6 +85,7 @@ var p = getProduct(id) || getProduct('bread');
 var lang = I18N.lang();
 document.documentElement.lang = lang;
 I18N.apply(document);
+I18N.wireFlags(document);
 p = window.pLocal(p, lang);
 document.getElementById('recipe-wrap').style.setProperty('--accent', p.accent.color);
 document.getElementById('recipe-eyebrow').innerHTML = p.recipe.eyebrow;
