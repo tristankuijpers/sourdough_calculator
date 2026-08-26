@@ -93,7 +93,7 @@ const PRODUCTS = [
     },
     base: { starter: 100, flour: 500, water: 330, salt: 10, oil: 12, total: 952 },
     portionNames: { en: "pizza", nl: "pizza" },
-    slider: { min: 300, max: 3000, step: 1, def: 952 },
+    slider: { min: 300, max: 2400, step: 1, def: 952 },
     chipsSwitchTo: "percent",
     widget: { type: "balls", defaultCount: 4, defaultBallWeight: 237.5 },
     chips: {
