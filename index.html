@@ -99,7 +99,14 @@
 // Localize the product list for this page load *before* the app boots:
 // pLocal() swaps every shared string for the active language (labels, chips,
 // comingSoon) while leaving ratios/limits untouched.
-window.PRODUCTS = PRODUCTS.map(p => window.pLocal(p, I18N.lang()));
+//
+// NB: `const PRODUCTS` in products.js is a global lexical binding and cannot
+// be reassigned (so no `PRODUCTS = PRODUCTS.map(...)` here). Mutate the array
+// in place instead, so every later reference to the bare identifier sees the
+// localized items.
+PRODUCTS.forEach(function (raw, i) {
+  PRODUCTS[i] = window.pLocal(raw, I18N.lang());
+});
 </script>
 <script>
 // ---------- core baker's-percentage math ----------
