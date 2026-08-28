@@ -283,7 +283,7 @@ const I18N = {
     gs_ing_flour_p:
       "Ik bak mijn broden met 100% volkoren tarwemee" +
       "l of 100% volkoren speltmeel. Je kan ook kiez" +
-      "en voor bijvoorbeeld 85% volkoren meel, of het" +
+      "en voor bijvoorbeeld 85% volkorenmeel, of het" +
       " meel mengen met een bepaalde hoeveelheid witt" +
       "e bloem. Het soort meel dat je gebruikt heeft " +
       "invloed op de hoeveelheid water die je moet ge" +
