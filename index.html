@@ -606,9 +606,9 @@ $('fav-form').addEventListener('submit', e => {
   const list = loadFavorites();
   list.push(fav);
   saveFavorites(list);
+  const savedPid = favEditProduct.id; // closeFavDialog() clears favEditProduct
   closeFavDialog();
-  setStarLit(favEditProduct.id, true);
-  favEditProduct = null;
+  setStarLit(savedPid, true);
   showToast(I18N.t('favoriteSaved'));
 });
 
