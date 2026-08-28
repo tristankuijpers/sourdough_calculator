@@ -111,13 +111,16 @@ const PRODUCTS = [
       ]
     },
     advanced: {
-      salt: 2.0,
-      hydration: { key: "hydration", min: 60, max: 70, step: 1, def: 65,
+      // Defaults mirror the base portion (500 g flour + 100 g starter => 550 g total
+      // flour): hydration (330+50)/550 = 69.09%, starter 100/550 = 18.18%,
+      // salt & oil 10/550 = 1.82% each.
+      salt: 1.8182,
+      hydration: { key: "hydration", min: 60, max: 70, step: 0.0001, def: 69.0909,
         labels: { en: "Hydration (water relative to total flour)", nl: "Hydratatie (water t.o.v. totaal bloem)" } },
-      starter:   { key: "starter",   min: 10, max: 35, step: 1, def: 20,
+      starter:   { key: "starter",   min: 10, max: 35, step: 0.0001, def: 18.1818,
         labels: { en: "Starter (relative to total flour)",        nl: "Starter (t.o.v. totaal bloem)" } },
       extras: [
-        { key: "oil", min: 0, max: 8, step: 0.5, def: 3,
+        { key: "oil", min: 0, max: 8, step: 0.0001, def: 1.8182,
           names: { en: "Olive oil", nl: "Olijfolie" },
           labels: { en: "Olive oil (relative to total flour)", nl: "Olijfolie (t.o.v. totaal bloem)" } }
       ]
