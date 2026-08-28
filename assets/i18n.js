@@ -93,9 +93,10 @@ const I18N = {
 
     gs_starter_h: "The starter",
     gs_starter_p1:
-      "Try to get a starter from a friend who&rsquo;s properly int" +
-      "o sourdough. Or make your own &mdash; there are plenty of g" +
-      "uides online.",
+      "Try to get a starter from a friend who&rsquo;s properly int"
+      + "o sourdough. Or <a href=\"making-a-starter.html\">grow yo"
+      + "ur own from scratch</a> &mdash; it takes about a week and a"
+      + " few feeds a day.",
     gs_starter_p2:
       "For this recipe we start from 100g of active starter: 50g " +
       "whole wheat flour and 50g water. What &ldquo;active&rdquo; m" +
@@ -214,7 +215,96 @@ const I18N = {
 
     gs_punchline:
       "In total, making a loaf costs a good ten minutes of actual" +
-      " work."
+      " work.",
+    /* ---- Making a starter from scratch (en) ---- */
+    ms_eyebrow: "making a starter &middot; from scratch",
+    ms_title: "Making a Sourdough Starter from Scratch",
+    ms_sub: "No friend&rsquo;s starter handy? Grow your own. Flour, water and about a week of patience &mdash; here&rsquo;s how.",
+    ms_meta_title: "Making a Sourdough Starter from Scratch &mdash; Sourdough Calculator",
+    ms_meta_desc: "No friend's starter handy? Grow your own. Flour, water and about a week of patience — a day-by-day guide to making a sourdough starter from scratch.",
+    ms_lede:
+      "To grow a starter you don&rsquo;t need much, and it takes longe" +
+      "r than people like to admit &mdash; a week at least. The good n" +
+      "ews: almost none of that time is work. Here&rsquo;s how I&rsqu" +
+      "o;d start one today.",
+    ms_need_h: "What you&rsquo;ll need",
+    ms_need_jar: "A clean jar",
+    ms_need_flour: "Whole wheat flour",
+    ms_need_water: "Water",
+    ms_need_scale: "Kitchen scale",
+    ms_need_band: "Rubber band",
+    ms_how_h: "The day-by-day",
+    ms_how_intro:
+      "A starter is a small colony of wild yeast and bacteria. You fe" +
+      "ed it, it grows, and the good microbes crowd out the bad. Each" +
+      " day you&rsquo;ll do the same short chore: throw out half, add " +
+      "50g flour and 50g water, stir. That&rsquo;s it.",
+    ms_day1_h: "Day 1 &middot; Mix",
+    ms_day1_p:
+      "Put 50g whole wheat flour and 50g water in the jar and stir un" +
+      "til no dry flour is left. Mark the level with the rubber band," +
+      " so you can see it rise later. Lid on loosely &mdash; it needs " +
+      "air, not a seal. Nothing happens today. That&rsquo;s normal.",
+    ms_day2_h: "Day 2 &middot; Feeding time",
+    ms_day2_p:
+      "Throw away about half, then add 50g flour and 50g water and st" +
+      "ir. A few bubbles may appear. The smell is still innocent, alm" +
+      "ost sweet &mdash; that changes soon.",
+    ms_day3_h: "Day 3 &middot; The great leap (that isn&rsquo;t)",
+    ms_day3_p:
+      "It may suddenly look very alive, then just as suddenly look de" +
+      "ad &mdash; a flat grey mush. Both are fine. Keep feeding: disca" +
+      "rd half, 50g flour, 50g water. Don&rsquo;t start over. This is " +
+      "exactly the moment everyone gives up.",
+    ms_day4_h: "Day 4 &middot; A rhythm",
+    ms_day4_p:
+      "Same sad-sounding chore: discard half, feed 50/50. Now you sta" +
+      "rt to notice a rhythm, a rise and a fall after each feed. The " +
+      "smell turns properly sour. That&rsquo;s the microbes talking &" +
+      "mdash; it&rsquo;s good.",
+    ms_day5_h: "Day 5&ndash;7 &middot; Patience",
+    ms_day5_p:
+      "Keep the daily 1:1:1 feed going. What you&rsquo;re after is a s" +
+      "teady doubling within a few hours and a surface dotted with bu" +
+      "bbles. Mine only truly clicked around day 8&ndash;10. So did l" +
+      "ots of other people&rsquo;s. Yours isn&rsquo;t broken.",
+    ms_ready_h: "When is it active?",
+    ms_ready_p1:
+      "An active starter doubles within a few hours of a feed, the to" +
+      "p is foamy with bubbles, and it smells pleasantly sour &mdash;" +
+      " not sharp, not like nail-polish remover. That&rsquo;s the sam" +
+      "e &ldquo;active&rdquo; the <a href=\"getting-started.html\">ge" +
+      "neral method</a> talks about.",
+    ms_ready_p2:
+      "From there you can set your first loaf going. Keep the extra s" +
+      "tarter in the fridge between bakes &mdash; it pauses, stays ali" +
+      "ve, and it&rsquo;ll happily wait weeks for you.",
+    ms_trouble_h: "Common problems &amp; fixes",
+    ms_t1_h: "No bubbles yet",
+    ms_t1_p:
+      "It&rsquo;s early days until about day 3, and a cold kitchen slo" +
+      "ws things right down. Move it somewhere warmer and give it time" +
+      " before you judge it.",
+    ms_t2_h: "Smells sharp, like nail-polish remover",
+    ms_t2_p:
+      "It&rsquo;s hungry &mdash; the culture is bigger than what you&r" +
+      "squo;re feeding it. Feed more often, or give it a slightly bigg" +
+      "er feed (say 75g flour and 75g water).",
+    ms_t3_h: "A grey liquid pooling on top (hooch)",
+    ms_t3_p:
+      "Same story: it&rsquo;s hungry. Pour the hooch off and feed as u" +
+      "sual. It&rsquo;s a sign to feed more often, not a dead starter.",
+    ms_t4_h: "Mould &mdash; fuzzy, coloured, on top",
+    ms_t4_p:
+      "That&rsquo;s the one you don&rsquo;t fix. Throw it out and star" +
+      "t again. It costs two ingredients and a few days, and you&rsqu" +
+      "o;ve already learned the moves.",
+    ms_punchline:
+      "In the end, a starter is just flour, water and a week of looki" +
+      "ng after it &mdash; and it&rsquo;s the start of every loaf on t" +
+      "his site.",
+    ms_readMethod: "Read the general method &rarr;",
+
   },
 
   nl: {
@@ -303,9 +393,10 @@ const I18N = {
     gs_starter_p1:
       "Tracht een portie zuurdesemstarter vast te krij" +
       "gen van een kennis die gepassioneerd is door zu" +
-      "urdesembrood bakken. Je kan ook je eigen zuurd" +
-      "esemstarter maken, er zijn tal van handleiding" +
-      "en online.",
+      "urdesembrood bakken. Of <a href=\"making-a-star" +
+      "ter.html\">kweek er zelf één van nul</a> &mdash;" +
+      " dat duurt ongeveer een week en een paar voedin" +
+      "gen per dag.",
     gs_starter_p2:
       "Voor dit recept gaan we uit van 100g actieve z" +
       "uurdesemstarter, bestaande uit 50g volkorenmee" +
@@ -470,6 +561,97 @@ const I18N = {
     gs_punchline:
       "In totaal kost het dus maar een dikke tien minu" +
       "ten om een brood te maken.",
+/* ---- Een starter maken van nul (nl) ---- */
+    ms_eyebrow: "een starter maken &middot; van nul",
+    ms_title: "Een zuurdesemstarter maken van nul",
+    ms_sub: "Geen starter van een kennis voorhanden? Kweek er zelf één. Meel, water en ongeveer een week geduld &mdash; zo doe je dat.",
+    ms_meta_title: "Een zuurdesemstarter maken van nul &mdash; Zuurdesemcalculator",
+    ms_meta_desc: "Geen starter van een kennis voorhanden? Kweek er zelf één. Meel, water en ongeveer een week geduld — een dag-per-dag gids om een zuurdesemstarter van nul te maken.",
+    ms_lede:
+      "Om een starter te laten groeien heb je niet veel nodig, en het " +
+      "duurt langer dan men graag toegeeft &mdash; minstens een week. " +
+      "Het goede nieuws: bijna geen van die tijd is echt werk. Zo zou " +
+      "ik er vandaag één beginnen.",
+    ms_need_h: "Wat je nodig hebt",
+    ms_need_jar: "Een proper jampotje",
+    ms_need_flour: "Volkorenmeel",
+    ms_need_water: "Water",
+    ms_need_scale: "Keukenweegschaal",
+    ms_need_band: "Elastiekje",
+    ms_how_h: "Dag per dag",
+    ms_how_intro:
+      "Een starter is een kleine kolonie wilde gist en bacteriën. Je " +
+      "voedt ze, ze groeien, en de goede microben verdringen de slech" +
+      "te. Elke dag doe je hetzelfde karweitje: de helft weggooien, 5" +
+      "0g meel en 50g water toevoegen, roeren. Dat is alles.",
+    ms_day1_h: "Dag 1 &middot; Mengen",
+    ms_day1_p:
+      "Doe 50g volkorenmeel en 50g water in het potje en roer tot er " +
+      "geen droog meel meer over is. Markeer het niveau met het elast" +
+      "iekje, zodat je straks kunt zien hoe het rijst. Deksel er losj" +
+      "es op &mdash; het heeft lucht nodig, geen luchtdicht deksel. V" +
+      "andaag gebeurt er niets. Dat is normaal.",
+    ms_day2_h: "Dag 2 &middot; Voedertijd",
+    ms_day2_p:
+      "Gooi ongeveer de helft weg, voeg dan 50g meel en 50g water toe" +
+      " en roer. Er kunnen wat belletjes verschijnen. De geur is nog " +
+      "onschuldig, bijna zoet &mdash; dat verandert snel.",
+    ms_day3_h: "Dag 3 &middot; De grote sprong (die het niet is)",
+    ms_day3_p:
+      "Het kan nu ineens heel levendig lijken, en dan net zo ineens d" +
+      "ood &mdash; een platte grijze pap. Beide zijn oké. Blijf voede" +
+      "n: de helft weggooien, 50g meel, 50g water. Niet opnieuw begin" +
+      "nen. Dit is precies het moment waarop iedereen opgeeft.",
+    ms_day4_h: "Dag 4 &middot; Een ritme",
+    ms_day4_p:
+      "Hetzelfde trieste karweitje: de helft weggooien, 50/50 voeden." +
+      " Nu begin je een ritme te zien, een rijzen en zakken na elke v" +
+      "oeding. De geur wordt goed zuur. Dat zijn de microben die prat" +
+      "en &mdash; dat is goed.",
+    ms_day5_h: "Dag 5&ndash;7 &middot; Geduld",
+    ms_day5_p:
+      "Blijf de dagelijkse 1:1:1-voeding volhouden. Waar je naar op z" +
+      "oek bent is een stabiele verdubbeling binnen een paar uur en e" +
+      "en oppervlak vol belletjes. Bij mij klikte het pas echt rond d" +
+      "ag 8&ndash;10. Bij heel veel anderen ook. De jouwe is niet stu" +
+      "k.",
+    ms_ready_h: "Wanneer is hij actief?",
+    ms_ready_p1:
+      "Een actieve starter verdubbelt binnen een paar uur na een voed" +
+      "ing, staat bovenaan vol schuimende belletjes en ruikt aangenaa" +
+      "m zuur &mdash; niet scherp, niet naar nagellakremover. Dat is " +
+      "hetzelfde &ldquo;actief&rdquo; waar de <a href=\"getting-start" +
+      "ed.html\">algemene methode</a> het over heeft.",
+    ms_ready_p2:
+      "Vanaf dan kan je je eerste brood in de kweek zetten. Bewaar de" +
+      " extra starter tussen het bakken in de koelkast &mdash; hij pa" +
+      "uzeert, blijft leven, en wacht gerust weken op je.",
+    ms_trouble_h: "Veelvoorkomende problemen &amp; oplossingen",
+    ms_t1_h: "Nog geen belletjes",
+    ms_t1_p:
+      "Tot ongeveer dag 3 is het nog vroeg, en een koude keuken vertr" +
+      "aagt alles flink. Zet hem op een warmere plek en geef het tijd" +
+      " voordat je oordeelt.",
+    ms_t2_h: "Ruikt scherp, naar nagellakremover",
+    ms_t2_p:
+      "Hij heeft honger &mdash; de cultuur is groter dan wat je haar v" +
+      "oert. Voed vaker, of geef een iets grotere voeding (zeg 75g me" +
+      "el en 75g water).",
+    ms_t3_h: "Een grijze vloeistof bovenaan (hooch)",
+    ms_t3_p:
+      "Hetzelfde verhaal: honger. Giet de hooch eraf en voed zoals ge" +
+      "woonlijk. Het is een teken om vaker te voeden, geen dode start" +
+      "er.",
+    ms_t4_h: "Schimmel &mdash; pluizig, gekleurd, bovenaan",
+    ms_t4_p:
+      "Dat is het enige dat je niet oplost. Gooi het weg en begin opn" +
+      "ieuw. Het kost twee ingrediënten en een paar dagen, en de bewe" +
+      "gingen ken je al.",
+    ms_punchline:
+      "Uiteindelijk is een starter gewoon meel, water en een week ero" +
+      "ver waken &mdash; en het is het begin van elk brood op deze si" +
+      "te.",
+    ms_readMethod: "Lees de algemene methode &rarr;",
   },
 };
 
