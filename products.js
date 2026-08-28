@@ -200,7 +200,7 @@ recipes: {
         eyebrow: "focaccia &middot; method",
         title: "Focaccia: recipe &amp; method",
         tagline: "The easy one: no shaping, no scoring, no steam. Same general method up to the bulk ferment &mdash; then oil, a pan, dimples, and a hot flat bake.",
-        tip: "match the dough weight to your baking sheet with the calculator, then follow the method &mdash; the dimples never change.",
+        tip: "match the dough weight to your baking sheet with the calculator, then follow the method.",
         notes: [
           { h: "Olive oil, generously", p: "Oil goes in the dough, in the pan and on top. Focaccia is the one recipe where being greasy is the point &mdash; don't hold back." },
           { h: "Pan proof", p: "After the bulk ferment, no bowl: stretch the dough into a generously oiled baking sheet (30&times;40&nbsp;cm). It will try to spring back &mdash; give it a rest, then stretch again until it stays." },
@@ -212,7 +212,7 @@ recipes: {
         eyebrow: "focaccia &middot; methode",
         title: "Focaccia: recept &amp; methode",
         tagline: "De makkelijke: geen vorm, geen insnede, geen stoom. Dezelfde algemene methode tot aan de bulkrijs &mdash; daarna olie, een pan, kuiltjes en een hete platte bak.",
-        tip: "stem het deeggewicht af op je bakplaat met de calculator en volg dan de methode &mdash; de kuiltjes veranderen nooit.",
+        tip: "stem het deeggewicht af op je bakplaat met de calculator en volg dan de methode.",
         notes: [
           { h: "Royaal olijfolie", p: "Olie in het deeg, in de pan en er bovenop. Focaccia is het enige recept waar vet zijn het punt is &mdash; houd je niet in." },
           { h: "Rijzen in de pan", p: "Na de bulkrijs, geen kom: rek het deeg uit over een royaal ingevette bakplaat (30&times;40&nbsp;cm). Het zal terugveren &mdash; geef het rust en rek opnieuw tot het blijft liggen." },
