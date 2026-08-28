@@ -514,6 +514,10 @@ function openFavorites(){
   panel.classList.add('active');
   $('favorites-btn').classList.add('active');
   $('favorites-btn').setAttribute('aria-expanded', 'true');
+  // the language toggle reloads the page: remember the pane was open so the
+  // boot code below can reopen it (sessionStorage survives a reload, but a
+  // new visit starts with the pane closed)
+  try { sessionStorage.setItem('sd_fav_open', '1'); } catch (e) {}
 }
 
 function hideFavorites(){
@@ -522,6 +526,7 @@ function hideFavorites(){
   panel.classList.remove('active');
   $('favorites-btn').classList.remove('active');
   $('favorites-btn').setAttribute('aria-expanded', 'false');
+  try { sessionStorage.removeItem('sd_fav_open'); } catch (e) {}
   // leaving the favorites pane (or switching product tabs) extinguishes the
   // star: it only stays lit while the saved/loaded favorite stays on screen
   if (litFav) setStarLit(litFav, false);
@@ -541,6 +546,10 @@ $('favorites-btn').addEventListener('click', () => {
   if ($('favorites-btn').classList.contains('active')) closeFavorites();
   else openFavorites();
 });
+
+// boot: reopen the favorites pane if it was open when the page (re)loaded,
+// e.g. after switching language, which goes through a full page reload
+try { if (sessionStorage.getItem('sd_fav_open') === '1') openFavorites(); } catch (e) {}
 
 $('favorites-card').addEventListener('click', e => {
   const loadBtn = e.target.closest('[data-load]');
