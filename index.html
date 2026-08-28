@@ -343,12 +343,14 @@ PRODUCTS.forEach(p => {
       ? parseFloat(btn.dataset.v)
       : p.base.total * balls / p.widget.defaultCount;
     persistValue($(pid+'-weight'));
+    unlightStarOn(pid);
     updateProduct(p);
   });
 
   // total-dough weight slider (keeps current mode; never restored on load)
   $(pid+'-weight').addEventListener('input', () => {
     persistValue($(pid+'-weight'));
+    unlightStarOn(pid);
     updateProduct(p);
   });
 
@@ -357,6 +359,7 @@ PRODUCTS.forEach(p => {
     $(pid+'-ball-weight').addEventListener('input', () => {
       $(pid+'-ball-weight').value = Math.round((parseFloat($(pid+'-ball-weight').value) || p.widget.defaultBallWeight) * 2) / 2;
       persistValue($(pid+'-ball-weight'));
+      unlightStarOn(pid);
       updateProduct(p);
     });
   }
@@ -367,12 +370,14 @@ PRODUCTS.forEach(p => {
     el.addEventListener('input', () => {
       if (p.chipsSwitchTo === 'base') baseMode[pid] = 'percent';
       persistValue(el);
+      unlightStarOn(pid);
       updateProduct(p);
     });
   });
 
   // reset-to-defaults
   $(pid+'-reset').addEventListener('click', () => {
+    unlightStarOn(pid);
     baseMode[pid] = p.chipsSwitchTo;
     if (p.resetWeight) {
       $(pid+'-weight').value = p.slider.def;
@@ -408,6 +413,10 @@ function setStarLit(pid, lit){
   const star = $(pid + '-fav-star');
   if (star) star.classList.toggle('faved', !!lit);
 }
+
+// changing any slider/reset on a product means the loaded/saved favorite no
+// longer matches the current settings: extinguish its star
+function unlightStarOn(pid){ if (litFav === pid) setStarLit(pid, false); }
 
 function loadFavorites(){
   try {
