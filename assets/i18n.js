@@ -40,7 +40,7 @@ const I18N = {
     ing_water: "Water",
     ing_salt: "Salt",
     ing_oil: "Olive oil",
-    pctOfFlour: "of flour",
+    pctOfFlour: "of the total flour",
     hydrationPct: "hydration %s%",
 
     shareTitle: "Sourdough Calculator",
@@ -330,7 +330,7 @@ const I18N = {
     ing_water: "Water",
     ing_salt: "Zout",
     ing_oil: "Olijfolie",
-    pctOfFlour: "van de bloem",
+    pctOfFlour: "van de totale bloem",
     hydrationPct: "hydratatie %s%",
 
     shareTitle: "Zuurdesemcalculator",

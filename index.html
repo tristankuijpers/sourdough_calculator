@@ -183,12 +183,16 @@ function updateProduct(p){
     ? scaleBase(p.base, W)
     : computeDough(W, h, st, sp, o);
 
+  // Every ingredient is annotated with its baker's percentage of the total
+  // flour (grams shown ÷ total flour incl. starter). The hydration itself is
+  // shown elsewhere, so it does not appear in the rows.
+  const ann = t => Math.round(t*100)+'% '+I18N.t('pctOfFlour');
   const rows = [
-    {name:I18N.t('ing_starter'), pctLabel:Math.round(st*100)+'% '+I18N.t('pctOfFlour'), grams:d.starter},
-    {name:I18N.t('ing_flour'),   pctLabel:'',                                        grams:d.flour},
-    {name:I18N.t('ing_water'),   pctLabel:I18N.t('hydrationPct',Math.round(h*100)),   grams:d.water},
-    ...p.advanced.extras.map((ex,i) => ({name:ex.name, pctLabel:Math.round(os[i])+'%', grams:d.oil})),
-    {name:I18N.t('ing_salt'),    pctLabel:Math.round(sp*100)+'%',                    grams:d.salt},
+    {name:I18N.t('ing_starter'), pctLabel:ann(d.starter/d.totalFlour), grams:d.starter},
+    {name:I18N.t('ing_flour'),   pctLabel:ann(d.flour/d.totalFlour),   grams:d.flour},
+    {name:I18N.t('ing_water'),   pctLabel:ann(d.water/d.totalFlour),   grams:d.water},
+    ...p.advanced.extras.map((ex,i) => ({name:ex.name, pctLabel:ann(d.oil/d.totalFlour), grams:d.oil})),
+    {name:I18N.t('ing_salt'),    pctLabel:ann(d.salt/d.totalFlour),    grams:d.salt},
   ];
   renderRows($(pid+'-rows'), rows);
 
