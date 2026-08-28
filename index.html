@@ -83,6 +83,7 @@
     <div class="sub" data-i18n-html="sub">Set the total dough weight &mdash; every ratio scales automatically.</div>
     <div class="head-actions">
       <a class="chip get-started" href="recipes/getting-started.html"><img class="icon-img" src="assets/favicon-32x32.png" alt=""><span data-i18n="getStarted">Getting started with sourdough</span></a>
+      <button type="button" class="chip favorites-btn" id="favorites-btn" aria-expanded="false">&#9733; <span data-i18n="favorites">Favorites</span></button>
     </div>
   </header>
 
@@ -91,6 +92,26 @@
   </div>
 
   <div id="panels"></div>
+
+  <!-- Favorites pane: opened via the header chip; content rendered by JS -->
+  <div class="tabpanel" id="panel-favorites" hidden>
+    <div class="card" id="favorites-card"></div>
+  </div>
+
+  <!-- Name-this-recipe dialog, opened by the star button -->
+  <div class="fav-overlay" id="fav-overlay" hidden>
+    <div class="fav-dialog" role="dialog" aria-modal="true" aria-labelledby="fav-dialog-title">
+      <div class="fav-dialog-title" id="fav-dialog-title" data-i18n="favDialogTitle">Name this recipe</div>
+      <form id="fav-form">
+        <input type="text" id="fav-name-input" maxlength="40" autocomplete="off"
+               placeholder="e.g. focaccia extra oil">
+        <div class="fav-dialog-actions">
+          <button type="button" class="chip" id="fav-cancel" data-i18n="cancel">Cancel</button>
+          <button type="submit" class="chip chip-primary" id="fav-save" data-i18n="save">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <div class="toast" id="share-toast"></div>
   <footer>
@@ -248,6 +269,9 @@ function calcPanelHTML(p){
     ...p.advanced.extras.map(ex => advRowHTML(pid, ex))
   ].join('');
   return `
+      <button type="button" class="fav-star" id="${pid}-fav-star" title="${I18N.t('saveToFavorites')}" aria-label="${I18N.t('saveToFavorites')}">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5 0.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-0.9z"/></svg>
+      </button>
       <div class="weight-block">
         <div class="weight-label">${I18N.t('totalDough')}</div>
         <div class="weight-value"><span id="${pid}-weight-num">${s.def}</span><span>g</span></div>
@@ -319,12 +343,14 @@ PRODUCTS.forEach(p => {
       ? parseFloat(btn.dataset.v)
       : p.base.total * balls / p.widget.defaultCount;
     persistValue($(pid+'-weight'));
+    unlightStarOn(pid);
     updateProduct(p);
   });
 
   // total-dough weight slider (keeps current mode; never restored on load)
   $(pid+'-weight').addEventListener('input', () => {
     persistValue($(pid+'-weight'));
+    unlightStarOn(pid);
     updateProduct(p);
   });
 
@@ -333,6 +359,7 @@ PRODUCTS.forEach(p => {
     $(pid+'-ball-weight').addEventListener('input', () => {
       $(pid+'-ball-weight').value = Math.round((parseFloat($(pid+'-ball-weight').value) || p.widget.defaultBallWeight) * 2) / 2;
       persistValue($(pid+'-ball-weight'));
+      unlightStarOn(pid);
       updateProduct(p);
     });
   }
@@ -343,12 +370,14 @@ PRODUCTS.forEach(p => {
     el.addEventListener('input', () => {
       if (p.chipsSwitchTo === 'base') baseMode[pid] = 'percent';
       persistValue(el);
+      unlightStarOn(pid);
       updateProduct(p);
     });
   });
 
   // reset-to-defaults
   $(pid+'-reset').addEventListener('click', () => {
+    unlightStarOn(pid);
     baseMode[pid] = p.chipsSwitchTo;
     if (p.resetWeight) {
       $(pid+'-weight').value = p.slider.def;
@@ -363,6 +392,233 @@ PRODUCTS.forEach(p => {
   });
 
   updateProduct(p);
+});
+
+// ---------- favorites ----------
+// A favorite pins a product together with the current slider values into
+// localStorage ("sd_favorites"), under a user-chosen name. The Favorites pane
+// (opened via the header chip) lists them and can load any of them back.
+const FAV_KEY = 'sd_favorites';
+const favOverlay = $('fav-overlay');
+const favNameInput = $('fav-name-input');
+favNameInput.placeholder = I18N.t('favNamePlaceholder');
+let favEditProduct = null; // product object currently being pinned
+// Which product's star is currently lit. Session-only: lit after saving via
+// the star or loading a favorite; cleared as soon as the user navigates to
+// another product tab (so returning shows an unlit star again).
+let litFav = null;
+
+function setStarLit(pid, lit){
+  litFav = lit ? pid : null;
+  const star = $(pid + '-fav-star');
+  if (star) star.classList.toggle('faved', !!lit);
+}
+
+// changing any slider/reset on a product means the loaded/saved favorite no
+// longer matches the current settings: extinguish its star
+function unlightStarOn(pid){ if (litFav === pid) setStarLit(pid, false); }
+
+function loadFavorites(){
+  try {
+    const v = JSON.parse(localStorage.getItem(FAV_KEY));
+    return Array.isArray(v) ? v : [];
+  } catch (e) { return []; }
+}
+function saveFavorites(list){
+  try { localStorage.setItem(FAV_KEY, JSON.stringify(list)); }
+  catch (e) { showToast(I18N.t('favoriteSaved') + ' (localStorage unavailable)'); }
+}
+
+// capture the full current slider state of a product panel
+function captureProductState(p){
+  const pid = p.id;
+  const extras = {};
+  p.advanced.extras.forEach(ex => {
+    extras[ex.key] = parseFloat($(pid + '-' + ex.key).value);
+  });
+  return {
+    weight: parseFloat($(pid + '-weight').value),
+    extras: extras,
+    ballWeight: (p.widget && p.widget.type === 'balls')
+      ? parseFloat($(pid + '-ball-weight').value) || null
+      : null,
+    baseMode: baseMode[pid]
+  };
+}
+
+// apply a saved state back onto a product's sliders and re-render
+function applyProductState(p, fav){
+  const pid = p.id;
+  $(pid + '-weight').value = fav.weight;
+  persistValue($(pid + '-weight'));
+  if (fav.ballWeight != null && p.widget && p.widget.type === 'balls'){
+    $(pid + '-ball-weight').value = fav.ballWeight;
+    persistValue($(pid + '-ball-weight'));
+  }
+  Object.keys(fav.extras || {}).forEach(key => {
+    const el = $(pid + '-' + key);
+    if (el){ el.value = fav.extras[key]; persistValue(el); }
+  });
+  baseMode[pid] = fav.baseMode || p.chipsSwitchTo;
+  updateProduct(p);
+}
+
+function escapeHTML(s){
+  return String(s).replace(/[&<>"']/g, c => (
+    { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]
+  ));
+}
+
+function favSummary(p, fav){
+  const bits = [round(fav.weight) + ' g'];
+  Object.keys(fav.extras || {}).forEach(key => {
+    bits.push(round(fav.extras[key]) + '% ' + key);
+  });
+  return bits.join(' \u00b7 ');
+}
+
+function renderFavorites(){
+  const list = loadFavorites();
+  const card = $('favorites-card');
+  if (!list.length){
+    card.innerHTML = '<div class="favorites-empty">' + I18N.t('favoritesEmpty') + '</div>';
+    return;
+  }
+  card.innerHTML = list.map(fav => {
+    const p = PRODUCTS.find(x => x.id === fav.productId);
+    const accent = p ? p.accent.color : 'var(--amber)';
+    const available = p && !p.disabled;
+    return `
+      <div class="fav-item" style="--accent:${accent}">
+        <div class="fav-info">
+          <div class="fav-name">${escapeHTML(fav.name)}</div>
+          <div class="fav-meta">
+            ${p ? escapeHTML(p.label) : escapeHTML(I18N.t('favUnavailable'))}
+            ${available ? ' · ' + escapeHTML(favSummary(p, fav)) : ''}
+          </div>
+        </div>
+        <div class="fav-actions">
+          ${available ? `<button type="button" class="chip" data-load="${fav.id}">${I18N.t('load')}</button>` : ''}
+          <button type="button" class="chip fav-delete" data-del="${fav.id}" aria-label="${I18N.t('remove')}">&times;</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function openFavorites(){
+  renderFavorites();
+  // hide product panels, show favorites (not a hash-persisted tab)
+  document.querySelectorAll('.tabpanel').forEach(el => el.classList.remove('active'));
+  const panel = $('panel-favorites');
+  panel.hidden = false;
+  panel.classList.add('active');
+  $('favorites-btn').classList.add('active');
+  $('favorites-btn').setAttribute('aria-expanded', 'true');
+  // the language toggle reloads the page: remember the pane was open so the
+  // boot code below can reopen it (sessionStorage survives a reload, but a
+  // new visit starts with the pane closed)
+  try { sessionStorage.setItem('sd_fav_open', '1'); } catch (e) {}
+}
+
+function hideFavorites(){
+  const panel = $('panel-favorites');
+  panel.hidden = true;
+  panel.classList.remove('active');
+  $('favorites-btn').classList.remove('active');
+  $('favorites-btn').setAttribute('aria-expanded', 'false');
+  try { sessionStorage.removeItem('sd_fav_open'); } catch (e) {}
+  // leaving the favorites pane (or switching product tabs) extinguishes the
+  // star: it only stays lit while the saved/loaded favorite stays on screen
+  if (litFav) setStarLit(litFav, false);
+}
+
+function closeFavorites(){
+  hideFavorites();
+  // restore the tab strip's active tab
+  const tab = document.querySelector('.tab.active');
+  if (tab){
+    const panel2 = document.getElementById('panel-' + tab.dataset.tab);
+    if (panel2) panel2.classList.add('active');
+  }
+}
+
+$('favorites-btn').addEventListener('click', () => {
+  if ($('favorites-btn').classList.contains('active')) closeFavorites();
+  else openFavorites();
+});
+
+// boot: reopen the favorites pane if it was open when the page (re)loaded,
+// e.g. after switching language, which goes through a full page reload
+try { if (sessionStorage.getItem('sd_fav_open') === '1') openFavorites(); } catch (e) {}
+
+$('favorites-card').addEventListener('click', e => {
+  const loadBtn = e.target.closest('[data-load]');
+  if (loadBtn){
+    const fav = loadFavorites().find(f => f.id === loadBtn.dataset.load);
+    const p = fav && PRODUCTS.find(x => x.id === fav.productId);
+    if (fav && p && !p.disabled){
+      closeFavorites();
+      // switch to the product's tab
+      document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === p.id));
+      document.querySelectorAll('#panels .tabpanel').forEach(el => el.classList.remove('active'));
+      $('panel-' + p.id).classList.add('active');
+      applyProductState(p, fav);
+      // loaded from favorites -> its star stays lit on this product
+      setStarLit(p.id, true);
+      showToast(I18N.t('favoriteLoaded'));
+    }
+    return;
+  }
+  const delBtn = e.target.closest('[data-del]');
+  if (delBtn){
+    const removed = loadFavorites().find(f => f.id === delBtn.dataset.del);
+    if (removed && litFav === removed.productId) setStarLit(removed.productId, false);
+    saveFavorites(loadFavorites().filter(f => f.id !== delBtn.dataset.del));
+    renderFavorites();
+    showToast(I18N.t('favoriteDeleted'));
+  }
+});
+
+// star buttons: open the name dialog for that product
+document.querySelectorAll('.fav-star').forEach(btn => {
+  btn.addEventListener('click', () => {
+    favEditProduct = PRODUCTS.find(p => p.id === btn.id.replace('-fav-star', ''));
+    if (!favEditProduct || favEditProduct.disabled) return;
+    const W = round(parseFloat($(favEditProduct.id + '-weight').value));
+    favNameInput.value = favEditProduct.label + ' · ' + W + ' g';
+    favOverlay.hidden = false;
+    favNameInput.focus();
+    favNameInput.select();
+  });
+});
+
+function closeFavDialog(){ favOverlay.hidden = true; favEditProduct = null; }
+
+$('fav-cancel').addEventListener('click', closeFavDialog);
+favOverlay.addEventListener('click', e => { if (e.target === favOverlay) closeFavDialog(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape'){
+    if (!favOverlay.hidden) closeFavDialog();
+    else if ($('favorites-btn').classList.contains('active')) closeFavorites();
+  }
+});
+
+$('fav-form').addEventListener('submit', e => {
+  e.preventDefault();
+  if (!favEditProduct) return;
+  const name = favNameInput.value.trim() ||
+    (favEditProduct.label + ' · ' + round(parseFloat($(favEditProduct.id + '-weight').value)) + ' g');
+  const fav = Object.assign(
+    { id: 'fav-' + Date.now(), name: name, productId: favEditProduct.id, savedAt: Date.now() },
+    captureProductState(favEditProduct)
+  );
+  const list = loadFavorites();
+  list.push(fav);
+  saveFavorites(list);
+  const savedPid = favEditProduct.id; // closeFavDialog() clears favEditProduct
+  closeFavDialog();
+  setStarLit(savedPid, true);
+  showToast(I18N.t('favoriteSaved'));
 });
 
 // ---------- share ----------
@@ -412,6 +668,9 @@ if (!enableNativeShare){
 // ---------- tabs ----------
 document.querySelectorAll('.tab').forEach(tab=>{
   tab.addEventListener('click', ()=>{
+    // selecting a product tab also closes the favorites pane, so the
+    // ★ chip doesn't stay lit (and its next click would otherwise "cancel")
+    hideFavorites();
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
     document.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('active'));
     tab.classList.add('active');
