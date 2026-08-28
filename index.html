@@ -398,6 +398,16 @@ const favOverlay = $('fav-overlay');
 const favNameInput = $('fav-name-input');
 favNameInput.placeholder = I18N.t('favNamePlaceholder');
 let favEditProduct = null; // product object currently being pinned
+// Which product's star is currently lit. Session-only: lit after saving via
+// the star or loading a favorite; cleared as soon as the user navigates to
+// another product tab (so returning shows an unlit star again).
+let litFav = null;
+
+function setStarLit(pid, lit){
+  litFav = lit ? pid : null;
+  const star = $(pid + '-fav-star');
+  if (star) star.classList.toggle('faved', !!lit);
+}
 
 function loadFavorites(){
   try {
@@ -503,6 +513,9 @@ function hideFavorites(){
   panel.classList.remove('active');
   $('favorites-btn').classList.remove('active');
   $('favorites-btn').setAttribute('aria-expanded', 'false');
+  // leaving the favorites pane (or switching product tabs) extinguishes the
+  // star: it only stays lit while the saved/loaded favorite stays on screen
+  if (litFav) setStarLit(litFav, false);
 }
 
 function closeFavorites(){
@@ -532,12 +545,16 @@ $('favorites-card').addEventListener('click', e => {
       document.querySelectorAll('#panels .tabpanel').forEach(el => el.classList.remove('active'));
       $('panel-' + p.id).classList.add('active');
       applyProductState(p, fav);
+      // loaded from favorites -> its star stays lit on this product
+      setStarLit(p.id, true);
       showToast(I18N.t('favoriteLoaded'));
     }
     return;
   }
   const delBtn = e.target.closest('[data-del]');
   if (delBtn){
+    const removed = loadFavorites().find(f => f.id === delBtn.dataset.del);
+    if (removed && litFav === removed.productId) setStarLit(removed.productId, false);
     saveFavorites(loadFavorites().filter(f => f.id !== delBtn.dataset.del));
     renderFavorites();
     showToast(I18N.t('favoriteDeleted'));
@@ -580,9 +597,9 @@ $('fav-form').addEventListener('submit', e => {
   const list = loadFavorites();
   list.push(fav);
   saveFavorites(list);
-  const star = $(favEditProduct.id + '-fav-star');
-  if (star) star.classList.add('faved');
   closeFavDialog();
+  setStarLit(favEditProduct.id, true);
+  favEditProduct = null;
   showToast(I18N.t('favoriteSaved'));
 });
 
