@@ -141,7 +141,15 @@ function persistValue(el){ localStorage.setItem('sd_' + el.id, el.value); }
 const $ = id => document.getElementById(id);
 // session-only UI mode per product: "base" (chips scale the default portion) or "percent"
 const baseMode = {};
-const activeId = PRODUCTS.some(p => !p.disabled) ? PRODUCTS.find(p => !p.disabled).id : null;
+// Active tab lives in the URL hash (#bread / #pizza / #focaccia) so reloads —
+// e.g. the language toggle, which reloads the page — land back on the same
+// product instead of resetting to the first one. Falls back to the first
+// enabled product when no (valid) hash is present.
+const defaultId = PRODUCTS.find(p => !p.disabled) ? PRODUCTS.find(p => !p.disabled).id : null;
+const hashId = location.hash.length > 1 ? location.hash.slice(1) : null;
+const activeId = (hashId && PRODUCTS.find(p => p.id === hashId && !p.disabled))
+  ? hashId
+  : defaultId;
 
 // scale a base portion (grams) up/down to a new total dough weight
 function scaleBase(base, W){
@@ -204,9 +212,10 @@ function updateProduct(p){
 
 function tabHTML(p){
   const soon = p.disabled ? ' tab-soon' : '';
+  const active = p.id === activeId ? ' active' : '';
   const emoji = p.emoji ? p.emoji+' ' : '';
   const tag = p.tag ? `<span class="tag">${p.tag}</span>` : '';
-  return `<div class="tab${soon}" data-tab="${p.id}" style="--accent-soft:${p.accent.soft}; --accent-ring:${p.accent.ring};">${emoji}${p.label}${tag}</div>`;
+  return `<div class="tab${soon}${active}" data-tab="${p.id}" style="--accent-soft:${p.accent.soft}; --accent-ring:${p.accent.ring};">${emoji}${p.label}${tag}</div>`;
 }
 
 function chipHTML(c){
@@ -406,6 +415,12 @@ document.querySelectorAll('.tab').forEach(tab=>{
     tab.classList.add('active');
     document.getElementById('panel-'+tab.dataset.tab).classList.add('active');
     tab.scrollIntoView({block:'nearest', inline:'nearest', behavior:'smooth'});
+    // Keep the URL hash in sync, so any reload (e.g. the language toggle) restores
+    // this tab rather than falling back to the first product. Disabled ("soon")
+    // tabs are placeholders, so they never drive the persisted tab.
+    if (!tab.classList.contains('tab-soon')) {
+      try { history.replaceState(null, '', '#' + tab.dataset.tab); } catch (e) {}
+    }
   });
 });
 
