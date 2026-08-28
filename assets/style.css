@@ -164,6 +164,7 @@ h1{
 }
 
 .card{
+  position:relative;
   background:var(--surface);
   border:1px solid var(--line);
   border-radius:var(--radius);
@@ -507,6 +508,125 @@ footer{
   color:var(--ink);
 }
 .note p{font-size:14px; line-height:1.6; color:var(--muted); margin:0;}
+
+/* ---------- favorites ---------- */
+/* star button in the top-right corner of every calculator card */
+.fav-star{
+  position:absolute;
+  top:14px;
+  right:14px;
+  width:34px;
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:transparent;
+  color:var(--muted);
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.fav-star:hover{color:var(--accent, var(--amber)); border-color:var(--accent, var(--amber));}
+.fav-star svg{fill:none; stroke:currentColor; stroke-width:1.6; stroke-linejoin:round;}
+.fav-star.faved{color:var(--accent, var(--amber)); border-color:var(--accent, var(--amber)); background:var(--accent-soft, rgba(207,159,66,0.16));}
+.fav-star.faved svg{fill:currentColor;}
+
+/* header chip that opens the favorites pane */
+.favorites-btn{font-family:'Inter',sans-serif; font-size:13px; padding:10px 16px;}
+.favorites-btn.active{color:var(--bg); background:var(--amber); border-color:var(--amber);}
+
+/* name-this-recipe dialog */
+/* NB: [hidden] must win over display:flex, otherwise the overlay is visible
+   on page load and can never be closed via the hidden attribute. */
+.fav-overlay[hidden]{display:none;}
+.fav-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(15,12,8,0.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:50;
+  padding:20px;
+}
+.fav-dialog{
+  width:100%;
+  max-width:340px;
+  background:var(--surface);
+  border:1px solid var(--line-strong);
+  border-radius:var(--radius);
+  padding:20px;
+}
+.fav-dialog-title{
+  font-family:'Fraunces',serif;
+  font-size:16px;
+  font-weight:600;
+  color:var(--ink);
+  margin-bottom:12px;
+}
+.fav-dialog input[type=text]{
+  width:100%;
+  box-sizing:border-box;
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid var(--line-strong);
+  background:var(--surface-2, transparent);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  font-size:14px;
+}
+.fav-dialog input[type=text]:focus{outline:none; border-color:var(--amber);}
+.fav-dialog-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:14px;
+}
+.chip-primary{color:var(--bg); background:var(--amber); border-color:var(--amber);}
+.chip-primary:hover{color:var(--bg); background:var(--amber); border-color:var(--amber);}
+
+/* favorites pane list */
+.favorites-empty{
+  text-align:center;
+  padding:24px 12px;
+  color:var(--muted);
+  font-size:13.5px;
+  line-height:1.6;
+  max-width:44ch;
+  margin:0 auto;
+}
+.fav-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+}
+.fav-item:last-child{border-bottom:none;}
+.fav-item .fav-name{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:15px;
+  color:var(--ink);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.fav-item .fav-meta{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:var(--muted);
+  margin-top:2px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.fav-info{min-width:0;}
+.fav-actions{display:flex; gap:6px; flex-shrink:0;}
+.fav-delete{font-size:14px; line-height:1; padding:6px 10px;}
+.fav-delete:hover{color:var(--tomato, #c1502e); border-color:var(--tomato, #c1502e);}
 
 /* getting-started story page */
 .story .lede{
