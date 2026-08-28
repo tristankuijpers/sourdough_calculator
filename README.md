@@ -129,7 +129,7 @@ GitHub Pages serves `index.html` from the published branch/folder by default, an
 
 ## Roadmap
 
-- **Advanced sliders are temporarily hidden** to keep the calculator dead simple. Planned: a flour-mix picker (e.g. "50% whole wheat / 50% white") instead. See `TODO(advanced)` in `index.html` and `.adv-panel` in `assets/style.css`.
+- Each calculator now has an **Advanced** toggle with a **hydration slider**: the total dough weight stays fixed while flour, starter & salt are re-derived from it. A flour-mix picker (e.g. "50% whole wheat / 50% white") is still planned.
 
 ## Contributing
 

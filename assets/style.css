@@ -420,10 +420,9 @@ footer{
 }
 .coming-soon p{font-size:13.5px; line-height:1.6; max-width:38ch; margin:0 auto;}
 
-/* Advanced sliders are temporarily hidden to keep the calculator dead simple.
-   TODO(advanced): rework into a flour-mix picker (e.g. "50% whole wheat /
-   50% white"). Delete this rule to bring the sliders back. */
-.adv-panel{display:none;}
+/* Advanced settings sit behind an opt-in toggle so the core calculator stays
+   dead simple. The hydration slider keeps the total dough weight fixed and
+   re-derives flour, starter & salt from it (see computeDough in index.html). */
 
 /* CTA row on the landing page: getting-started chip + language switch */
 .head-actions{
