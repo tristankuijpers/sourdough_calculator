@@ -451,17 +451,5 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
 }
 </script>
-<script>
-// TEMP DEBUG (remove): report toggle geometry in the document title
-var lt = document.querySelector('.lang-toggle');
-var r = lt.getBoundingClientRect();
-document.title = 'DBG ' + JSON.stringify({
-  x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height),
-  wrapW: Math.round(document.querySelector('.wrap').getBoundingClientRect().width),
-  innerW: window.innerWidth,
-  scrollW: document.documentElement.scrollWidth,
-  btnH: Math.round(document.querySelector('.flag-btn').getBoundingClientRect().height)
-});
-</script>
 </body>
 </html>
