@@ -28,7 +28,7 @@ const PRODUCTS = [
     // Base-gram "default portion". Used in recipe/portion mode (chip presets).
     base: { starter: 100, flour: 450, water: 300, salt: 8, oil: 0, total: 858 },
     portionNames: { en: "full loaf", nl: "heel brood" },
-    slider: { min: 300, max: 2600, step: 1, def: 858 },
+    slider: { min: 300, max: 2500, step: 1, def: 858 },
     // "base" chips snap to the default portion scaled to the chosen weight;
     // "percent" chips just set the total weight (percent-driven).
     chipsSwitchTo: "base",
@@ -93,7 +93,7 @@ const PRODUCTS = [
     },
     base: { starter: 100, flour: 500, water: 330, salt: 10, oil: 10, total: 950 },
     portionNames: { en: "pizza", nl: "pizza" },
-    slider: { min: 300, max: 2400, step: 1, def: 950 },
+    slider: { min: 300, max: 2500, step: 1, def: 950 },
     chipsSwitchTo: "base",
     widget: { type: "balls", defaultCount: 4, defaultBallWeight: 237.5 },
     chips: {
@@ -166,7 +166,7 @@ recipes: {
     },
     base: { starter: 100, flour: 440, water: 320, salt: 10, oil: 30, total: 900 },
     portionNames: { en: "standard pan", nl: "standaardpan" },
-    slider: { min: 300, max: 2400, step: 1, def: 900 },
+    slider: { min: 300, max: 2500, step: 1, def: 900 },
     chipsSwitchTo: "percent",
     chips: {
       en: [
