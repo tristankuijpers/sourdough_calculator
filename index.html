@@ -497,12 +497,16 @@ function openFavorites(){
   $('favorites-btn').setAttribute('aria-expanded', 'true');
 }
 
-function closeFavorites(){
+function hideFavorites(){
   const panel = $('panel-favorites');
   panel.hidden = true;
   panel.classList.remove('active');
   $('favorites-btn').classList.remove('active');
   $('favorites-btn').setAttribute('aria-expanded', 'false');
+}
+
+function closeFavorites(){
+  hideFavorites();
   // restore the tab strip's active tab
   const tab = document.querySelector('.tab.active');
   if (tab){
@@ -629,6 +633,9 @@ if (!enableNativeShare){
 // ---------- tabs ----------
 document.querySelectorAll('.tab').forEach(tab=>{
   tab.addEventListener('click', ()=>{
+    // selecting a product tab also closes the favorites pane, so the
+    // ★ chip doesn't stay lit (and its next click would otherwise "cancel")
+    hideFavorites();
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
     document.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('active'));
     tab.classList.add('active');
