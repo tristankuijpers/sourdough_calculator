@@ -367,6 +367,10 @@ function calcPanelHTML(p){
     ...p.advanced.extras.map(ex => advRowHTML(pid, ex))
   ].join('');
   return `
+      <button type="button" class="reset-icon" id="${pid}-reset-icon" title="${I18N.t('resetIcon')}" aria-label="${I18N.t('resetIcon')}">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <path d="M20 3v4h-4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
       <button type="button" class="fav-star" id="${pid}-fav-star" title="${I18N.t('saveToFavorites')}" aria-label="${I18N.t('saveToFavorites')}">
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5 0.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-0.9z"/></svg>
       </button>
@@ -519,22 +523,37 @@ PRODUCTS.forEach(p => {
     });
   });
 
-  // reset-to-defaults
-  $(pid+'-reset').addEventListener('click', () => {
+  // reset-to-defaults (top-left icon): full reset back to the default portion,
+  // restoring the weight slider so the matching preset chip lights up again
+  const resetProduct = () => {
     unlightStarOn(pid);
     baseMode[pid] = p.chipsSwitchTo;
     if (dynBase[pid]) dynBase[pid] = Object.assign({}, p.base);
-    if (p.resetWeight) {
-      $(pid+'-weight').value = p.slider.def;
-      persistValue($(pid+'-weight'));
-    }
+    // restore the weight to the default portion so the matching preset chip
+    // (e.g. "full loaf", "4 balls", "standard pan") lights back up
+    $(pid+'-weight').value = p.slider.def;
+    persistValue($(pid+'-weight'));
     if (p.widget && p.widget.type === 'balls') $(pid+'-ball-weight').value = p.widget.defaultBallWeight;
     advCfgs(p).forEach(cfg => {
       $(pid+'-'+cfg.key).value = cfg.def;
       persistValue($(pid+'-'+cfg.key));
     });
     updateProduct(p);
-  });
+  };
+  // Advanced-panel "reset": keep the user's total dough weight and only bring
+  // the ratio sliders (hydration, extras/oil) back to their defaults
+  const resetAdvanced = () => {
+    unlightStarOn(pid);
+    baseMode[pid] = p.chipsSwitchTo;
+    if (dynBase[pid]) dynBase[pid] = Object.assign({}, p.base);
+    advCfgs(p).forEach(cfg => {
+      $(pid+'-'+cfg.key).value = cfg.def;
+      persistValue($(pid+'-'+cfg.key));
+    });
+    updateProduct(p);
+  };
+  $(pid+'-reset-icon').addEventListener('click', resetProduct);
+  $(pid+'-reset').addEventListener('click', resetAdvanced);
 
   updateProduct(p);
 });

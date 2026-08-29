@@ -550,6 +550,26 @@ footer{
 .fav-star.faved{color:var(--accent, var(--amber)); border-color:var(--accent, var(--amber)); background:var(--accent-soft, rgba(207,159,66,0.16));}
 .fav-star.faved svg{fill:currentColor;}
 
+/* reset icon button in the top-left corner of every calculator card */
+.reset-icon{
+  position:absolute;
+  top:14px;
+  left:14px;
+  width:34px;
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:transparent;
+  color:var(--muted);
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.reset-icon:hover{color:var(--accent, var(--amber)); border-color:var(--accent, var(--amber));}
+.reset-icon svg{fill:none;}
+
 /* header chip that opens the favorites pane */
 .favorites-btn{font-family:'Inter',sans-serif; font-size:13px; padding:10px 16px;}
 .favorites-btn.active{color:var(--bg); background:var(--amber); border-color:var(--amber);}

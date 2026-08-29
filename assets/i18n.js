@@ -36,6 +36,7 @@ const I18N = {
     editHint: "Fill in each ingredient below to get started.",
     advanced: "Advanced",
     resetDefaults: "Reset to defaults",
+    resetIcon: "Reset to defaults",
     helperTotalFlour: "total flour incl. starter: <b>%s g</b>",
     doneBalls: "dough balls of",
 
@@ -344,6 +345,7 @@ const I18N = {
     editHint: "Vul hieronder elk ingredient in om te starten.",
     advanced: "Geavanceerd",
     resetDefaults: "Terug naar standaardwaarden",
+    resetIcon: "Herstel standaardwaarden",
     helperTotalFlour: "totaal bloem incl. starter: <b>%s g</b>",
     doneBalls: "deegballen van",
 
