@@ -382,7 +382,7 @@ function calcPanelHTML(p){
       <div class="divider">
         <svg width="20" height="12" viewBox="0 0 20 12"><path d="M1 10 L7 2 M8 10 L14 2 M15 10 L19 4" stroke="var(--accent, var(--amber))" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
         <div class="line"></div>
-        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em;">${I18N.t('ingredients')}</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em;">${I18N.t(p.editableIngredients ? 'ingredientsEdit' : 'ingredients')}</span>
         <div class="line"></div>
       </div>
 
