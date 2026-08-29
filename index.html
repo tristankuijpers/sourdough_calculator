@@ -147,11 +147,11 @@ function computeDough(W, h, s, sp, o){
 }
 const round = n => Math.round(n);
 
-function renderRows(container, items){
+function renderRows(container, items, editable){
   container.innerHTML = items.map(it => `
     <div class="row">
       <div><span class="name">${it.name}</span><span class="pct">${it.pctLabel}</span></div>
-      <div class="amt">${round(it.grams)}<span>g</span></div>
+      <div class="amt${editable ? ' editable' : ''}"${it.key ? ` data-key="${it.key}"` : ''}${editable ? ` title="${I18N.t('editIngredient')}"` : ''}>${round(it.grams)}<span>g</span></div>
     </div>`).join('');
 }
 
@@ -162,6 +162,10 @@ function persistValue(el){ localStorage.setItem('sd_' + el.id, el.value); }
 const $ = id => document.getElementById(id);
 // session-only UI mode per product: "base" (chips scale the default portion) or "percent"
 const baseMode = {};
+// editable products (custom) keep a mutable working base in grams; the weight
+// slider scales it, ingredient-row edits replace parts of it and ratio-slider
+// moves recompute it from the baker's percentages
+const dynBase = {};
 // Active tab lives in the URL hash (#bread / #pizza / #focaccia) so reloads —
 // e.g. the language toggle, which reloads the page — land back on the same
 // product instead of resetting to the first one. Falls back to the first
@@ -171,6 +175,11 @@ const hashId = location.hash.length > 1 ? location.hash.slice(1) : null;
 const activeId = (hashId && PRODUCTS.find(p => p.id === hashId && !p.disabled))
   ? hashId
   : defaultId;
+
+// every adjustable ratio-slider config of a product: hydration, then any extras
+function advCfgs(p){
+  return [p.advanced.hydration, ...p.advanced.extras].filter(Boolean);
+}
 
 // scale a base portion (grams) up/down to a new total dough weight
 function scaleBase(base, W){
@@ -185,43 +194,83 @@ function scaleBase(base, W){
   };
 }
 
+// read the current baker's percentages off a product's sliders
+function currentPcts(p){
+  const pid = p.id;
+  const h  = parseFloat($(pid+'-hydration').value) / 100;
+  const st = p.advanced.starter.def / 100;
+  const sp = (p.advanced.salt || 0) / 100;   // salt is always a fixed % (no salt slider)
+  const os = p.advanced.extras.map(ex => parseFloat($(pid+'-'+ex.key).value));
+  // fixed oil % (custom) joins any extra %'s (e.g. pizza/focaccia oil slider)
+  const o  = (p.advanced.oil || 0) / 100 + os.reduce((a,b)=>a+b,0) / 100;
+  return { h, st, sp, os, o };
+}
+
 // The one update function every product shares.
 function updateProduct(p){
   const pid = p.id;
   const W  = parseFloat($(pid+'-weight').value);
-  const h  = parseFloat($(pid+'-hydration').value) / 100;
-  const st = p.advanced.starter.def / 100;
-  const sp = p.advanced.salt / 100;
-  const os = p.advanced.extras.map(ex => parseFloat($(pid+'-'+ex.key).value));
-  const o  = os.reduce((a,b)=>a+b,0) / 100;
+  const { h, st, sp, os, o } = currentPcts(p);
+  // editable product with no ingredients yet (all grams still 0): show a blank
+  // slate so the user knows to fill in every ingredient themselves — and skip
+  // any scaling/percentage math that would otherwise divide by total flour 0
+  const empty = p.editableIngredients && dynBase[pid] && dynBase[pid].total <= 0;
 
   $(pid+'-weight-num').textContent  = round(W);
   $(pid+'-hydration-v').textContent = Math.round(h*100)+'%';
   p.advanced.extras.forEach((ex,i) => { $(pid+'-'+ex.key+'-v').textContent = Math.round(os[i])+'%'; });
 
-  const d = (p.chipsSwitchTo === 'base' && baseMode[pid] === 'base' && p.base)
-    ? scaleBase(p.base, W)
-    : computeDough(W, h, st, sp, o);
+  // base mode scales the product's working base (default portion, or the
+  // custom product's user-edited ingredient grams) to the chosen weight;
+  // otherwise the baker's percentages drive the rows.
+  // editable products (custom) always scale from their working gram base, so
+  // the weight slider keeps scaling exactly the ingredients the user entered;
+  // bread/pizza use their base/percent mode as before
+  const inBase = p.editableIngredients
+    ? (dynBase[pid] || p.base)
+    : (p.chipsSwitchTo === 'base' && baseMode[pid] === 'base' && (dynBase[pid] || p.base));
+  const d = empty
+    ? { starter:0, flour:0, water:0, salt:0, oil:0, totalFlour:0 }
+    : (inBase ? scaleBase(inBase, W) : computeDough(W, h, st, sp, o));
+  const k = (empty || !inBase) ? 1 : W / inBase.total;
 
   // Every ingredient is annotated with its baker's percentage of the total
   // flour (grams shown ÷ total flour incl. starter). The hydration itself is
   // shown elsewhere, so it does not appear in the rows.
-  const ann = t => Math.round(t*100)+'% '+I18N.t('pctOfFlour');
+  const ann = t => isFinite(t) ? Math.round(t*100)+'% '+I18N.t('pctOfFlour') : '';
   const rows = [
-    {name:I18N.t('ing_starter'), pctLabel:ann(d.starter/d.totalFlour), grams:d.starter},
-    {name:I18N.t('ing_flour'),   pctLabel:ann(d.flour/d.totalFlour),   grams:d.flour},
-    {name:I18N.t('ing_water'),   pctLabel:ann(d.water/d.totalFlour),   grams:d.water},
-    ...p.advanced.extras.map((ex,i) => ({name:ex.name, pctLabel:ann(d.oil/d.totalFlour), grams:d.oil})),
-    {name:I18N.t('ing_salt'),    pctLabel:ann(d.salt/d.totalFlour),    grams:d.salt},
+    {key:'starter', name:I18N.t('ing_starter'), pctLabel:ann(d.starter/d.totalFlour), grams:d.starter},
+    {key:'flour',   name:I18N.t('ing_flour'),   pctLabel:ann(d.flour/d.totalFlour),   grams:d.flour},
+    {key:'water',   name:I18N.t('ing_water'),   pctLabel:ann(d.water/d.totalFlour),   grams:d.water},
+  // each extra ingredient gets its own grams from its own % of total flour
+    ...p.advanced.extras.map((ex,i) => ({
+      key: ex.key,
+      name: ex.name,
+      pctLabel: ann(empty ? NaN : (inBase ? (inBase[ex.key]*k)/d.totalFlour : os[i]/100)),
+      grams: empty ? 0 : (inBase ? inBase[ex.key]*k : os[i]/100*d.totalFlour)
+    })),
+    // fixed oil ingredient (custom): its own editable row like salt, no slider
+    ...(p.advanced.oil ? [{
+      key: 'oil', name: I18N.t('ing_oil'),
+      pctLabel: ann(d.oil/d.totalFlour), grams: d.oil
+    }] : []),
+    {key:'salt',    name:I18N.t('ing_salt'),    pctLabel:ann(d.salt/d.totalFlour),    grams:d.salt},
   ];
-  renderRows($(pid+'-rows'), rows);
+  renderRows($(pid+'-rows'), rows, !!p.editableIngredients);
+
+  // the ratio sliders have nothing to tune against while the ingredient rows
+  // are still empty — disable them until the user enters an ingredient (they
+  // show their defaults, but can't move). This avoids a confusing 0/0 state.
+  advCfgs(p).forEach(cfg => { const el = $(pid+'-'+cfg.key); if (el) el.disabled = empty; });
 
   // dough-ball counter (pizza widget); helper line always shows total flour
   if (p.widget && p.widget.type === 'balls'){
     const bw = parseFloat($(pid+'-ball-weight').value) || p.widget.defaultBallWeight;
     $(pid+'-ball-count').textContent = Math.round(W / bw);
   }
-  $(pid+'-helper').innerHTML = I18N.t('helperTotalFlour', round(d.totalFlour));
+  $(pid+'-helper').innerHTML = empty
+    ? I18N.t('editHint')
+    : I18N.t('helperTotalFlour', round(d.totalFlour));
 
   // chip active state
   [...$(pid+'-chips').children].forEach(c => {
@@ -232,6 +281,55 @@ function updateProduct(p){
     c.classList.toggle('active', ok);
   });
 }
+// re-derive the ratio sliders from a working base (grams), clamped to the
+// sliders' ranges. h = (water + starter/2) / F, s = starter / F, etc., where
+// F = total flour incl. starter (flour + starter/2).
+function syncRatioSliders(p, b){
+  const pid = p.id;
+  const F = b.flour + b.starter / 2;
+  if (F <= 0) return;
+  const set = (cfg, pct) => {
+    if (!cfg) return;
+    const el = $(pid+'-'+cfg.key);
+    // custom product has no starter slider — its starter percentage has no
+    // control, only the editable gram row (so nothing to sync to)
+    if (!el) return;
+    el.value = Math.min(cfg.max, Math.max(cfg.min, pct));
+    persistValue(el);
+  };
+  set(p.advanced.hydration, (b.water + b.starter / 2) / F * 100);
+  set(p.advanced.starter,   b.starter / F * 100);   // no slider -> guarded no-op
+  p.advanced.extras.forEach(ex => set(ex, (b[ex.key] || 0) / F * 100));
+}
+
+// editable ingredient rows (custom): the typed grams replace that ingredient
+// at the CURRENT dough weight; every other ingredient keeps its grams, the
+// weight slider snaps to the new total and the ratio sliders re-derive. From
+// then on the weight slider scales exactly these ingredient grams.
+function editIngredient(p, key, grams){
+  const pid = p.id;
+  const b = dynBase[pid];
+  const W = parseFloat($(pid+'-weight').value);
+  const k = b.total ? W / b.total : 1;   // base grams -> grams at current weight
+  const nb = {
+    starter: b.starter * k,
+    flour:   b.flour   * k,
+    water:   b.water   * k,
+    salt:    b.salt    * k,
+    oil:     (b.oil || 0) * k
+  };
+  p.advanced.extras.forEach(ex => { if (nb[ex.key] === undefined) nb[ex.key] = (b[ex.key] || 0) * k; });
+  nb[key] = grams;
+  nb.total = nb.starter + nb.flour + nb.water + nb.salt +
+    Object.keys(nb).filter(kk => !['starter','flour','water','salt','total'].includes(kk)).reduce((a,kk)=>a+nb[kk],0);
+  dynBase[pid] = nb;
+  syncRatioSliders(p, nb);
+  $(pid+'-weight').value = Math.max(p.slider.min, Math.min(p.slider.max, Math.round(nb.total)));
+  persistValue($(pid+'-weight'));
+  unlightStarOn(pid);
+  updateProduct(p);
+}
+
 // ---- builders -----------------------------------------------------------
 
 function tabHTML(p){
@@ -284,7 +382,7 @@ function calcPanelHTML(p){
       <div class="divider">
         <svg width="20" height="12" viewBox="0 0 20 12"><path d="M1 10 L7 2 M8 10 L14 2 M15 10 L19 4" stroke="var(--accent, var(--amber))" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
         <div class="line"></div>
-        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em;">${I18N.t('ingredients')}</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.1em;">${I18N.t(p.editableIngredients ? 'ingredientsEdit' : 'ingredients')}</span>
         <div class="line"></div>
       </div>
 
@@ -292,7 +390,9 @@ function calcPanelHTML(p){
 
       ${helper}
 
-      <div class="recipe-link"><a class="chip" href="recipes/recipe.html?product=${pid}">${I18N.t('recipeMethod')}</a></div>
+      <div class="recipe-link">${p.recipe
+        ? `<a class="chip" href="recipes/recipe.html?product=${pid}">${I18N.t('recipeMethod')}</a>`
+        : `<a class="chip" href="recipes/getting-started.html">${I18N.t('basicMethod')}</a>`}</div>
 
       <!-- Advanced toggle: the hydration slider keeps the total dough weight
            fixed and re-derives flour, starter & salt from it. -->
@@ -322,14 +422,14 @@ PRODUCTS.forEach(p => {
   if (p.disabled) return;
   const pid = p.id;
   baseMode[pid] = p.chipsSwitchTo;
+  // editable products work from a mutable copy of their default base
+  if (p.editableIngredients) dynBase[pid] = Object.assign({}, p.base);
 
   // persistence: seed ratio slider defaults, then restore any saved values.
   // (Weight is intentionally never restored — every product opens on its
   // default portion.)
-  [p.advanced.hydration, ...p.advanced.extras]
-    .forEach(cfg => { $(pid+'-'+cfg.key).value = cfg.def; });
-  [p.advanced.hydration, ...p.advanced.extras]
-    .forEach(cfg => restoreValue($(pid+'-'+cfg.key)));
+  advCfgs(p).forEach(cfg => { $(pid+'-'+cfg.key).value = cfg.def; });
+  advCfgs(p).forEach(cfg => restoreValue($(pid+'-'+cfg.key)));
 
   $(pid+'-chips').innerHTML = p.chips.map(chipHTML).join('');
 
@@ -346,6 +446,31 @@ PRODUCTS.forEach(p => {
     unlightStarOn(pid);
     updateProduct(p);
   });
+
+  // editable ingredient rows (custom): tap a gram amount to type a new one.
+  // editIngredient() replaces that ingredient at the current weight, snaps the
+  // weight slider to the new total and re-derives the ratio sliders.
+  if (p.editableIngredients){
+    $(pid+'-rows').addEventListener('click', e => {
+      const amt = e.target.closest('.amt');
+      if (!amt || !amt.dataset.key || amt.querySelector('input')) return;
+      const key = amt.dataset.key;
+      const cur = round(parseFloat($(pid+'-weight').value) / dynBase[pid].total * dynBase[pid][key]);
+      amt.innerHTML = `<input class="amt-input" inputmode="decimal" value="${cur}">`;
+      const inp = amt.querySelector('input');
+      inp.focus(); inp.select();
+      const commit = () => {
+        let v = parseFloat(inp.value);
+        if (isNaN(v) || v < 0) v = cur;
+        editIngredient(p, key, v);
+      };
+      inp.addEventListener('blur', commit);
+      inp.addEventListener('keydown', ev => {
+        if (ev.key === 'Enter'){ ev.preventDefault(); inp.blur(); }
+        if (ev.key === 'Escape'){ inp.value = cur; inp.blur(); }
+      });
+    });
+  }
 
   // total-dough weight slider (keeps current mode; never restored on load)
   $(pid+'-weight').addEventListener('input', () => {
@@ -364,11 +489,30 @@ PRODUCTS.forEach(p => {
     });
   }
 
-  // ratio sliders switch bread/pizza from base mode into percentage mode
-  [p.advanced.hydration, ...p.advanced.extras].forEach(cfg => {
+  // ratio sliders: on editable products (custom) they recompute the working
+  // base from the percentages at the current weight; on bread/pizza they
+  // switch from base mode into percentage mode
+  advCfgs(p).forEach(cfg => {
     const el = $(pid+'-'+cfg.key);
     el.addEventListener('input', () => {
-      if (p.chipsSwitchTo === 'base') baseMode[pid] = 'percent';
+      if (p.editableIngredients){
+        const W = parseFloat($(pid+'-weight').value);
+        const b = dynBase[pid];
+        const F = b ? b.flour + b.starter / 2 : 0;
+        // no starter/salt slider on custom: keep both % from the working base,
+        // and read the (possibly just-moved) hydration / extra sliders
+        const s  = F ? b.starter / F : p.advanced.starter.def / 100;
+        const sp = F ? b.salt / F : (p.advanced.salt || 0) / 100;
+        const h  = parseFloat($(pid+'-hydration').value) / 100;
+        const os = p.advanced.extras.map(ex => parseFloat($(pid+'-'+ex.key).value) / 100);
+        // fixed oil % (custom) keeps its current share of the flour, like salt
+        const o  = F ? (b.oil || 0) / F : (p.advanced.oil || 0) / 100 + os.reduce((a,x)=>a+x, 0);
+        const d = computeDough(W, h, s, sp, o);
+        const nb = { starter: d.starter, flour: d.flour, water: d.water, salt: d.salt, oil: d.oil };
+        p.advanced.extras.forEach((ex,i) => { if (ex.key !== 'oil') nb[ex.key] = os[i]*d.totalFlour; });
+        nb.total = W;
+        dynBase[pid] = nb;
+      } else if (p.chipsSwitchTo === 'base') baseMode[pid] = 'percent';
       persistValue(el);
       unlightStarOn(pid);
       updateProduct(p);
@@ -379,12 +523,13 @@ PRODUCTS.forEach(p => {
   $(pid+'-reset').addEventListener('click', () => {
     unlightStarOn(pid);
     baseMode[pid] = p.chipsSwitchTo;
+    if (dynBase[pid]) dynBase[pid] = Object.assign({}, p.base);
     if (p.resetWeight) {
       $(pid+'-weight').value = p.slider.def;
       persistValue($(pid+'-weight'));
     }
     if (p.widget && p.widget.type === 'balls') $(pid+'-ball-weight').value = p.widget.defaultBallWeight;
-    [p.advanced.hydration, ...p.advanced.extras].forEach(cfg => {
+    advCfgs(p).forEach(cfg => {
       $(pid+'-'+cfg.key).value = cfg.def;
       persistValue($(pid+'-'+cfg.key));
     });
@@ -433,8 +578,8 @@ function saveFavorites(list){
 function captureProductState(p){
   const pid = p.id;
   const extras = {};
-  p.advanced.extras.forEach(ex => {
-    extras[ex.key] = parseFloat($(pid + '-' + ex.key).value);
+  advCfgs(p).forEach(cfg => {
+    extras[cfg.key] = parseFloat($(pid + '-' + cfg.key).value);
   });
   return {
     weight: parseFloat($(pid + '-weight').value),
@@ -442,7 +587,9 @@ function captureProductState(p){
     ballWeight: (p.widget && p.widget.type === 'balls')
       ? parseFloat($(pid + '-ball-weight').value) || null
       : null,
-    baseMode: baseMode[pid]
+    baseMode: baseMode[pid],
+    // editable products: pin the working ingredient base too
+    base: dynBase[pid] ? Object.assign({}, dynBase[pid]) : null
   };
 }
 
@@ -460,6 +607,7 @@ function applyProductState(p, fav){
     if (el){ el.value = fav.extras[key]; persistValue(el); }
   });
   baseMode[pid] = fav.baseMode || p.chipsSwitchTo;
+  if (fav.base && dynBase[pid]) dynBase[pid] = Object.assign({}, fav.base);
   updateProduct(p);
 }
 
@@ -471,8 +619,10 @@ function escapeHTML(s){
 
 function favSummary(p, fav){
   const bits = [round(fav.weight) + ' g'];
+  const ingNames = { starter:'ing_starter', flour:'ing_flour', water:'ing_water', salt:'ing_salt', oil:'ing_oil' };
   Object.keys(fav.extras || {}).forEach(key => {
-    bits.push(round(fav.extras[key]) + '% ' + key);
+    if (key === 'hydration'){ bits.push(I18N.t('hydrationPct', round(fav.extras[key]))); return; }
+    bits.push(round(fav.extras[key]) + '% ' + (ingNames[key] ? I18N.t(ingNames[key]) : key));
   });
   return bits.join(' \u00b7 ');
 }

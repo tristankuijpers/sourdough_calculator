@@ -29,7 +29,11 @@ const I18N = {
 
     totalDough: "Total dough weight",
     ingredients: "INGREDIENTS",
+    ingredientsEdit: "INGREDIENTS — fill in your own desired values",
     recipeMethod: "📖 Recipe &amp; method",
+    basicMethod: "The general method &rarr;",
+    editIngredient: "Tap to edit",
+    editHint: "Fill in each ingredient below to get started.",
     advanced: "Advanced",
     resetDefaults: "Reset to defaults",
     helperTotalFlour: "total flour incl. starter: <b>%s g</b>",
@@ -333,7 +337,11 @@ const I18N = {
 
     totalDough: "Totaal deeggewicht",
     ingredients: "INGREDIËNTEN",
+    ingredientsEdit: "INGREDIËNTEN — vul zelf de gewenste waarden in",
     recipeMethod: "📖 Recept &amp; methode",
+    basicMethod: "De algemene methode &rarr;",
+    editIngredient: "Tik om in te vullen",
+    editHint: "Vul hieronder elk ingredient in om te starten.",
     advanced: "Geavanceerd",
     resetDefaults: "Terug naar standaardwaarden",
     helperTotalFlour: "totaal bloem incl. starter: <b>%s g</b>",

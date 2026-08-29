@@ -224,6 +224,51 @@ recipes: {
         ]
       }
     }
+  },
+  {
+    // Fully user-configurable product: no fixed recipe, every baker's
+    // percentage is a slider. Weight slider scales all ingredients
+    // proportionally; favorites save/restore the full slider state.
+    id: "custom",
+    labels: { en: "Custom", nl: "Eigen recept" },
+    emoji: null,
+    tags: { en: null, nl: null },
+    disabled: false,
+    accent: {
+      color: "var(--teal)",
+      soft: "rgba(127,163,160,0.16)",
+      ring: "rgba(127,163,160,0.35)"
+    },
+    // Working base for the editable ingredient rows: tap any gram amount to
+    // type a new one. The weight slider scales this base proportionally;
+    // the ratio sliders are re-derived from it on every edit.
+    // Defaults mirror the "Pizza · 4 balls" landing (950 g total) so this
+    // page opens with the same amounts as Pizza's 4-ball preset — no balls
+    // widget, just the same ingredient grams / ratios to start from.
+    base: { starter: 100, flour: 500, water: 330, salt: 10, oil: 10, total: 950 },
+    editableIngredients: true,
+    resetWeight: true,
+    portionNames: { en: "batch", nl: "portie" },
+    slider: { min: 200, max: 3000, step: 1, def: 950 },
+    chipsSwitchTo: "percent",
+    chips: { en: [], nl: [] },
+    advanced: {
+      // Defaults mirror the "Pizza · 4 balls" ratios (of a 550 g total flour,
+      // incl. the 100 g 50/50 starter): hydration 69.0909%, starter 18.1818%,
+      // salt & oil 1.8182% each — matching Pizza's default landing.
+      salt: 1.8182, // fixed salt % relative to total flour (used when re-deriving
+      // the ratios); salt itself stays user-editable via its ingredient row
+      oil: 1.8182,  // fixed oil % relative to total flour, same as salt: olive
+      // oil has no Advanced slider — it stays an editable ingredient row
+      hydration: { key: "hydration", min: 0, max: 100, step: 1, def: 69.0909,
+        labels: { en: "Hydration (water relative to total flour)", nl: "Hydratatie (water t.o.v. totaal bloem)" } },
+      starter:   { key: "starter",   min: 5,  max: 40, step: 1, def: 18.1818,
+        labels: { en: "Starter (relative to total flour)",        nl: "Starter (t.o.v. totaal bloem)" } },
+      extras: []
+    },
+    widget: null,
+    // No recipe of its own: the method button points at the general method.
+    recipes: null
   }
 ];
 
