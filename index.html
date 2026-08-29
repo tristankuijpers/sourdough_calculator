@@ -176,10 +176,9 @@ const activeId = (hashId && PRODUCTS.find(p => p.id === hashId && !p.disabled))
   ? hashId
   : defaultId;
 
-// every adjustable ratio-slider config of a product: hydration, the optional
-// user-settable salt slider (custom product), then any extras
+// every adjustable ratio-slider config of a product: hydration, then any extras
 function advCfgs(p){
-  return [p.advanced.hydration, p.advanced.saltSlider, ...p.advanced.extras].filter(Boolean);
+  return [p.advanced.hydration, ...p.advanced.extras].filter(Boolean);
 }
 
 // scale a base portion (grams) up/down to a new total dough weight
@@ -200,9 +199,11 @@ function currentPcts(p){
   const pid = p.id;
   const h  = parseFloat($(pid+'-hydration').value) / 100;
   const st = p.advanced.starter.def / 100;
-  const sp = (p.advanced.saltSlider ? parseFloat($(pid+'-salt').value) : p.advanced.salt) / 100;
+  const sp = (p.advanced.salt || 0) / 100;   // salt is always a fixed % (no salt slider)
   const os = p.advanced.extras.map(ex => parseFloat($(pid+'-'+ex.key).value));
-  return { h, st, sp, os, o: os.reduce((a,b)=>a+b,0) / 100 };
+  // fixed oil % (custom) joins any extra %'s (e.g. pizza/focaccia oil slider)
+  const o  = (p.advanced.oil || 0) / 100 + os.reduce((a,b)=>a+b,0) / 100;
+  return { h, st, sp, os, o };
 }
 
 // The one update function every product shares.
@@ -210,6 +211,10 @@ function updateProduct(p){
   const pid = p.id;
   const W  = parseFloat($(pid+'-weight').value);
   const { h, st, sp, os, o } = currentPcts(p);
+  // editable product with no ingredients yet (all grams still 0): show a blank
+  // slate so the user knows to fill in every ingredient themselves — and skip
+  // any scaling/percentage math that would otherwise divide by total flour 0
+  const empty = p.editableIngredients && dynBase[pid] && dynBase[pid].total <= 0;
 
   $(pid+'-weight-num').textContent  = round(W);
   $(pid+'-hydration-v').textContent = Math.round(h*100)+'%';
@@ -218,16 +223,21 @@ function updateProduct(p){
   // base mode scales the product's working base (default portion, or the
   // custom product's user-edited ingredient grams) to the chosen weight;
   // otherwise the baker's percentages drive the rows.
-  const inBase = p.chipsSwitchTo === 'base' && baseMode[pid] === 'base' && (dynBase[pid] || p.base);
-  const d = inBase
-    ? scaleBase(inBase, W)
-    : computeDough(W, h, st, sp, o);
-  const k = inBase ? W / inBase.total : 1;
+  // editable products (custom) always scale from their working gram base, so
+  // the weight slider keeps scaling exactly the ingredients the user entered;
+  // bread/pizza use their base/percent mode as before
+  const inBase = p.editableIngredients
+    ? (dynBase[pid] || p.base)
+    : (p.chipsSwitchTo === 'base' && baseMode[pid] === 'base' && (dynBase[pid] || p.base));
+  const d = empty
+    ? { starter:0, flour:0, water:0, salt:0, oil:0, totalFlour:0 }
+    : (inBase ? scaleBase(inBase, W) : computeDough(W, h, st, sp, o));
+  const k = (empty || !inBase) ? 1 : W / inBase.total;
 
   // Every ingredient is annotated with its baker's percentage of the total
   // flour (grams shown ÷ total flour incl. starter). The hydration itself is
   // shown elsewhere, so it does not appear in the rows.
-  const ann = t => Math.round(t*100)+'% '+I18N.t('pctOfFlour');
+  const ann = t => isFinite(t) ? Math.round(t*100)+'% '+I18N.t('pctOfFlour') : '';
   const rows = [
     {key:'starter', name:I18N.t('ing_starter'), pctLabel:ann(d.starter/d.totalFlour), grams:d.starter},
     {key:'flour',   name:I18N.t('ing_flour'),   pctLabel:ann(d.flour/d.totalFlour),   grams:d.flour},
@@ -236,19 +246,31 @@ function updateProduct(p){
     ...p.advanced.extras.map((ex,i) => ({
       key: ex.key,
       name: ex.name,
-      pctLabel: ann(inBase ? (inBase[ex.key]*k)/d.totalFlour : os[i]/100),
-      grams: inBase ? inBase[ex.key]*k : os[i]/100*d.totalFlour
+      pctLabel: ann(empty ? NaN : (inBase ? (inBase[ex.key]*k)/d.totalFlour : os[i]/100)),
+      grams: empty ? 0 : (inBase ? inBase[ex.key]*k : os[i]/100*d.totalFlour)
     })),
+    // fixed oil ingredient (custom): its own editable row like salt, no slider
+    ...(p.advanced.oil ? [{
+      key: 'oil', name: I18N.t('ing_oil'),
+      pctLabel: ann(d.oil/d.totalFlour), grams: d.oil
+    }] : []),
     {key:'salt',    name:I18N.t('ing_salt'),    pctLabel:ann(d.salt/d.totalFlour),    grams:d.salt},
   ];
   renderRows($(pid+'-rows'), rows, !!p.editableIngredients);
+
+  // the ratio sliders have nothing to tune against while the ingredient rows
+  // are still empty — disable them until the user enters an ingredient (they
+  // show their defaults, but can't move). This avoids a confusing 0/0 state.
+  advCfgs(p).forEach(cfg => { const el = $(pid+'-'+cfg.key); if (el) el.disabled = empty; });
 
   // dough-ball counter (pizza widget); helper line always shows total flour
   if (p.widget && p.widget.type === 'balls'){
     const bw = parseFloat($(pid+'-ball-weight').value) || p.widget.defaultBallWeight;
     $(pid+'-ball-count').textContent = Math.round(W / bw);
   }
-  $(pid+'-helper').innerHTML = I18N.t('helperTotalFlour', round(d.totalFlour));
+  $(pid+'-helper').innerHTML = empty
+    ? I18N.t('editHint')
+    : I18N.t('helperTotalFlour', round(d.totalFlour));
 
   // chip active state
   [...$(pid+'-chips').children].forEach(c => {
@@ -269,12 +291,14 @@ function syncRatioSliders(p, b){
   const set = (cfg, pct) => {
     if (!cfg) return;
     const el = $(pid+'-'+cfg.key);
+    // custom product has no starter slider — its starter percentage has no
+    // control, only the editable gram row (so nothing to sync to)
+    if (!el) return;
     el.value = Math.min(cfg.max, Math.max(cfg.min, pct));
     persistValue(el);
   };
   set(p.advanced.hydration, (b.water + b.starter / 2) / F * 100);
-  set(p.advanced.starter,   b.starter / F * 100);
-  set(p.advanced.saltSlider, b.salt / F * 100);
+  set(p.advanced.starter,   b.starter / F * 100);   // no slider -> guarded no-op
   p.advanced.extras.forEach(ex => set(ex, (b[ex.key] || 0) / F * 100));
 }
 
@@ -340,7 +364,6 @@ function calcPanelHTML(p){
   const helper = `<div class="helper-line" id="${pid}-helper"></div>`;
   const adv = [
     advRowHTML(pid, p.advanced.hydration),
-    advRowHTML(pid, p.advanced.saltSlider),
     ...p.advanced.extras.map(ex => advRowHTML(pid, ex))
   ].join('');
   return `
@@ -474,10 +497,19 @@ PRODUCTS.forEach(p => {
     el.addEventListener('input', () => {
       if (p.editableIngredients){
         const W = parseFloat($(pid+'-weight').value);
-        const { h, st, sp, os, o } = currentPcts(p);
-        const d = computeDough(W, h, st, sp, o);
-        const nb = { starter: d.starter, flour: d.flour, water: d.water, salt: d.salt };
-        p.advanced.extras.forEach((ex,i) => { nb[ex.key] = os[i]/100*d.totalFlour; });
+        const b = dynBase[pid];
+        const F = b ? b.flour + b.starter / 2 : 0;
+        // no starter/salt slider on custom: keep both % from the working base,
+        // and read the (possibly just-moved) hydration / extra sliders
+        const s  = F ? b.starter / F : p.advanced.starter.def / 100;
+        const sp = F ? b.salt / F : (p.advanced.salt || 0) / 100;
+        const h  = parseFloat($(pid+'-hydration').value) / 100;
+        const os = p.advanced.extras.map(ex => parseFloat($(pid+'-'+ex.key).value) / 100);
+        // fixed oil % (custom) keeps its current share of the flour, like salt
+        const o  = F ? (b.oil || 0) / F : (p.advanced.oil || 0) / 100 + os.reduce((a,x)=>a+x, 0);
+        const d = computeDough(W, h, s, sp, o);
+        const nb = { starter: d.starter, flour: d.flour, water: d.water, salt: d.salt, oil: d.oil };
+        p.advanced.extras.forEach((ex,i) => { if (ex.key !== 'oil') nb[ex.key] = os[i]*d.totalFlour; });
         nb.total = W;
         dynBase[pid] = nb;
       } else if (p.chipsSwitchTo === 'base') baseMode[pid] = 'percent';

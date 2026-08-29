@@ -111,7 +111,7 @@ Append one object to the `PRODUCTS` array in `products.js`. The fresh tab, calcu
 - **Bread** — portion presets `half / full / double loaf`.
 - **Pizza** — ball-count presets (2/4/6/8) via the `balls` widget.
 - **Focaccia** — percentage-driven; pan-size presets.
-- **Custom** — every baker's percentage (hydration, starter, salt, olive oil) is a user slider; the weight slider scales all ingredients proportionally. No recipe of its own: the method button links to the general method. Fully favorite-able; a loaded favorite stays adjustable.
+- **Custom** — a user-configurable batch: hydration is a slider, while starter, salt & olive oil are editable ingredient rows; the weight slider scales all ingredients proportionally. No recipe of its own: the method button links to the general method. Fully favorite-able; a loaded favorite stays adjustable.
 
 ## Local development
 
