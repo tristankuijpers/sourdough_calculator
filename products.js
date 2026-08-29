@@ -239,7 +239,12 @@ recipes: {
       soft: "rgba(127,163,160,0.16)",
       ring: "rgba(127,163,160,0.35)"
     },
-    base: null,
+    // Working base for the editable ingredient rows: tap any gram amount to
+    // type a new one. The weight slider scales this base proportionally;
+    // the ratio sliders are re-derived from it on every edit.
+    base: { starter: 92, flour: 415, water: 278, salt: 8, oil: 7, total: 800 },
+    editableIngredients: true,
+    resetWeight: true,
     portionNames: { en: "batch", nl: "portie" },
     slider: { min: 200, max: 3000, step: 1, def: 800 },
     chipsSwitchTo: "percent",
@@ -308,6 +313,8 @@ window.pLocal = function (p, lang) {
   if (p.advanced) {
     out.advanced = Object.assign({}, p.advanced, {
       hydration: p.advanced.hydration ? Object.assign({}, p.advanced.hydration, { label: pick(p.advanced.hydration.labels, L), pctLabel: tk(L, "hydrationPct") }) : null,
+      // optional user-settable salt slider (custom product)
+      saltSlider: p.advanced.saltSlider ? Object.assign({}, p.advanced.saltSlider, { label: pick(p.advanced.saltSlider.labels, L), pctOfFlour: tk(L, "pctOfFlour") }) : null,
       starter:   p.advanced.starter   ? Object.assign({}, p.advanced.starter,   { label: pick(p.advanced.starter.labels, L), pctOfFlour: tk(L, "pctOfFlour") }) : null,
       extras:    (p.advanced.extras || []).map(function (ex) {
         return Object.assign({}, ex, { label: pick(ex.labels, L), name: pick(ex.names, L), pctOfFlour: tk(L, "pctOfFlour") });
