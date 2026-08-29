@@ -224,6 +224,43 @@ recipes: {
         ]
       }
     }
+  },
+  {
+    // Fully user-configurable product: no fixed recipe, every baker's
+    // percentage is a slider. Weight slider scales all ingredients
+    // proportionally; favorites save/restore the full slider state.
+    id: "custom",
+    labels: { en: "Custom", nl: "Eigen" },
+    emoji: "\uD83C\uDF9B\uFE0F",
+    tags: { en: null, nl: null },
+    disabled: false,
+    accent: {
+      color: "var(--teal)",
+      soft: "rgba(127,163,160,0.16)",
+      ring: "rgba(127,163,160,0.35)"
+    },
+    base: null,
+    portionNames: { en: "batch", nl: "portie" },
+    slider: { min: 200, max: 3000, step: 1, def: 800 },
+    chipsSwitchTo: "percent",
+    chips: { en: [], nl: [] },
+    advanced: {
+      salt: 1.8, // fallback; overridden by the saltSlider below
+      saltSlider: { key: "salt", min: 0, max: 4, step: 0.1, def: 1.8,
+        labels: { en: "Salt (relative to total flour)", nl: "Zout (t.o.v. totaal bloem)" } },
+      hydration: { key: "hydration", min: 50, max: 95, step: 1, def: 70,
+        labels: { en: "Hydration (water relative to total flour)", nl: "Hydratatie (water t.o.v. totaal bloem)" } },
+      starter:   { key: "starter",   min: 5,  max: 40, step: 1, def: 20,
+        labels: { en: "Starter (relative to total flour)",        nl: "Starter (t.o.v. totaal bloem)" } },
+      extras: [
+        { key: "oil", min: 0, max: 8, step: 0.1, def: 1.5,
+          names: { en: "Olive oil", nl: "Olijfolie" },
+          labels: { en: "Olive oil (relative to total flour)", nl: "Olijfolie (t.o.v. totaal bloem)" } }
+      ]
+    },
+    widget: null,
+    // No recipe of its own: the method button points at the general method.
+    recipes: null
   }
 ];
 

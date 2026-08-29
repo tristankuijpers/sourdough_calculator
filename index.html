@@ -172,6 +172,12 @@ const activeId = (hashId && PRODUCTS.find(p => p.id === hashId && !p.disabled))
   ? hashId
   : defaultId;
 
+// every adjustable ratio-slider config of a product: hydration, the optional
+// user-settable salt slider (custom product), then any extras
+function advCfgs(p){
+  return [p.advanced.hydration, p.advanced.saltSlider, ...p.advanced.extras].filter(Boolean);
+}
+
 // scale a base portion (grams) up/down to a new total dough weight
 function scaleBase(base, W){
   const k = W / base.total;
@@ -191,7 +197,8 @@ function updateProduct(p){
   const W  = parseFloat($(pid+'-weight').value);
   const h  = parseFloat($(pid+'-hydration').value) / 100;
   const st = p.advanced.starter.def / 100;
-  const sp = p.advanced.salt / 100;
+  // custom product: salt is a user slider; every other product has a fixed %
+  const sp = (p.advanced.saltSlider ? parseFloat($(pid+'-salt').value) : p.advanced.salt) / 100;
   const os = p.advanced.extras.map(ex => parseFloat($(pid+'-'+ex.key).value));
   const o  = os.reduce((a,b)=>a+b,0) / 100;
 
@@ -211,7 +218,8 @@ function updateProduct(p){
     {name:I18N.t('ing_starter'), pctLabel:ann(d.starter/d.totalFlour), grams:d.starter},
     {name:I18N.t('ing_flour'),   pctLabel:ann(d.flour/d.totalFlour),   grams:d.flour},
     {name:I18N.t('ing_water'),   pctLabel:ann(d.water/d.totalFlour),   grams:d.water},
-    ...p.advanced.extras.map((ex,i) => ({name:ex.name, pctLabel:ann(d.oil/d.totalFlour), grams:d.oil})),
+  // each extra ingredient gets its own grams from its own % of total flour
+    ...p.advanced.extras.map((ex,i) => ({name:ex.name, pctLabel:ann((os[i]/100)), grams:os[i]/100*d.totalFlour})),
     {name:I18N.t('ing_salt'),    pctLabel:ann(d.salt/d.totalFlour),    grams:d.salt},
   ];
   renderRows($(pid+'-rows'), rows);
@@ -266,6 +274,7 @@ function calcPanelHTML(p){
   const helper = `<div class="helper-line" id="${pid}-helper"></div>`;
   const adv = [
     advRowHTML(pid, p.advanced.hydration),
+    advRowHTML(pid, p.advanced.saltSlider),
     ...p.advanced.extras.map(ex => advRowHTML(pid, ex))
   ].join('');
   return `
@@ -292,7 +301,9 @@ function calcPanelHTML(p){
 
       ${helper}
 
-      <div class="recipe-link"><a class="chip" href="recipes/recipe.html?product=${pid}">${I18N.t('recipeMethod')}</a></div>
+      <div class="recipe-link">${p.recipe
+        ? `<a class="chip" href="recipes/recipe.html?product=${pid}">${I18N.t('recipeMethod')}</a>`
+        : `<a class="chip" href="recipes/getting-started.html">${I18N.t('basicMethod')}</a>`}</div>
 
       <!-- Advanced toggle: the hydration slider keeps the total dough weight
            fixed and re-derives flour, starter & salt from it. -->
@@ -326,10 +337,8 @@ PRODUCTS.forEach(p => {
   // persistence: seed ratio slider defaults, then restore any saved values.
   // (Weight is intentionally never restored — every product opens on its
   // default portion.)
-  [p.advanced.hydration, ...p.advanced.extras]
-    .forEach(cfg => { $(pid+'-'+cfg.key).value = cfg.def; });
-  [p.advanced.hydration, ...p.advanced.extras]
-    .forEach(cfg => restoreValue($(pid+'-'+cfg.key)));
+  advCfgs(p).forEach(cfg => { $(pid+'-'+cfg.key).value = cfg.def; });
+  advCfgs(p).forEach(cfg => restoreValue($(pid+'-'+cfg.key)));
 
   $(pid+'-chips').innerHTML = p.chips.map(chipHTML).join('');
 
@@ -365,7 +374,7 @@ PRODUCTS.forEach(p => {
   }
 
   // ratio sliders switch bread/pizza from base mode into percentage mode
-  [p.advanced.hydration, ...p.advanced.extras].forEach(cfg => {
+  advCfgs(p).forEach(cfg => {
     const el = $(pid+'-'+cfg.key);
     el.addEventListener('input', () => {
       if (p.chipsSwitchTo === 'base') baseMode[pid] = 'percent';
@@ -384,7 +393,7 @@ PRODUCTS.forEach(p => {
       persistValue($(pid+'-weight'));
     }
     if (p.widget && p.widget.type === 'balls') $(pid+'-ball-weight').value = p.widget.defaultBallWeight;
-    [p.advanced.hydration, ...p.advanced.extras].forEach(cfg => {
+    advCfgs(p).forEach(cfg => {
       $(pid+'-'+cfg.key).value = cfg.def;
       persistValue($(pid+'-'+cfg.key));
     });
@@ -433,8 +442,8 @@ function saveFavorites(list){
 function captureProductState(p){
   const pid = p.id;
   const extras = {};
-  p.advanced.extras.forEach(ex => {
-    extras[ex.key] = parseFloat($(pid + '-' + ex.key).value);
+  advCfgs(p).forEach(cfg => {
+    extras[cfg.key] = parseFloat($(pid + '-' + cfg.key).value);
   });
   return {
     weight: parseFloat($(pid + '-weight').value),
@@ -471,8 +480,10 @@ function escapeHTML(s){
 
 function favSummary(p, fav){
   const bits = [round(fav.weight) + ' g'];
+  const ingNames = { starter:'ing_starter', flour:'ing_flour', water:'ing_water', salt:'ing_salt', oil:'ing_oil' };
   Object.keys(fav.extras || {}).forEach(key => {
-    bits.push(round(fav.extras[key]) + '% ' + key);
+    if (key === 'hydration'){ bits.push(I18N.t('hydrationPct', round(fav.extras[key]))); return; }
+    bits.push(round(fav.extras[key]) + '% ' + (ingNames[key] ? I18N.t(ingNames[key]) : key));
   });
   return bits.join(' \u00b7 ');
 }

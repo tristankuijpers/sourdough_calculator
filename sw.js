@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sourdough-v20';
+const CACHE_NAME = 'sourdough-v22';
 const ASSETS = [
   './',
   './index.html',
