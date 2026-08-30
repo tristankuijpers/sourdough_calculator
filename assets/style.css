@@ -514,6 +514,23 @@ footer{
   border-color:var(--accent, var(--amber));
 }
 .general-callout .chip:hover .icon-img{filter:brightness(0);}
+
+/* Inline text-links inside the method/story copy (e.g. "grow your own from
+   scratch" on getting-started, "general method" on making-a-starter). The
+   rest of the site styles its links as chips or amber text, so these should
+   match: they pick up the same product accent as the step numbers and CTA
+   chips, lose the ugly browser-default blue, and use a subtle underline that
+   brightens on hover. Chips & the header back-link keep their own styling. */
+body.recipe-page .card a:not(.chip):not(.back-link){
+  color:var(--accent, var(--amber));
+  text-decoration:none;
+  border-bottom:1px solid rgba(207,159,66,0.35);
+  transition:color .15s ease, border-color .15s ease;
+}
+body.recipe-page .card a:not(.chip):not(.back-link):hover{
+  color:var(--ink);
+  border-color:var(--ink);
+}
 .notes-title{
   font-family:'Fraunces',serif;
   font-size:18px;
