@@ -91,7 +91,9 @@ body{
    Present on every page (calculator, recipe, getting-started). */
 .lang-toggle{
   position:absolute;
-  top:0;
+  /* buttons (~25px tall) are vertically centered on the eyebrow text line
+     (~13px tall), which starts at the header's very top */
+  top:-6px;
   right:0;
   display:flex;
   gap:6px;
