@@ -26,6 +26,7 @@ const I18N = {
     getStarted: "Getting started with sourdough",
     footer: "Built by TK/LAB &middot; <a href=\"https://github.com/tristankuijpers/sourdough_calculator\" target=\"_blank\" rel=\"noopener\">open source on GitHub</a>",
     shareApp: "Share this app",
+    themeToggle: "Theme: light/dark",
 
     totalDough: "Total dough weight",
     ingredients: "INGREDIENTS",
@@ -335,6 +336,7 @@ const I18N = {
     getStarted: "Aan de slag met zuurdesem",
     footer: "Gemaakt door TK/LAB &middot; <a href=\"https://github.com/tristankuijpers/sourdough_calculator\" target=\"_blank\" rel=\"noopener\">open source op GitHub</a>",
     shareApp: "Deel deze app",
+    themeToggle: "Thema: licht/donker",
 
     totalDough: "Totaal deeggewicht",
     ingredients: "INGREDIËNTEN",

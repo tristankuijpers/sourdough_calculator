@@ -1,4 +1,5 @@
 :root{
+  color-scheme: dark;
   --bg: #1c160f;
   --bg-2: #24190f;
   --surface: #2a2015;
@@ -13,6 +14,59 @@
   --tomato: #c1502e;
   --olive: #8a9a5b;
   --radius: 14px;
+  /* themable helpers that only make sense relative to the background */
+  --ring: rgba(241,233,216,0.18);
+  --scrim: rgba(15,12,8,0.6);
+  --card-shadow: 0 32px 80px -32px rgba(0,0,0,0.85);
+}
+
+/* Light theme. Two sources:
+   - prefers-color-scheme (browser/OS) applies automatically ONLY when the
+     visitor hasn't explicitly forced a theme (no [data-theme="dark"]), so a
+     stored "dark" choice always wins even on a light device, and vice versa.
+   - <html data-theme="light"> is an explicit, stored choice and therefore
+     beats everything (source order puts it last). */
+:root[data-theme="light"]{
+  color-scheme: light;
+  --bg: #f5eddd;
+  --bg-2: #eadfc6;
+  --surface: #fffaf0;
+  --surface-2: #efe4ce;
+  --line: rgba(70,54,36,0.10);
+  --line-strong: rgba(70,54,36,0.18);
+  --ink: #2a2117;
+  --muted: #6e6150;
+  --amber: #a8751d;
+  --amber-dim: #8a6426;
+  --teal: #3f7a76;
+  --tomato: #b4411f;
+  --olive: #5f7a3a;
+  --radius: 14px;
+  --ring: rgba(70,54,36,0.16);
+  --scrim: rgba(40,30,18,0.35);
+  --card-shadow: 0 24px 60px -30px rgba(80,60,30,0.4);
+}
+
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    color-scheme: light;
+    --bg: #f5eddd;
+    --bg-2: #eadfc6;
+    --surface: #fffaf0;
+    --surface-2: #efe4ce;
+    --line: rgba(70,54,36,0.10);
+    --line-strong: rgba(70,54,36,0.18);
+    --ink: #2a2117;
+    --muted: #6e6150;
+    --amber: #a8751d;
+    --amber-dim: #8a6426;
+    --teal: #3f7a76;
+    --tomato: #b4411f;
+    --olive: #5f7a3a;
+    --ring: rgba(70,54,36,0.16);
+    --scrim: rgba(40,30,18,0.35);
+    --card-shadow: 0 24px 60px -30px rgba(80,60,30,0.4);
+  }
 }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
@@ -60,7 +114,7 @@ body{
   width:24px;
   height:15px;
   border-radius:2px;
-  box-shadow:0 0 0 1px rgba(241,233,216,0.18);
+  box-shadow:0 0 0 1px var(--ring);
 }
 .flag-btn:hover{opacity:0.9;}
 .flag-btn.active{
@@ -68,6 +122,23 @@ body{
   border-color:var(--amber);
   box-shadow:inset 0 0 0 1px rgba(207,159,66,0.35);
 }
+
+/* Light/dark theme toggle — shares the flag-button look, sits last in the
+   top-right toggle cluster. Shows a sun when the app is dark (click → light)
+   and a moon when it's light (click → dark). Which icon shows depends on the
+   resolved theme: an explicit <html data-theme> or, absent an explicit choice,
+   the OS/browser preference (prefers-color-scheme). */
+.theme-btn svg{width:17px; height:17px; display:none; box-shadow:none;}
+:root:not([data-theme="light"]) .theme-sun{display:block;}
+:root:not([data-theme="light"]) .theme-moon{display:none;}
+:root[data-theme="light"] .theme-sun{display:none;}
+:root[data-theme="light"] .theme-moon{display:block;}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme]) .theme-sun{display:none;}
+  :root:not([data-theme]) .theme-moon{display:block;}
+}
+.theme-btn .sun{fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round;}
+.theme-btn .moon{fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;}
 
 header{position:relative; margin-bottom:28px;}
 .eyebrow{
@@ -603,7 +674,7 @@ body.recipe-page .card a:not(.chip):not(.back-link):hover{
 .fav-overlay{
   position:fixed;
   inset:0;
-  background:rgba(15,12,8,0.6);
+  background:var(--scrim);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -789,7 +860,7 @@ body.recipe-page .card a:not(.chip):not(.back-link):hover{
   body.home .card{
     padding: 38px 34px;
     border-radius: 20px;
-    box-shadow: 0 32px 80px -32px rgba(0,0,0,0.85);
+    box-shadow: var(--card-shadow);
     background:
       radial-gradient(760px 320px at 50% -10%, var(--accent-soft, rgba(207,159,66,0.10)), transparent 62%),
       var(--surface);
