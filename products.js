@@ -50,7 +50,7 @@ const PRODUCTS = [
       salt: 1.6,
       hydration: { key: "hydration", min: 50, max: 90, step: 1, def: 70,
         labels: { en: "Hydration (water relative to total flour)", nl: "Hydratatie (water t.o.v. totaal bloem)" } },
-      starter:   { key: "starter",   min: 10, max: 35, step: 1, def: 20,
+      starter:   { key: "starter",   min: 10, max: 35, step: 0.0001, def: 20,
         labels: { en: "Starter (relative to total flour)",        nl: "Starter (t.o.v. totaal bloem)" } },
       extras: []
     },
@@ -262,7 +262,7 @@ recipes: {
       // oil has no Advanced slider — it stays an editable ingredient row
       hydration: { key: "hydration", min: 0, max: 100, step: 1, def: 69.0909,
         labels: { en: "Hydration (water relative to total flour)", nl: "Hydratatie (water t.o.v. totaal bloem)" } },
-      starter:   { key: "starter",   min: 5,  max: 40, step: 1, def: 18.1818,
+      starter:   { key: "starter",   min: 5,  max: 40, step: 0.0001, def: 18.1818,
         labels: { en: "Starter (relative to total flour)",        nl: "Starter (t.o.v. totaal bloem)" } },
       extras: []
     },
