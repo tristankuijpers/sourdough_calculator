@@ -27,6 +27,11 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 .wrap{max-width:640px;margin:0 auto;position:relative;}
+/* Column container for the calculator page. On mobile it stays a plain
+   block (single column, current behaviour); on wide screens a CSS grid
+   splits it into left (everything except the calculator) + right (the
+   calculator card). */
+.layout{display:block;}
 
 /* Language flag toggle: pinned top-right, aligned with the top text line.
    Present on every page (calculator, recipe, getting-started). */
@@ -64,7 +69,7 @@ body{
   box-shadow:inset 0 0 0 1px rgba(207,159,66,0.35);
 }
 
-header{margin-bottom:28px;}
+header{position:relative; margin-bottom:28px;}
 .eyebrow{
   font-family:'IBM Plex Mono',monospace;
   font-size:11px;
@@ -699,4 +704,123 @@ footer{
   font-weight:600;
   color:var(--ink);
   margin:24px 0 0;
+}
+
+/* =========================================================================
+   Website (desktop) full-size layout
+   -------------------------------------------------------------------------
+   Mobile (< 901px): nothing below applies — the calculator keeps its exact
+   single-column behaviour. On the wide site the screen is split vertically:
+   LEFT  = everything that is not the calculator (header, product nav, footer)
+   RIGHT = the calculator card (and the favourites pane).
+
+   Everything is scoped to <body class="home"> (the calculator page) so the
+   shared recipe/getting-started pages stay untouched.
+   ========================================================================= */
+@media (min-width: 901px){
+  body.home{ padding: 44px 48px 84px; }
+  body.home .wrap{ max-width: 1240px; }
+
+  /* two-column split via grid areas */
+  body.home .layout{
+    display: grid;
+    grid-template-columns: minmax(280px, 400px) minmax(0, 1fr);
+    grid-template-areas:
+      "header main"
+      "tabs   main"
+      "footer main";
+    grid-template-rows: auto auto 1fr;
+    gap: 38px 60px;
+    align-items: start;
+  }
+
+  /* left column: brand header on top, nav, footer at the bottom */
+  body.home header{      grid-area: header; margin: 0; }
+  body.home .tabs-wrap{  grid-area: tabs;   margin: 0; }
+  body.home footer{      grid-area: footer; margin: 0; }
+
+  /* pull the top brand blocks in the left column further apart vertically:
+     eyebrow (starter 50/50…) → flags (top-right) → title → subtitle. The
+     language flags are absolutely positioned at the header's top-right, so
+     giving the header top padding also lifts them clear of the eyebrow. */
+  body.home header{ padding-top: 6px; }
+  body.home .eyebrow{ margin-top: 2px; }
+  body.home h1{ margin: 44px 0 12px; }
+  body.home .sub{ margin-top: 40px; padding-right: 120px; }
+  body.home .head-actions{ margin-top: 34px; }
+
+  /* right column: the calculator card (and favourites pane share the spot) */
+  body.home #panels{          grid-area: main; max-width: 560px; width: 100%; justify-self: center; }
+  body.home #panel-favorites{ grid-area: main; max-width: 560px; width: 100%; justify-self: center; }
+
+  /* language flags sit in the top-right of the sidebar/header */
+  body.home header .lang-toggle{ top: 8px; }
+
+  /* product tabs become a tidy vertical sidebar navigation */
+  body.home .tabs-wrap::before,
+  body.home .tabs-wrap::after{ content: none; }
+  body.home .tabs{
+    flex-direction: column;
+    overflow: visible;
+    gap: 9px;
+    margin: 0;
+    padding: 0;
+  }
+  body.home .tab{ width: 100%; min-width: 0; text-align: left; }
+
+  /* calculator card: a little more presence, softly lit top edge */
+  body.home .card{
+    padding: 38px 34px;
+    border-radius: 20px;
+    box-shadow: 0 32px 80px -32px rgba(0,0,0,0.85);
+    background:
+      radial-gradient(760px 320px at 50% -10%, var(--accent-soft, rgba(207,159,66,0.10)), transparent 62%),
+      var(--surface);
+  }
+  /* keep the card's star / reset buttons hugging the larger corner radius */
+  body.home .fav-star,   body.home .reset-icon{ top: 18px; }
+  body.home .fav-star{   right: 18px; }
+  body.home .reset-icon{ left: 18px; }
+}
+
+/* =========================================================================
+   Website (desktop) full-size layout — recipe & method pages
+   -------------------------------------------------------------------------
+   Mirrors the calculator page: everything except the method block sits in
+   the LEFT column (language flags, back link, title & subtitle, footer) and
+   the method block sits in the RIGHT column. Same column widths / gap and
+   the same flag + title position as the homepage, so navigating between the
+   calculator and the recipe pages never makes the flags or title jump.
+   Mobile (< 901px) keeps the current single-column behaviour untouched.
+   ========================================================================= */
+@media (min-width: 901px){
+  body.recipe-page{ padding: 44px 48px 84px; }
+  body.recipe-page .wrap{ max-width: 1240px; }
+
+  body.recipe-page .layout{
+    display: grid;
+    grid-template-columns: minmax(280px, 400px) minmax(0, 1fr);
+    grid-template-areas:
+      "header main"
+      "footer main";
+    grid-template-rows: auto 1fr;
+    gap: 38px 60px;
+    align-items: start;
+  }
+
+  /* left column: header (flags, back link, title) on top, footer at bottom */
+  body.recipe-page header{ grid-area: header; margin: 0; position: relative; padding-top: 6px; }
+  body.recipe-page header .lang-toggle{ top: 8px; }
+  body.recipe-page footer{ grid-area: footer; margin: 0; }
+
+  /* right column: the method block (and its CTA links) */
+  body.recipe-page .method-col{ grid-area: main; max-width: 640px; width: 100%; justify-self: center; }
+  body.recipe-page .recipe-link{ margin-top: 26px; }
+
+  /* vertical rhythm for the left-column top blocks: back link → eyebrow →
+     title → subtitle. The flags sit absolutely at the header's top-right. */
+  body.recipe-page header .back-link{ margin-top: 32px; margin-bottom: 0; }
+  body.recipe-page .eyebrow{ margin-top: 22px; }
+  body.recipe-page h1{ margin: 40px 0 12px; }
+  body.recipe-page .sub{ margin-top: 34px; padding-right: 120px; }
 }
