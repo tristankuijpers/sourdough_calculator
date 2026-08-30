@@ -53,24 +53,27 @@
 })();
 </script>
 </head>
-<body>
+<body class="recipe-page">
 <div class="wrap">
-  <div class="lang-toggle" aria-label="Language / Taal">
-    <button type="button" class="flag-btn" data-lang="en" aria-label="English" title="English">
-      <svg viewBox="0 0 60 30" aria-hidden="true"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="2.6"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg>
-    </button>
-    <button type="button" class="flag-btn" data-lang="nl" aria-label="Nederlands" title="Nederlands">
-      <svg viewBox="0 0 30 20" aria-hidden="true"><rect width="10" height="20" fill="#1a1a1a"/><rect x="10" width="10" height="20" fill="#FDDA24"/><rect x="20" width="10" height="20" fill="#EF3340"/></svg>
-    </button>
-  </div>
-  <a class="back-link" href="../index.html" data-i18n-html="back">&larr; Back to calculator</a>
+  <div class="layout">
+
   <header>
+    <div class="lang-toggle" aria-label="Language / Taal">
+      <button type="button" class="flag-btn" data-lang="en" aria-label="English" title="English">
+        <svg viewBox="0 0 60 30" aria-hidden="true"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="2.6"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg>
+      </button>
+      <button type="button" class="flag-btn" data-lang="nl" aria-label="Nederlands" title="Nederlands">
+        <svg viewBox="0 0 30 20" aria-hidden="true"><rect width="10" height="20" fill="#1a1a1a"/><rect x="10" width="10" height="20" fill="#FDDA24"/><rect x="20" width="10" height="20" fill="#EF3340"/></svg>
+      </button>
+    </div>
+    <a class="back-link" href="../index.html" data-i18n-html="back">&larr; Back to calculator</a>
     <div class="eyebrow" data-i18n-html="ms_eyebrow">making a starter &middot; from scratch</div>
     <h1 data-i18n-html="ms_title">Making a Sourdough Starter from Scratch</h1>
     <div class="sub" data-i18n-html="ms_sub">No friend&rsquo;s starter handy? Grow your own. Flour, water and about a week of patience &mdash; here&rsquo;s how.</div>
   </header>
 
-  <div class="card story">
+  <div class="method-col">
+    <div class="card story">
     <p class="lede" data-i18n-html="ms_lede">To grow a starter you don&rsquo;t need much, and it takes longer than people like to admit &mdash; a week at least. The good news: almost none of that time is work. Here&rsquo;s how I&rsquo;d start one today.</p>
 
     <h2 data-i18n-html="ms_need_h">What you&rsquo;ll need</h2>
@@ -133,11 +136,12 @@
     </div>
 
     <p class="punchline" data-i18n-html="ms_punchline">In the end, a starter is just flour, water and a week of looking after it &mdash; and it&rsquo;s the start of every loaf on this site.</p>
-  </div>
+    </div>
 
-  <div class="recipe-link">
-    <a class="chip" href="getting-started.html" data-i18n-html="ms_readMethod">Read the general method &rarr;</a>
-    <a class="chip" href="../index.html" data-i18n-html="calcCta">Set your total dough weight on the calculator &rarr;</a>
+    <div class="recipe-link">
+      <a class="chip" href="getting-started.html" data-i18n-html="ms_readMethod">Read the general method &rarr;</a>
+      <a class="chip" href="../index.html" data-i18n-html="calcCta">Set your total dough weight on the calculator &rarr;</a>
+    </div>
   </div>
 
   <footer>
@@ -145,6 +149,8 @@
       <span class="foot-stat" data-i18n-html="footer">Built by TK/LAB &middot; <a href="https://github.com/tristankuijpers/sourdough_calculator" target="_blank" rel="noopener">open source on GitHub</a></span>
     </div>
   </footer>
+
+  </div>
 </div>
 <script src="../assets/i18n.js"></script>
 <script>
