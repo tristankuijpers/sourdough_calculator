@@ -172,11 +172,11 @@ body{
 .theme-btn .sun{fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round;}
 .theme-btn .moon{fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;}
 
-/* Base (mobile-first) spacing: the absolutely-positioned language/theme toggle
-   cluster sits at top:0, so a header top padding lifts the eyebrow + title clear
-   of it and gives the buttons room above the page title. (The desktop blocks
-   below re-pin padding-top for their own tighter layouts.) */
-header{position:relative; padding-top:26px; margin-bottom:28px;}
+/* The language/theme toggle cluster is absolutely pinned to the header's
+   top-right at the same y as the first text line (the eyebrow), so the header
+   itself needs no top padding; the breathing room before the page title comes
+   from the h1 top margin below. (The desktop blocks re-pin the toggle lower.) */
+header{position:relative; margin-bottom:28px;}
 .eyebrow{
   font-family:'IBM Plex Mono',monospace;
   font-size:11px;
@@ -197,7 +197,9 @@ h1{
   font-family:'Fraunces',serif;
   font-weight:600;
   font-size:clamp(28px,7vw,38px);
-  margin:6px 0 4px;
+  /* extra room below the top line (eyebrow + EN/NL/theme toggles) before the
+     title; the desktop layout blocks override this with their own margins */
+  margin:32px 0 8px;
   letter-spacing:-0.01em;
 }
 .sub{color:var(--muted); font-size:14px; max-width:46ch; line-height:1.5;}
